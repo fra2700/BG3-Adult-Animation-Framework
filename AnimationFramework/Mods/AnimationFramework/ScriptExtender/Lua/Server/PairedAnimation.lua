@@ -266,9 +266,16 @@ function UpdateAnimationVars(pairData)
     local targetAnimName  = "BottomAnimationID"
     local targetSoundName = "SoundBottom"
 
-    local casterIsMale = Osi.IsTagged(pairData.Caster, "d27831df-2891-42e4-b615-ae555404918b")
-    local targetIsMale = Osi.IsTagged(pairData.Target, "d27831df-2891-42e4-b615-ae555404918b")
-
+    local casterIsMale = Osi.IsTagged(pairData.Caster, "d27831df-2891-42e4-b615-ae555404918b") -- Has GENITAL_PENIS tag
+    local targetIsMale = 1
+    if Osi.IsTagged(pairData.Target, "25bf5042-5bf6-4360-8df8-ab107ccb0d37") == 0 then -- If target has no PLAYABLE tag (not a PC or a companion)...
+        if Osi.IsTagged(pairData.Target, "3806477c-65a7-4100-9f92-be4c12c4fa4f") == 1 then -- If target has FEMALE tag...
+            targetIsMale = 0
+        end
+    else -- Target is PLAYABLE
+        targetIsMale = Osi.IsTagged(pairData.Target, "d27831df-2891-42e4-b615-ae555404918b") -- Has GENITAL_PENIS tag
+    end
+    
     if casterIsMale == 0 and targetIsMale == 0 then
         pairData.AnimContainer = "LesbianAnimationsContainer"
     end
