@@ -25,7 +25,6 @@ function OnSessionLoaded()
         for _, table in ipairs(StartSexSpells) do
             if table.AnimName == spell then
                 SexSpellUsed(caster, target, table)
-                _D(_C():GetAllComponents(target))
                 break
             end
         end
