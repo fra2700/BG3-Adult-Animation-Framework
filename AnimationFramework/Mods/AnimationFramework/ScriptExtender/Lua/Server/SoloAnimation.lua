@@ -5,25 +5,22 @@ end
 function StartSoloAnimation(actor, animProperties) 
 
     local soloData = {
-        Proxy = "",
-        AnimProperties = animProperties,
-        AnimLength = animProperties["AnimLength"] * 1000
+        Actor = actor,
+        ActorData = SexActor_Init(actor, "SexVocal"),
+        AnimProperties = animProperties
     }
 
+    UpdateSoloAnimationVars(soloData)
+
     AnimationSolos[actor] = soloData
-    
+
     if animProperties["Fade"] == true then
-        Osi.ObjectTimerLaunch(actor, "SoloBeginningFade.Start", 200)
-        Osi.ObjectTimerLaunch(actor, "SoloBeginningFade.End", 1200)
-        Osi.ObjectTimerLaunch(actor, "SoloFinishFade.Start", soloData.AnimLength - 400)
-        Osi.ObjectTimerLaunch(actor, "SoloFinishFade.End", soloData.AnimLength + 400 + 650)
+        Osi.ObjectTimerLaunch(actor, "SoloSexFade.Start", 200)
+        Osi.ObjectTimerLaunch(actor, "SoloSexFade.End", 1200)
     end
 
-    Osi.ObjectTimerLaunch(actor, "ShowProx", 400)
-    Osi.ObjectTimerLaunch(actor, "CasterSetup", 400)
-    Osi.ObjectTimerLaunch(actor, "SexVocal", 600)
+    Osi.ObjectTimerLaunch(actor, "SoloSexSetup", 400)
 
-    TryRemoveSpell(actor, "StartSexContainer")
     TryAddSpell(actor, "MasturbationAnimationsContainer")
 end
 
@@ -35,26 +32,15 @@ function SoloAnimationListeners()
                   -- FADE TIMERS --
         ------------------------------------
 
-        if timer == "SoloBeginningFade.Start" then
+        if timer == "SoloSexFade.Start" then
             Osi.ScreenFadeTo(actor, 0.1, 0.1, "AnimFade")
             return
         end
 
-        if timer == "SoloBeginningFade.End" then
+        if timer == "SoloSexFade.End" then
             Osi.ClearScreenFade(actor, 0.1, "AnimFade", 0)
             return
         end
-
-        if timer == "SoloFinishFade.Start" then
-            Osi.ScreenFadeTo(actor, 0.1, 0.1, "AnimFade")
-            return
-        end
-
-        if timer == "SoloFinishFade.End" then
-            Osi.ClearScreenFade(actor, 0.1, "AnimFade", 0)
-            return
-        end
-
 
         ------------------------------------
                -- ANIMATION TIMERS --
@@ -65,64 +51,40 @@ function SoloAnimationListeners()
             return
         end
 
-        --START
-        if timer == "ShowProx" then
-            soloData.Proxy = SubstituteProxy(actor)
-            Osi.ObjectTimerLaunch(actor, "SoloAnimStart", 200)
-            Osi.ObjectTimerLaunch(actor, "SoloAnimEnd", soloData.AnimLength)
-            Osi.AddBoosts(actor, "ActionResourceBlock(Movement)", "", "")
-            return
-        end
-
-        if timer == "CasterSetup" then
-            Osi.Transform(actor, "Humans_InvisibleHelper_d5589336-4ca7-4ef7-9f6d-ebfea51001fe", "b40d9ab4-57a7-4632-b8d7-188904b00606")
-            if soloData.AnimProperties["Strip"] == true and Osi.HasActiveStatus(actor, "BLOCK_STRIPPING")~=1 then
+        if timer == "SoloSexSetup" then
+            if soloData.AnimProperties["Strip"] == true and Osi.HasActiveStatus(actor, "BLOCK_STRIPPING") ~= 1 then
                 Strip(actor)
             end
-            Osi.SetDetached(actor, 0)
+            SexActor_SubstituteProxy(soloData.ActorData)
+            Osi.ObjectTimerLaunch(actor, "SoloAnimStart", 200)
             return
         end
 
         if timer == "SoloAnimStart" then
-            -- Start Animation
-            if soloData.AnimProperties["Loop"] == true then
-                Osi.PlayLoopingAnimation(soloData.Proxy, "", soloData.AnimProperties["TopAnimationID"], "", "", "", "", "")
-            else
-                Osi.PlayAnimation(soloData.Proxy, soloData.AnimProperties["TopAnimationID"])
-            end
+            SexActor_FinalizeSetup(soloData.ActorData)
+            PlaySoloAnimation(soloData)
+            Osi.SetDetached(soloData.Actor, 0)
             return
         end
         
-        --END
-        if timer == "SoloAnimEnd" then
-            StopSoloAnimation(actor)
+        if timer == "SoloAnimTimeout" then
+            StopSoloAnimation(soloData)
             return
         end
 
         if timer == "FinishMasturbating" then
-            Osi.RemoveTransforms(actor)
-            Osi.StopAnimation(soloData.Proxy, 1)
-            Osi.TeleportToPosition(soloData.Proxy, 0, 0, 0)
-            Osi.RemoveBoosts(actor, "ActionResourceBlock(Movement)", 0, "", "")
-            Osi.ObjectTimerCancel(actor, "SexVocal")
-
-            TryRemoveSpell(actor, "MasturbationAnimationsContainer")
-            TryAddSpell(actor, "StartSexContainer")
-            Redress(actor)
+            SexActor_Terminate(soloData.ActorData)
 
             AnimationSolos[actor] = nil
             return
         end
-
 
         ------------------------------------
                -- SOUND TIMERS --
         ------------------------------------
 
         if timer == "SexVocal" then
-            local randomVocal = SoundRandomizer(PlayerSexSounds)
-            Osi.PlaySound(actor, randomVocal)
-            Osi.ObjectTimerLaunch(actor, "SexVocal", math.random(1500,2000) , 1)
+            SexActor_PlayVocal(soloData.ActorData, 1500, 2500)
             return
         end
     end)
@@ -132,12 +94,19 @@ function SoloAnimationListeners()
     ------------------------------------
 
     Ext.Osiris.RegisterListener("UsingSpell", 5, "after", function(caster, spell, _, _, _)
+        local soloData = AnimationSolos[caster]
+        if not soloData then
+            return
+        end
+
         if spell == "StopMasturbating" then
-            StopSoloAnimation(caster)
+            StopSoloAnimation(soloData)
         else
             for _, newAnim in ipairs(MasturbationAnimations) do
                 if newAnim.AnimName == spell then
-                    ChangeSoloAnimation(caster, newAnim)
+                    soloData.AnimProperties = newAnim
+                    UpdateSoloAnimationVars(soloData)
+                    PlaySoloAnimation(soloData)
                     break
                 end
             end
@@ -147,30 +116,39 @@ end
 
 Ext.Events.SessionLoaded:Subscribe(SoloAnimationListeners)
 
-function ChangeSoloAnimation(actor, newAnimation) 
-    local soloData = AnimationSolos[actor]
-    if not soloData then
-        return
+function PlaySoloAnimation(soloData)
+    SexActor_StartAnimation(soloData.ActorData, soloData.AnimProperties)
+
+    -- Timeout timer
+    local animTimeout = soloData.AnimProperties["AnimLength"] * 1000
+    if animTimeout > 0 then
+        Osi.ObjectTimerLaunch(soloData.Actor, "SoloAnimTimeout", animTimeout)
+    else
+        Osi.ObjectTimerCancel(soloData.Actor, "SoloAnimTimeout")
     end
-
-    soloData.AnimProperties = newAnimation
-    Osi.PlayLoopingAnimation(soloData.Proxy, "", soloData.AnimProperties["TopAnimationID"], "", "", "", "", "")
-    -- Osi.PlayLoopingAnimation(soloData.Proxy, "", soloData.AnimProperties["TopAnimationID"], "", "", "", "", "")
-    -- Osi.PlayLoopingAnimation(soloData.Proxy, "", soloData.AnimProperties["TopAnimationID"], "", "", "", "", "")
 end
 
-function StopSoloAnimation(actor)
-    Osi.ObjectTimerCancel(actor, "SoloFinishFade.Start")
-    Osi.ObjectTimerCancel(actor, "SoloFinishFade.End")
-    Osi.ScreenFadeTo(actor, 0.1, 0.1, "AnimFade")
-    Osi.ObjectTimerLaunch(actor, "SoloFinishFade.End", 2500)
-    Osi.ObjectTimerLaunch(actor, "FinishMasturbating", 200)
+function StopSoloAnimation(soloData)
+    Osi.ObjectTimerCancel(soloData.Actor, "SoloAnimTimeout")
+    Osi.ObjectTimerCancel(soloData.Actor, "SoloSexFade.Start")
+    Osi.ObjectTimerCancel(soloData.Actor, "SoloSexFade.End")
+
+    Osi.ScreenFadeTo(soloData.Actor, 0.1, 0.1, "AnimFade")
+
+    Osi.ObjectTimerLaunch(soloData.Actor, "FinishMasturbating", 200)
+    Osi.ObjectTimerLaunch(soloData.Actor, "SoloSexFade.End", 2500)
+    SexActor_StopVocalTimer(soloData.ActorData)
 end
 
-PlayerSexSounds = {"BreathLongExhaleOpen_PlayerCharacter_Cine","BreathLongInhaleOpen_PlayerCharacter_Cine","BreathShortInhaleOpen_PlayerCharacter_Cine", "LoveMoanClosed_PlayerCharacter_Cine", "LoveMoanOpen_PlayerCharacter_Cine"}
+local PLAYER_SEX_SOUNDS = {
+    "BreathLongExhaleOpen_PlayerCharacter_Cine",
+    "BreathLongInhaleOpen_PlayerCharacter_Cine",
+    "BreathShortInhaleOpen_PlayerCharacter_Cine",
+    "LoveMoanClosed_PlayerCharacter_Cine",
+    "LoveMoanOpen_PlayerCharacter_Cine"
+}
 
-function SoundRandomizer(soundtable)
-    local randomIndex = math.random(1, #soundtable)
-    -- Return the randomly selected string
-    return soundtable[randomIndex]
+function UpdateSoloAnimationVars(soloData)
+    soloData.ActorData.Animation  = soloData.AnimProperties["TopAnimationID"]
+    soloData.ActorData.SoundTable = PLAYER_SEX_SOUNDS
 end
