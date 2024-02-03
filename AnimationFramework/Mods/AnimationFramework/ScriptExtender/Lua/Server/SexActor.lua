@@ -108,17 +108,23 @@ function SexActor_SubstituteProxy(actorData, optionalTarget)
     local actorEntity = Ext.Entity.Get(actorData.Actor)
     local proxyEntity = Ext.Entity.Get(actorData.Proxy)
 
-    -- Copy Voice.Voice to the proxy because Osi.CreateAtObject does not do this and we want the proxy to play vocals
+    -- Copy Voice component to the proxy because Osi.CreateAtObject does not do this and we want the proxy to play vocals
     if actorEntity.Voice then
-        if not proxyEntity.Voice then
-            proxyEntity:CreateComponent("Voice")
-        end
-        proxyEntity.Voice.Voice = actorEntity.Voice.Voice
+        CopySimpleEntityComponent(actorEntity, proxyEntity, "Voice")
+    end
+
+    -- Copy actor's equipment to the proxy (it will be equipped later in SexActor_FinalizeSetup)
+    if not SexActor_IsStripped(actorData) then
+        SexActor_CopyEquipmentToProxy(actorData)
     end
 end
 
 function SexActor_FinalizeSetup(actorData)
     if actorData.Proxy then
+        if actorData.CopiedEquipment then
+            SexActor_DressProxy(actorData)
+        end
+
         Osi.TeleportToPosition(actorData.Actor, actorData.AnimPosX, actorData.AnimPosY, actorData.AnimPosZ, "", 0, 0, 0, 0, 1)
         Osi.SetVisible(actorData.Actor, 0)
     end
@@ -175,7 +181,7 @@ function SexActor_Strip(actorData)
     Osi.SetArmourSet(actorData.Actor, 1)
     
     local currentEquipment = {}
-    for i, slotName in ipairs(STRIP_SLOTS) do
+    for _, slotName in ipairs(STRIP_SLOTS) do
         local gearPiece = Osi.GetEquippedItem(actorData.Actor, slotName)
         if gearPiece then
             Osi.LockUnequip(gearPiece, 0)
@@ -189,8 +195,63 @@ end
 function SexActor_Redress(actorData)
     Osi.SetArmourSet(actorData.Actor, actorData.OldArmourSet)
 
-    for _, item in pairs(actorData.GearSet) do
+    for _, item in ipairs(actorData.GearSet) do
         Osi.Equip(actorData.Actor, item)
     end
     actorData.GearSet = nil
+end
+
+function SexActor_CopyEquipmentToProxy(actorData)
+    local currentArmourSet = Osi.GetArmourSet(actorData.Actor)
+
+    local copySlots = {}
+    if currentArmourSet == 0 then -- "Normal" armour set
+        copySlots = { "Boots", "Breast", "Cloak", "Gloves", "Amulet", "MeleeMainHand", "MeleeOffHand", "RangedMainHand", "RangedOffHand", "MusicalInstrument" }
+
+        -- Check if the actor has "Hide Helmet" option on in the inventory...
+        local actorEntity = Ext.Entity.Get(actorData.Actor)
+        local hideHelmet = actorEntity.ServerCharacter and actorEntity.ServerCharacter.PlayerData and actorEntity.ServerCharacter.PlayerData.HelmetOption == 0
+        if not hideHelmet then
+            copySlots[#copySlots + 1] = "Helmet"
+        end
+    elseif currentArmourSet == 1 then -- "Vanity" armour set
+        copySlots = { "Underwear", "VanityBody", "VanityBoots" }
+    end
+
+    local copiedEquipment = {}
+    for _, slotName in ipairs(copySlots) do
+        local gearPiece = Osi.GetEquippedItem(actorData.Actor, slotName)
+        if gearPiece then
+            local gearTemplate = Osi.GetTemplate(gearPiece)
+            Osi.TemplateAddTo(gearTemplate, actorData.Proxy, 1, 0)
+            copiedEquipment[#copiedEquipment + 1] = { Template = gearTemplate, SourceItem = gearPiece } 
+        end
+    end
+
+    if #copiedEquipment > 0 then
+        actorData.CopiedEquipment = copiedEquipment
+        actorData.CopiedArmourSet = currentArmourSet
+    end
+end
+
+function SexActor_DressProxy(actorData)
+    Osi.SetArmourSet(actorData.Proxy, actorData.CopiedArmourSet)
+
+    for _, itemData in ipairs(actorData.CopiedEquipment) do
+        local item = Osi.GetItemByTemplateInInventory(itemData.Template, actorData.Proxy)
+        if item then
+            -- Copy the dye applied to the source item
+            local srcEntity = Ext.Entity.Get(itemData.SourceItem)
+            if srcEntity and srcEntity.ItemDye then
+                CopySimpleEntityComponent(srcEntity, Ext.Entity.Get(item), "ItemDye")
+            end
+
+            Osi.Equip(actorData.Proxy, item)
+        else
+            _P("SexActor_DressProxy: couldn't find an item of template " .. itemTemplate .. " in the proxy")
+        end
+    end
+
+    actorData.CopiedArmourSet = nil
+    actorData.CopiedEquipment = nil
 end

@@ -86,3 +86,25 @@ function TryAddStartSexSpell(actor)
         TryAddSpell(actor, "StartSexContainer")
     end
 end
+
+function CopySimpleEntityComponent(srcEntity, dstEntity, componentName)
+    local srcComponent = srcEntity[componentName]
+    if not srcComponent then
+        _P("CopySimpleEntityComponent: srcEntity has no '" .. componentName .. "' component.")
+        return
+    end
+
+    local dstComponent = dstEntity[componentName]
+    if not dstComponent then
+        dstEntity:CreateComponent(componentName)
+        dstComponent = dstEntity[componentName]
+    end
+
+    for k, v in pairs(srcComponent) do        
+        dstComponent[k] = v
+    end
+
+    if componentName ~= "ServerIconList" and componentName ~= "ServerDisplayNameList" and componentName ~= "ServerItem" then
+        dstEntity:Replicate(componentName)
+    end
+end
