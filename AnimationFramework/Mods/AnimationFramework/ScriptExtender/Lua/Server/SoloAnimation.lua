@@ -53,7 +53,7 @@ function SoloAnimationListeners()
 
         if timer == "SoloSexSetup" then
             if soloData.AnimProperties["Strip"] == true and Osi.HasActiveStatus(actor, "BLOCK_STRIPPING") ~= 1 then
-                Strip(actor)
+                SexActor_Strip(soloData.ActorData)
             end
             SexActor_SubstituteProxy(soloData.ActorData)
             Osi.ObjectTimerLaunch(actor, "SoloAnimStart", 200)
