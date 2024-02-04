@@ -99,18 +99,34 @@ function SexActor_SubstituteProxy(actorData, optionalTarget)
     local proxyMarker = Osi.CreateAtObject("06f96d65-0ee5-4ed5-a30a-92a3bfe3f708", proxyDestination, 1, 0, "", 1)
     -- Temporary teleport the original away a bit to give room for the proxy
     Osi.TeleportToPosition(actorData.Actor, actorData.StartX + 1.3, actorData.StartY, actorData.StartZ + 1.3, "", 0, 0, 0, 0, 1)
+
+    local actorEntity = Ext.Entity.Get(actorData.Actor)
+
     actorData.Proxy = Osi.CreateAtObject(Osi.GetTemplate(actorData.Actor), proxyMarker, 1, 0, "", 1)
+
     -- Copy the actor's looks to the proxy (does not copy transforms)
-    Osi.Transform(actorData.Proxy, actorData.Actor, "296bcfb3-9dab-4a93-8ab1-f1c53c6674c9")
+    local charTemplate
+    if actorEntity.CharacterCreationTemplateOverride then
+        -- Fixes the horned Wyll missing the horns as a proxy
+        charTemplate = actorEntity.CharacterCreationTemplateOverride.Template
+    else
+        charTemplate = actorData.Actor
+    end
+    Osi.Transform(actorData.Proxy, charTemplate, "296bcfb3-9dab-4a93-8ab1-f1c53c6674c9")
+
     Osi.SetDetached(actorData.Proxy, 1)
     BlockActorMovement(actorData.Proxy)
 
-    local actorEntity = Ext.Entity.Get(actorData.Actor)
     local proxyEntity = Ext.Entity.Get(actorData.Proxy)
 
     -- Copy Voice component to the proxy because Osi.CreateAtObject does not do this and we want the proxy to play vocals
     if actorEntity.Voice then
         CopySimpleEntityComponent(actorEntity, proxyEntity, "Voice")
+    end
+
+    -- Copy MaterialParameterOverride component if present (this fixes the white Shadowheart going back to her original hair)
+    if actorEntity.MaterialParameterOverride then
+        CopySimpleEntityComponent(actorEntity, proxyEntity, "MaterialParameterOverride")
     end
 
     -- Copy actor's equipment to the proxy (it will be equipped later in SexActor_FinalizeSetup)
