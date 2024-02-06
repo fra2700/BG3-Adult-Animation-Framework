@@ -72,14 +72,20 @@ function PairedAnimationListeners()
         end
 
         if timer == "PairedSexSetup" then
-            SexActor_SubstituteProxy(pairData.CasterData, pairData.Target)
+            pairData.ProxyData = SexActor_CreateProxyMarker(pairData.Target)
+            SexActor_SubstituteProxy(pairData.CasterData, pairData.ProxyData)
+            -- Always create a proxy for targets if they are PCs or companions or some temporary party members. 
+            -- It fixes the moan sounds for companions and prevents animation reset on these characters' selection in the party.
+            if ActorIsPlayable(pairData.Target) or Osi.IsPartyMember(pairData.Target, 1) == 1 then
+                SexActor_SubstituteProxy(pairData.TargetData, pairData.ProxyData)
+            end
             Osi.ObjectTimerLaunch(pairData.Caster, "PairedSexAnimStart", 400)
             return
         end
 
         if timer == "PairedSexAnimStart" then
-            SexActor_FinalizeSetup(pairData.CasterData)
-            SexActor_FinalizeSetup(pairData.TargetData)
+            SexActor_FinalizeSetup(pairData.CasterData, pairData.ProxyData)
+            SexActor_FinalizeSetup(pairData.TargetData, pairData.ProxyData)
             PlayPairedAnimation(pairData)
             Osi.SetDetached(pairData.Caster, 0)
             return
@@ -93,6 +99,7 @@ function PairedAnimationListeners()
         if timer == "FinishSex" then
             SexActor_Terminate(pairData.CasterData)
             SexActor_Terminate(pairData.TargetData)
+            SexActor_TerminateProxyMarker(pairData.ProxyData)
 
             table.remove(AnimationPairs, pairIndex)
             return
@@ -173,6 +180,27 @@ function StopPairedAnimation(pairData)
     SexActor_StopVocalTimer(pairData.TargetData)
 end
 
+local function ActorHasPenis(actor)
+    -- If actor is polymorphed (e.g., Disguise Self spell)
+    if Osi.HasAppliedStatusOfType(actor, "POLYMORPHED") == 1 then
+        -- As of hot fix #17, "Femme Githyanki" disguise has a dick.
+        local actorEntity = Ext.Entity.Get(actor)
+        if actorEntity.GameObjectVisual and actorEntity.GameObjectVisual.RootTemplateId and actorEntity.GameObjectVisual.RootTemplateId == "7bb034aa-d355-4973-9b61-4d83cf29d510" then
+            return true
+        end
+
+        return Osi.GetGender(actor, 1) ~= "Female"
+    end
+
+    -- If actor is not playable
+    if not ActorIsPlayable(actor) then
+        return Osi.IsTagged(actor, "FEMALE_3806477c-65a7-4100-9f92-be4c12c4fa4f") ~= 1
+    end
+
+    -- Playable actor (PC or companion)
+    return Osi.IsTagged(actor, "GENITAL_PENIS_d27831df-2891-42e4-b615-ae555404918b") == 1
+end
+
 function UpdatePairedAnimationVars(pairData)
     pairData.AnimContainer = "StraightAnimationsContainer"
 
@@ -181,25 +209,14 @@ function UpdatePairedAnimationVars(pairData)
     local targetAnimName  = "BottomAnimationID"
     local targetSoundName = "SoundBottom"
 
-    local casterIsMale = Osi.IsTagged(pairData.Caster, "d27831df-2891-42e4-b615-ae555404918b") -- Has GENITAL_PENIS tag
-    local targetIsMale = 1
-    if Osi.HasAppliedStatusOfType(pairData.Target, "POLYMORPHED") == 1 then -- If target has POLYMORPHED status (Disguise Self, etc.)...
-        if Osi.GetGender(pairData.Target, 1) == "Female" then
-            targetIsMale = 0
-        end
-    elseif Osi.IsTagged(pairData.Target, "25bf5042-5bf6-4360-8df8-ab107ccb0d37") == 0 then -- If target has no PLAYABLE tag (not a PC or a companion)...
-        if Osi.IsTagged(pairData.Target, "3806477c-65a7-4100-9f92-be4c12c4fa4f") == 1 then -- If target has FEMALE tag...
-            targetIsMale = 0
-        end
-    else -- Target is PLAYABLE
-        targetIsMale = Osi.IsTagged(pairData.Target, "d27831df-2891-42e4-b615-ae555404918b") -- Has GENITAL_PENIS tag
-    end
+    local casterHasPenis = ActorHasPenis(pairData.Caster)
+    local targetHasPenis = ActorHasPenis(pairData.Target)
 
-    if casterIsMale == 0 and targetIsMale == 0 then
+    if casterHasPenis == false and targetHasPenis == false then
         pairData.AnimContainer = "LesbianAnimationsContainer"
     end
 
-    if (casterIsMale == targetIsMale and pairData.SwitchPlaces) or (casterIsMale == 0 and targetIsMale == 1) then
+    if (casterHasPenis == targetHasPenis and pairData.SwitchPlaces) or (casterHasPenis == false and targetHasPenis) then
         casterAnimName, targetAnimName = targetAnimName, casterAnimName
         casterSoundName, targetSoundName = targetSoundName, casterSoundName
     end
