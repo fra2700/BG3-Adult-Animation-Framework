@@ -128,9 +128,9 @@ function PairedAnimationListeners()
         end
         local pairData = AnimationPairs[pairIndex]
 
-        if spell == "EndSex" then
+        if spell == "zzzEndSex" then
             StopPairedAnimation(pairData)
-        elseif spell == "SwitchPlacesLesbian" or spell == "SwitchPlacesStraight" then
+        elseif spell == "zzSwitchPlacesLesbian" or spell == "zzSwitchPlacesStraight" then
             pairData.SwitchPlaces = not pairData.SwitchPlaces
             UpdatePairedAnimationVars(pairData)
             PlayPairedAnimation(pairData)

@@ -101,7 +101,7 @@ function SoloAnimationListeners()
             return
         end
 
-        if spell == "StopMasturbating" then
+        if spell == "zzzStopMasturbating" then
             StopSoloAnimation(soloData)
         else
             for _, newAnim in ipairs(MasturbationAnimations) do
