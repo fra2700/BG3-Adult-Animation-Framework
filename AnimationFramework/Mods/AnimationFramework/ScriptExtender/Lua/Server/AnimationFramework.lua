@@ -7,12 +7,12 @@ function OnSessionLoaded()
     Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "after", function(_, _)
         local party = Osi.DB_PartyMembers:Get(nil)
         for i = #party, 1, -1 do
-            TryAddStartSexSpell(party[i][1])
+            AddMainSexSpell(party[i][1])
         end
     end)
 
     Ext.Osiris.RegisterListener("CharacterJoinedParty", 1, "after", function(actor)
-        TryAddStartSexSpell(actor)
+        AddMainSexSpell(actor)
     end)
 
  ------------------------------------------------------------------------------------------------------------------------------------------
@@ -77,9 +77,14 @@ function TryRemoveSpell(actor, spellName)
     return false
 end
 
-function TryAddStartSexSpell(actor)
-    -- Add "Start Sex" spell only if actor is PLAYABLE (PC or proper companion) or HUMANOID or FIEND
-    if (Osi.IsTagged(actor, "PLAYABLE_25bf5042-5bf6-4360-8df8-ab107ccb0d37") == 1 
+-- Returns true if actor is playable (a PC or a companion)
+function ActorIsPlayable(actor)
+    return Osi.IsTagged(actor, "PLAYABLE_25bf5042-5bf6-4360-8df8-ab107ccb0d37") == 1
+end
+
+function AddMainSexSpell(actor)
+    -- Add "Start Sex" spell only if actor is PLAYABLE or HUMANOID or FIEND
+    if (ActorIsPlayable(actor)
         or Osi.IsTagged(actor, "HUMANOID_7fbed0d4-cabc-4a9d-804e-12ca6088a0a8") == 1 
         or Osi.IsTagged(actor, "FIEND_44be2f5b-f27e-4665-86f1-49c5bfac54ab") == 1)
     then

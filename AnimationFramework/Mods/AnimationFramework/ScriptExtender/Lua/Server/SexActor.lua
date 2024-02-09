@@ -74,7 +74,7 @@ function SexActor_Terminate(actorData)
 
     RemoveSexPositionSpells(actorData.Actor)
     if Osi.IsPartyMember(actorData.Actor, 0) == 1 then
-        TryAddStartSexSpell(actorData.Actor)
+        AddMainSexSpell(actorData.Actor)
     end
 
     if actorData.IsCompanionInCamp then
@@ -84,33 +84,55 @@ function SexActor_Terminate(actorData)
     Osi.SetDetached(actorData.Actor, 0)
 end
 
-function SexActor_SubstituteProxy(actorData, optionalTarget)
+function SexActor_CreateProxyMarker(target)
+    local proxyData = {}
+    proxyData.MarkerX, proxyData.MarkerY, proxyData.MarkerZ = Osi.GetPosition(target)
+    proxyData.Marker = Osi.CreateAtObject("06f96d65-0ee5-4ed5-a30a-92a3bfe3f708", target, 1, 0, "", 1)
+    return proxyData
+end
+
+function SexActor_TerminateProxyMarker(proxyData)
+    if proxyData then
+        Osi.RequestDelete(proxyData.Marker)
+    end
+end
+
+function SexActor_SubstituteProxy(actorData, proxyData)
     actorData.StartX, actorData.StartY, actorData.StartZ = Osi.GetPosition(actorData.Actor)
 
-    local proxyDestination
-    if optionalTarget ~= nil then
-        proxyDestination = optionalTarget
-        actorData.AnimPosX, actorData.AnimPosY, actorData.AnimPosZ = Osi.GetPosition(optionalTarget)
-    else
-        proxyDestination = actorData.Actor
-        actorData.AnimPosX, actorData.AnimPosY, actorData.AnimPosZ = actorData.StartX, actorData.StartY, actorData.StartZ
-    end
-
-    local proxyMarker = Osi.CreateAtObject("06f96d65-0ee5-4ed5-a30a-92a3bfe3f708", proxyDestination, 1, 0, "", 1)
     -- Temporary teleport the original away a bit to give room for the proxy
     Osi.TeleportToPosition(actorData.Actor, actorData.StartX + 1.3, actorData.StartY, actorData.StartZ + 1.3, "", 0, 0, 0, 0, 1)
-    actorData.Proxy = Osi.CreateAtObject(Osi.GetTemplate(actorData.Actor), proxyMarker, 1, 0, "", 1)
+
+    local actorEntity = Ext.Entity.Get(actorData.Actor)
+
+    actorData.Proxy = Osi.CreateAtObject(Osi.GetTemplate(actorData.Actor), proxyData.Marker, 1, 0, "", 1)
+
     -- Copy the actor's looks to the proxy (does not copy transforms)
-    Osi.Transform(actorData.Proxy, actorData.Actor, "296bcfb3-9dab-4a93-8ab1-f1c53c6674c9")
+    local lookTemplate = actorData.Actor
+    -- If current GameObjectVisual template does not match the original actor's template, apply GameObjectVisual template to the proxy.
+    -- This copies the horns of Wyll or the look of any Disguise Self spell applied to the actor. 
+    if (actorEntity.GameObjectVisual and actorEntity.GameObjectVisual.RootTemplateId
+        and actorEntity.OriginalTemplate and actorEntity.OriginalTemplate.OriginalTemplate
+        and actorEntity.GameObjectVisual.RootTemplateId ~= actorEntity.OriginalTemplate.OriginalTemplate
+    ) then
+        lookTemplate = actorEntity.GameObjectVisual.RootTemplateId
+    end
+    Osi.Transform(actorData.Proxy, lookTemplate, "296bcfb3-9dab-4a93-8ab1-f1c53c6674c9")
+
     Osi.SetDetached(actorData.Proxy, 1)
     BlockActorMovement(actorData.Proxy)
 
-    local actorEntity = Ext.Entity.Get(actorData.Actor)
     local proxyEntity = Ext.Entity.Get(actorData.Proxy)
 
     -- Copy Voice component to the proxy because Osi.CreateAtObject does not do this and we want the proxy to play vocals
     if actorEntity.Voice then
         CopySimpleEntityComponent(actorEntity, proxyEntity, "Voice")
+    end
+
+    -- Copy MaterialParameterOverride component if present.
+    -- This fixes the white Shadowheart going back to her original black hair as a proxy.
+    if actorEntity.MaterialParameterOverride then
+        CopySimpleEntityComponent(actorEntity, proxyEntity, "MaterialParameterOverride")
     end
 
     -- Copy actor's equipment to the proxy (it will be equipped later in SexActor_FinalizeSetup)
@@ -119,13 +141,13 @@ function SexActor_SubstituteProxy(actorData, optionalTarget)
     end
 end
 
-function SexActor_FinalizeSetup(actorData)
+function SexActor_FinalizeSetup(actorData, proxyData)
     if actorData.Proxy then
         if actorData.CopiedEquipment then
             SexActor_DressProxy(actorData)
         end
 
-        Osi.TeleportToPosition(actorData.Actor, actorData.AnimPosX, actorData.AnimPosY, actorData.AnimPosZ, "", 0, 0, 0, 0, 1)
+        Osi.TeleportToPosition(actorData.Actor, proxyData.MarkerX, proxyData.MarkerY, proxyData.MarkerZ, "", 0, 0, 0, 0, 1)
         Osi.SetVisible(actorData.Actor, 0)
     end
     BlockActorMovement(actorData.Actor)
