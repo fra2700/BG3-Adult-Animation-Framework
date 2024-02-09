@@ -6,13 +6,13 @@ Installation:
   
 2. Install BG3 Mod Manager (BG3MM): https://github.com/LaughingLeader/BG3ModManager
 
-3. Uninstall all loose files installed with a previous version of the mod
-   a. Navigate to your \Baldurs Gate 3\Data Directory, typically:  
-      "C:\Program Files (x86)\Steam\steamapps\common\Baldurs Gate 3"
-   b. Delete the following folders if they are found:
-     - "Baldurs Gate 3\Data\Mods\AnimationFramework"
-     - "Baldurs Gate 3\Data\Public\AnimationFramework"
-     - "Baldurs Gate 3\Data\Public\Shared\Assets\Characters\_Anims"
+3. Uninstall all loose files installed with a previous version of the mod:  
+   - Navigate to your \Baldurs Gate 3\Data Directory, typically:  
+      "C:\Program Files (x86)\Steam\steamapps\common\Baldurs Gate 3"  
+   - Delete the following folders if they are found:
+        - "Baldurs Gate 3\Data\Mods\AnimationFramework"
+        - "Baldurs Gate 3\Data\Public\AnimationFramework"
+        - "Baldurs Gate 3\Data\Public\Shared\Assets\Characters\_Anims"
 
 5. Download both of the 'main' mod files:
      - AnimationFrameworkPak.zip
