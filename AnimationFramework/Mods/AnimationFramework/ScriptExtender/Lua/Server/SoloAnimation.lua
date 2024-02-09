@@ -55,13 +55,14 @@ function SoloAnimationListeners()
             if soloData.AnimProperties["Strip"] == true and Osi.HasActiveStatus(actor, "BLOCK_STRIPPING") ~= 1 then
                 SexActor_Strip(soloData.ActorData)
             end
-            SexActor_SubstituteProxy(soloData.ActorData)
+            soloData.ProxyData = SexActor_CreateProxyMarker(soloData.Actor)
+            SexActor_SubstituteProxy(soloData.ActorData, soloData.ProxyData)
             Osi.ObjectTimerLaunch(actor, "SoloAnimStart", 200)
             return
         end
 
         if timer == "SoloAnimStart" then
-            SexActor_FinalizeSetup(soloData.ActorData)
+            SexActor_FinalizeSetup(soloData.ActorData, soloData.ProxyData)
             PlaySoloAnimation(soloData)
             Osi.SetDetached(soloData.Actor, 0)
             return
@@ -74,6 +75,7 @@ function SoloAnimationListeners()
 
         if timer == "FinishMasturbating" then
             SexActor_Terminate(soloData.ActorData)
+            SexActor_TerminateProxyMarker(soloData.ProxyData)
 
             AnimationSolos[actor] = nil
             return
@@ -99,7 +101,7 @@ function SoloAnimationListeners()
             return
         end
 
-        if spell == "StopMasturbating" then
+        if spell == "zzzStopMasturbating" then
             StopSoloAnimation(soloData)
         else
             for _, newAnim in ipairs(MasturbationAnimations) do
