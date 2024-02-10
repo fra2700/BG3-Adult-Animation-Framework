@@ -11,8 +11,6 @@ function StartSoloAnimation(actor, animProperties)
         AnimContainer = ""
     }
 
-
-
     UpdateSoloAnimationVars(soloData)
 
     AnimationSolos[actor] = soloData
@@ -55,7 +53,7 @@ function SoloAnimationListeners()
         end
 
         if timer == "SoloSexSetup" then
-            if soloData.AnimProperties["Strip"] == true and Osi.HasActiveStatus(actor, "BLOCK_STRIPPING") ~= 1 then
+            if soloData.AnimProperties["Strip"] == true and Osi.HasActiveStatus(soloData.Actor, "BLOCK_STRIPPING") == 0 then
                 SexActor_Strip(soloData.ActorData)
             end
             soloData.ProxyData = SexActor_CreateProxyMarker(soloData.Actor)

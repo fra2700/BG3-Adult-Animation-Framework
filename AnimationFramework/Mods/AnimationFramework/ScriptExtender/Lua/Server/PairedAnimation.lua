@@ -13,27 +13,15 @@ function StartPairedAnimation(caster, target, animProperties)
         SwitchPlaces = false
     }
 
-    if pairData.AnimProperties["Strip"] == true then
-        pairData.StripCaster = (Osi.HasActiveStatus(caster, "BLOCK_STRIPPING") == 0)
-        pairData.StripTarget = (Osi.HasActiveStatus(target, "BLOCK_STRIPPING") == 0)
-    else
-        pairData.StripCaster = false
-        pairData.StripTarget = false
-    end
-
     UpdatePairedAnimationVars(pairData)
 
     AnimationPairs[#AnimationPairs + 1] = pairData
 
     local stripDelay = 0
-    if pairData.StripCaster or pairData.StripTarget then
+    if pairData.AnimProperties["Strip"] == true and Osi.HasActiveStatus(caster, "BLOCK_STRIPPING") == 0 then
         stripDelay = 1600
-        if pairData.StripCaster then
-            Osi.ApplyStatus(caster, "DARK_JUSTICIAR_VFX", 1)
-        end
-        if pairData.StripTarget then
-            Osi.ApplyStatus(target, "DARK_JUSTICIAR_VFX", 1)
-        end
+        Osi.ApplyStatus(caster, "DARK_JUSTICIAR_VFX", 1)
+        Osi.ApplyStatus(target, "DARK_JUSTICIAR_VFX", 1)
         Osi.ObjectTimerLaunch(caster, "PairedSexStrip", 600)
     end
 
@@ -76,14 +64,10 @@ function PairedAnimationListeners()
         local pairData = AnimationPairs[pairIndex]
 
         if timer == "PairedSexStrip" then
-            if pairData.StripCaster then
-                Osi.ApplyStatus(pairData.Caster, "PASSIVE_WILDMAGIC_MAGICRETRIBUTION_DEFENDER", 1) -- Spice it with some VFX
-                SexActor_Strip(pairData.CasterData)
-            end
-            if pairData.StripTarget then
-                Osi.ApplyStatus(pairData.Target, "PASSIVE_WILDMAGIC_MAGICRETRIBUTION_DEFENDER", 1) -- Spice it with some VFX
-                SexActor_Strip(pairData.TargetData)
-            end
+            Osi.ApplyStatus(pairData.Caster, "PASSIVE_WILDMAGIC_MAGICRETRIBUTION_DEFENDER", 1) -- Spice it with some VFX
+            SexActor_Strip(pairData.CasterData)
+            Osi.ApplyStatus(pairData.Target, "PASSIVE_WILDMAGIC_MAGICRETRIBUTION_DEFENDER", 1) -- Spice it with some VFX
+            SexActor_Strip(pairData.TargetData)
             return
         end
 
