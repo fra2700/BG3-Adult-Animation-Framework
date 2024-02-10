@@ -48,7 +48,7 @@ data "Icon" "Spell_Enchantment_Friends"
 data "DisplayName" "hf8d87b70ge53ag4a26gb758g3b9cccddbba0;1"
 data "Description" ""
 data "ExtraDescription" ""
-data "TargetConditions" ""
+data "TargetConditions" "Character() and (Tagged('HUMANOID') or Tagged('FIEND')) and SizeEqualOrGreater(Size.Medium) and not Tagged('CHILD') and not Self()"
 data "PrepareSound" "Instrument_Bard_Silence"
 data "CastSound" "Instrument_Bard_Silence"
 data "TargetSound" "Instrument_Bard_Silence"
@@ -77,7 +77,7 @@ data "SpellFlags" "IsLinkedSpellContainer"
 
 new entry "BlockStripping"
 type "SpellData"
-data "SpellType" "Shout"
+data "SpellType" "Target"
 data "SpellProperties" """
 data "Requirements" ""
 data "SpellContainerID" "SexOptions"
@@ -96,7 +96,7 @@ data "SpellAnimationIntentType" "None"
 
 new entry "RemoveStrippingBlock"
 type "SpellData"
-data "SpellType" "Shout"
+data "SpellType" "Target"
 data "SpellProperties" """
 data "Requirements" ""
 data "SpellContainerID" "SexOptions"
@@ -179,7 +179,7 @@ data "Boosts" "ScaleMultiplier(0.8)"
 new entry "LesbianAnimationsContainer"
 type "SpellData"
 data "SpellType" "Shout"
-data "ContainerSpells" "zzzEndSex;Grinding;EatPussy;FingerFuck;zzzSwitchPlacesLesbian;zzzEndSex;Grinding;EatPussy;FingerFuck;zzzSwitchPlacesLesbian;zzzEndSex;Grinding;EatPussy;FingerFuck;zzzSwitchPlacesLesbian;zzzEndSex;Grinding;EatPussy;FingerFuck;zzzSwitchPlacesLesbian"
+data "ContainerSpells" "zzzEndSex;Grinding;EatPussy;FingerFuck;zzzSwitchPlacesLesbian"
 data "Icon" "Spell_Enchantment_Hex"
 data "DisplayName" "h818a9789g4007g46c6gacd4g27e42b08b4ee;1"
 data "Description" ""
@@ -190,10 +190,24 @@ data "AIFlags" "CanNotUse"
 data "SpellFlags" "IsLinkedSpellContainer"
     
 
-new entry "MasturbationAnimationsContainer"
+new entry "FemaleMasturbationContainer"
 type "SpellData"
 data "SpellType" "Shout"
-data "ContainerSpells" "Wanking;zzzStopMasturbating;MasturbateStanding;Wanking;zzzStopMasturbating;MasturbateStanding;Wanking;zzzStopMasturbating;MasturbateStanding;Wanking;zzzStopMasturbating;MasturbateStanding"
+data "ContainerSpells" "zzzStopMasturbating;MasturbateStanding"
+data "Icon" "Spell_Enchantment_Hex"
+data "DisplayName" "h818a9789g4007g46c6gacd4g27e42b08b4ee;1"
+data "Description" ""
+data "PrepareSound" "Instrument_Bard_Silence"
+data "CastSound" "Instrument_Bard_Silence"
+data "TargetSound" "Instrument_Bard_Silence"
+data "AIFlags" "CanNotUse"
+data "SpellFlags" "IsLinkedSpellContainer"
+    
+
+new entry "MaleMasturbationContainer"
+type "SpellData"
+data "SpellType" "Shout"
+data "ContainerSpells" "zzzStopMasturbating;Wanking"
 data "Icon" "Spell_Enchantment_Hex"
 data "DisplayName" "h818a9789g4007g46c6gacd4g27e42b08b4ee;1"
 data "Description" ""
@@ -207,7 +221,7 @@ data "SpellFlags" "IsLinkedSpellContainer"
 new entry "StraightAnimationsContainer"
 type "SpellData"
 data "SpellType" "Shout"
-data "ContainerSpells" "zzzEndSex;Doggy;Missionary;Blowjob;Cowgirl;zzzSwitchPlacesStraight;Milking;zzzEndSex;Doggy;Missionary;Blowjob;Cowgirl;zzzSwitchPlacesStraight;Milking;zzzEndSex;Doggy;Missionary;Blowjob;Cowgirl;zzzSwitchPlacesStraight;Milking;zzzEndSex;Doggy;Missionary;Blowjob;Cowgirl;zzzSwitchPlacesStraight;Milking"
+data "ContainerSpells" "zzzEndSex;Doggy;Missionary;Blowjob;Cowgirl;zzzSwitchPlacesStraight;Milking"
 data "Icon" "Spell_Enchantment_Hex"
 data "DisplayName" "h818a9789g4007g46c6gacd4g27e42b08b4ee;1"
 data "Description" ""
@@ -218,29 +232,10 @@ data "AIFlags" "CanNotUse"
 data "SpellFlags" "IsLinkedSpellContainer"
     
 
-new entry "Wanking"
-type "SpellData"
-data "SpellType" "Shout"
-data "SpellProperties" ""
-data "Requirements" "!Combat"
-data "SpellContainerID" "MasturbationAnimationsContainer"
-data "Icon" "Spell_Divination_Guidance"
-data "DisplayName" "h8fbd124bg315eg4e0fg8f0fga6c8cc0c07b2;1"
-data "Description" ""
-data "ExtraDescription" ""
-data "TargetConditions" ""
-data "PrepareSound" "Instrument_Bard_Silence"
-data "CastSound" "Instrument_Bard_Silence"
-data "TargetSound" "Instrument_Bard_Silence"
-data "Autocast" "Yes"
-data "SpellFlags" "ImmediateCast;IsLinkedSpellContainer"
-data "HitAnimationType" "None"
-data "SpellAnimationIntentType" "None"
-
 
 
 //-------------------------------------------------
-// Masturbation
+// Female Masturbation
 //-------------------------------------------------
 
 new entry "zzzStopMasturbating"
@@ -248,7 +243,7 @@ type "SpellData"
 data "SpellType" "Shout"
 data "SpellProperties" ""
 data "Requirements" ""
-data "SpellContainerID" "MasturbationAnimationsContainer"
+data "SpellContainerID" "FemaleMasturbationContainer"
 data "Icon" "Spell_Enchantment_CharmPerson"
 data "DisplayName" "ha862daffg4e81g4d18ga13ege034d38b80e6;1"
 data "Description" ""
@@ -267,7 +262,7 @@ type "SpellData"
 data "SpellType" "Shout"
 data "SpellProperties" ""
 data "Requirements" "!Combat"
-data "SpellContainerID" "MasturbationAnimationsContainer"
+data "SpellContainerID" "FemaleMasturbationContainer"
 data "Icon" "Spell_Divination_Guidance"
 data "DisplayName" "hd46783feg2f86g42a3g8be1g92695ddcbfc0;1"
 data "Description" ""
@@ -281,13 +276,58 @@ data "SpellFlags" "ImmediateCast;IsLinkedSpellContainer"
 data "HitAnimationType" "None"
 data "SpellAnimationIntentType" "None"
 
+
+//-------------------------------------------------
+// Male Masturbation
+//-------------------------------------------------
+
+
+new entry "zzzStopMasturbating"
+type "SpellData"
+data "SpellType" "Shout"
+data "SpellProperties" ""
+data "Requirements" "!Combat"
+data "SpellContainerID" "MaleMasturbationContainer"
+data "Icon" "Spell_Enchantment_CharmPerson"
+data "DisplayName" "h94dec276g082cg4180g8cd3g8f2d37d9021f;1"
+data "Description" ""
+data "ExtraDescription" ""
+data "TargetConditions" ""
+data "PrepareSound" "Instrument_Bard_Silence"
+data "CastSound" "Instrument_Bard_Silence"
+data "TargetSound" "Instrument_Bard_Silence"
+data "Autocast" "Yes"
+data "SpellFlags" "ImmediateCast;IsLinkedSpellContainer"
+data "HitAnimationType" "None"
+data "SpellAnimationIntentType" "None"
+
+new entry "Wanking"
+type "SpellData"
+data "SpellType" "Shout"
+data "SpellProperties" ""
+data "Requirements" "!Combat"
+data "SpellContainerID" "MaleMasturbationContainer"
+data "Icon" "Spell_Divination_Guidance"
+data "DisplayName" "h8fbd124bg315eg4e0fg8f0fga6c8cc0c07b2;1"
+data "Description" ""
+data "ExtraDescription" ""
+data "TargetConditions" ""
+data "PrepareSound" "Instrument_Bard_Silence"
+data "CastSound" "Instrument_Bard_Silence"
+data "TargetSound" "Instrument_Bard_Silence"
+data "Autocast" "Yes"
+data "SpellFlags" "ImmediateCast;IsLinkedSpellContainer"
+data "HitAnimationType" "None"
+data "SpellAnimationIntentType" "None"
+
+
+
+
+
 //-------------------------------------------------
 // LESBIAN
 //-------------------------------------------------
 
-
-
-//-------------------------------------------------
 
 new entry "zzzEndSex"
 type "SpellData"
@@ -389,10 +429,6 @@ data "SpellAnimationIntentType" "None"
 // STRAIGHT
 //-------------------------------------------------
 
-
-
-
-//-------------------------------------------------
 
 new entry "zzzEndSex"
 type "SpellData"
@@ -526,3 +562,8 @@ data "Autocast" "Yes"
 data "SpellFlags" "ImmediateCast;IsLinkedSpellContainer"
 data "HitAnimationType" "None"
 data "SpellAnimationIntentType" "None"
+
+
+
+
+

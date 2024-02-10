@@ -8,7 +8,8 @@ StartSexSpells = {
         SoundTop = {"BreathLongExhaleOpen_PlayerCharacter_Cine","BreathLongInhaleOpen_PlayerCharacter_Cine","LoveMoanClosed_PlayerCharacter_Cine", "LoveMoanClosed_PlayerCharacter_Cine", "LoveMoanOpen_PlayerCharacter_Cine"},
         Strip = true,
         Type = "Solo",
-        TopAnimationID = "9d8c5992-55ab-4c2f-8d97-28b68eb50a8b"
+        TopAnimationID = "49497bdc-d901-4f60-9e4e-3d31a06f9002",
+        BottomAnimationID = "9d8c5992-55ab-4c2f-8d97-28b68eb50a8b"
     },
     {
         AnimName = "AskForSex",
@@ -26,23 +27,6 @@ StartSexSpells = {
 }
 
 SexAnimations = {
-    {
-        AnimName = "EndSex",
-    },
-    {
-        AnimName = "Wanking",
-        AnimLength = 3600,
-        Loop = true,
-        Fade = true,
-        Sound = true,
-        SoundTop = {"CAMP_Karlach_CRD_ROM_Date_SexKiss2", "CAMP_Karlach_CRD_ROM_Date_SexKiss3", "CAMP_Karlach_CRD_ROM_Date_SexKiss6", "CAMP_Karlach_CRD_ROM_Date_SexKiss7", "CAMP_Karlach_CRD_ROM_Date_SexKiss9"},
-        SoundBottom = {"CAMP_Karlach_CRD_ROM_Date_SexKiss2", "CAMP_Karlach_CRD_ROM_Date_SexKiss3", "CAMP_Karlach_CRD_ROM_Date_SexKiss6", "CAMP_Karlach_CRD_ROM_Date_SexKiss7", "CAMP_Karlach_CRD_ROM_Date_SexKiss9"},
-        Strip = true,
-        Type = "Solo",
-        TopAnimationID = "49497bdc-d901-4f60-9e4e-3d31a06f9002",
-        BottomAnimationID = "49497bdc-d901-4f60-9e4e-3d31a06f9002"
-    },
-	
     {
         AnimName = "Grinding",
         AnimLength = 3600,
@@ -174,6 +158,19 @@ SexAnimations = {
         Type = "Paired",
         TopAnimationID = "a71ace41-41ce-4876-8f14-4f419b677533",
         BottomAnimationID = "d2a17851-b51b-4e4f-be1d-30dc86b6466a"
+    },
+    {
+        AnimName = "Wanking",
+        AnimLength = 3600,
+        Loop = true,
+        Fade = true,
+        Sound = true,
+        SoundTop = {"CAMP_Karlach_CRD_ROM_Date_SexKiss2", "CAMP_Karlach_CRD_ROM_Date_SexKiss3", "CAMP_Karlach_CRD_ROM_Date_SexKiss6", "CAMP_Karlach_CRD_ROM_Date_SexKiss7", "CAMP_Karlach_CRD_ROM_Date_SexKiss9"},
+        SoundBottom = {"CAMP_Karlach_CRD_ROM_Date_SexKiss2", "CAMP_Karlach_CRD_ROM_Date_SexKiss3", "CAMP_Karlach_CRD_ROM_Date_SexKiss6", "CAMP_Karlach_CRD_ROM_Date_SexKiss7", "CAMP_Karlach_CRD_ROM_Date_SexKiss9"},
+        Strip = true,
+        Type = "Solo",
+        TopAnimationID = "49497bdc-d901-4f60-9e4e-3d31a06f9002",
+        BottomAnimationID = "49497bdc-d901-4f60-9e4e-3d31a06f9002"
     },
 	
 

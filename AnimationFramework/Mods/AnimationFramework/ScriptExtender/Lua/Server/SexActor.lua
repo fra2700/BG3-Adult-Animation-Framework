@@ -4,7 +4,8 @@ local FLAG_COMPANION_IN_CAMP = "161b7223-039d-4ebe-986f-1dcd9a66733f"
 local function RemoveSexPositionSpells(actor)
     TryRemoveSpell(actor, "StraightAnimationsContainer")
     TryRemoveSpell(actor, "LesbianAnimationsContainer")
-    TryRemoveSpell(actor, "MasturbationAnimationsContainer")
+    TryRemoveSpell(actor, "FemaleMasturbationContainer")
+    TryRemoveSpell(actor, "MaleMasturbationContainer")
 end
 
 local function BlockActorMovement(actor)
