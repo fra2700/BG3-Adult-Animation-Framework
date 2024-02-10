@@ -7,14 +7,12 @@ function OnSessionLoaded()
     Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "after", function(_, _)
         local party = Osi.DB_PartyMembers:Get(nil)
         for i = #party, 1, -1 do
-            AddMainSexSpell(party[i][1])
-            AddSexOptions(party[i][1])
+            AddMainSexSpells(party[i][1])
         end
     end)
 
     Ext.Osiris.RegisterListener("CharacterJoinedParty", 1, "after", function(actor)
-        AddMainSexSpell(actor)
-        AddSexOptions(party[i][1])
+        AddMainSexSpells(actor)
     end)
 
  ------------------------------------------------------------------------------------------------------------------------------------------
@@ -36,11 +34,7 @@ function OnSessionLoaded()
         if spell == "BlockStripping" then
             Osi.RemoveStatus(target, "BLOCK_STRIPPING")  
             Osi.ApplyStatus(target, "BLOCK_STRIPPING", -1)  
-        end
-    end)
-
-    Ext.Osiris.RegisterListener("UsingSpellOnTarget", 6, "after", function(_, target, spell, _, _, _)
-        if spell == "RemoveStrippingBlock" then
+        elseif spell == "RemoveStrippingBlock" then
             Osi.RemoveStatus(target, "BLOCK_STRIPPING")  
         end
     end)
@@ -84,13 +78,35 @@ function ActorIsPlayable(actor)
     return Osi.IsTagged(actor, "PLAYABLE_25bf5042-5bf6-4360-8df8-ab107ccb0d37") == 1
 end
 
-function AddMainSexSpell(actor)
-    -- Add "Start Sex" spell only if actor is PLAYABLE or HUMANOID or FIEND
+function ActorHasPenis(actor)
+    -- If actor is polymorphed (e.g., Disguise Self spell)
+    if Osi.HasAppliedStatusOfType(actor, "POLYMORPHED") == 1 then
+        -- As of hot fix #17, "Femme Githyanki" disguise has a dick.
+        local actorEntity = Ext.Entity.Get(actor)
+        if actorEntity.GameObjectVisual and actorEntity.GameObjectVisual.RootTemplateId and actorEntity.GameObjectVisual.RootTemplateId == "7bb034aa-d355-4973-9b61-4d83cf29d510" then
+            return true
+        end
+
+        return Osi.GetGender(actor, 1) ~= "Female"
+    end
+
+    -- If actor is not playable
+    if not ActorIsPlayable(actor) then
+        return Osi.IsTagged(actor, "FEMALE_3806477c-65a7-4100-9f92-be4c12c4fa4f") ~= 1
+    end
+
+    -- Playable actor (PC or companion)
+    return Osi.IsTagged(actor, "GENITAL_PENIS_d27831df-2891-42e4-b615-ae555404918b") == 1
+end
+
+function AddMainSexSpells(actor)
+    -- Add "Start Sex" and "Sex Options" spells only if actor is PLAYABLE or HUMANOID or FIEND
     if (ActorIsPlayable(actor)
         or Osi.IsTagged(actor, "HUMANOID_7fbed0d4-cabc-4a9d-804e-12ca6088a0a8") == 1 
         or Osi.IsTagged(actor, "FIEND_44be2f5b-f27e-4665-86f1-49c5bfac54ab") == 1)
     then
         TryAddSpell(actor, "StartSexContainer")
+        TryAddSpell(actor, "SexOptions")
     end
 end
 
@@ -113,15 +129,5 @@ function CopySimpleEntityComponent(srcEntity, dstEntity, componentName)
 
     if componentName ~= "ServerIconList" and componentName ~= "ServerDisplayNameList" and componentName ~= "ServerItem" then
         dstEntity:Replicate(componentName)
-    end
-end
-
-function AddSexOptions(actor)
-    -- Add "Start Sex" spell only if actor is PLAYABLE or HUMANOID or FIEND
-    if (ActorIsPlayable(actor)
-        or Osi.IsTagged(actor, "HUMANOID_7fbed0d4-cabc-4a9d-804e-12ca6088a0a8") == 1 
-        or Osi.IsTagged(actor, "FIEND_44be2f5b-f27e-4665-86f1-49c5bfac54ab") == 1)
-    then
-        TryAddSpell(actor, "SexOptions")
     end
 end
