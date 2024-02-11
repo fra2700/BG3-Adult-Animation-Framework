@@ -18,7 +18,7 @@ function StartPairedAnimation(caster, target, animProperties)
     AnimationPairs[#AnimationPairs + 1] = pairData
 
     local stripDelay = 0
-    if pairData.AnimProperties["Strip"] == true and Osi.HasActiveStatus(caster, "BLOCK_STRIPPING") ~= 1 then
+    if pairData.AnimProperties["Strip"] == true and Osi.HasActiveStatus(caster, "BLOCK_STRIPPING") == 0 then
         stripDelay = 1600
         Osi.ApplyStatus(caster, "DARK_JUSTICIAR_VFX", 1)
         Osi.ApplyStatus(target, "DARK_JUSTICIAR_VFX", 1)
@@ -178,27 +178,6 @@ function StopPairedAnimation(pairData)
     --Osi.ObjectTimerLaunch(pairData.Target, "PairedSexFade.End", 2500)
     SexActor_StopVocalTimer(pairData.CasterData)
     SexActor_StopVocalTimer(pairData.TargetData)
-end
-
-local function ActorHasPenis(actor)
-    -- If actor is polymorphed (e.g., Disguise Self spell)
-    if Osi.HasAppliedStatusOfType(actor, "POLYMORPHED") == 1 then
-        -- As of hot fix #17, "Femme Githyanki" disguise has a dick.
-        local actorEntity = Ext.Entity.Get(actor)
-        if actorEntity.GameObjectVisual and actorEntity.GameObjectVisual.RootTemplateId and actorEntity.GameObjectVisual.RootTemplateId == "7bb034aa-d355-4973-9b61-4d83cf29d510" then
-            return true
-        end
-
-        return Osi.GetGender(actor, 1) ~= "Female"
-    end
-
-    -- If actor is not playable
-    if not ActorIsPlayable(actor) then
-        return Osi.IsTagged(actor, "FEMALE_3806477c-65a7-4100-9f92-be4c12c4fa4f") ~= 1
-    end
-
-    -- Playable actor (PC or companion)
-    return Osi.IsTagged(actor, "GENITAL_PENIS_d27831df-2891-42e4-b615-ae555404918b") == 1
 end
 
 function UpdatePairedAnimationVars(pairData)

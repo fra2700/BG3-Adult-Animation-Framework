@@ -75,7 +75,7 @@ function SexActor_Terminate(actorData)
 
     RemoveSexPositionSpells(actorData.Actor)
     if Osi.IsPartyMember(actorData.Actor, 0) == 1 then
-        AddMainSexSpell(actorData.Actor)
+        AddMainSexSpells(actorData.Actor)
     end
 
     if actorData.IsCompanionInCamp then
