@@ -21,14 +21,14 @@ local ORGASM_SOUNDS = {
 }
 
 
-function SexActor_Init(actor, vocalTimerName)
+function SexActor_Init(actor, vocalTimerName, animProperties)
     local actorData = {
         Actor = actor,
         Proxy = nil,
         Animation = "",
         SoundTable = {},
         VocalTimerName = vocalTimerName,
-        IsCompanionInCamp = false
+        Strip = (animProperties["Strip"] == true and Osi.HasActiveStatus(actor, "BLOCK_STRIPPING") == 0)
     }
 
     Osi.SetDetached(actor, 1)
