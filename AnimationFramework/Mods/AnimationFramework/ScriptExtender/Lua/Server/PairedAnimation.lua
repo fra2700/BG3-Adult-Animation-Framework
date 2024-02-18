@@ -6,9 +6,9 @@ function StartPairedAnimation(caster, target, animProperties)
 
     local pairData = {
         Caster = caster,
-        CasterData = SexActor_Init(caster, "SexVocalCaster"),
+        CasterData = SexActor_Init(caster, "SexVocalCaster", animProperties),
         Target = target,
-        TargetData = SexActor_Init(target, "SexVocalTarget"),
+        TargetData = SexActor_Init(target, "SexVocalTarget", animProperties),
         AnimProperties = animProperties,
         SwitchPlaces = false
     }
@@ -17,20 +17,18 @@ function StartPairedAnimation(caster, target, animProperties)
 
     AnimationPairs[#AnimationPairs + 1] = pairData
 
-    --check if caster has 'block stripping' status & strip caster if not
     local stripDelay = 0
-    if pairData.AnimProperties["Strip"] == true and Osi.HasActiveStatus(caster, "BLOCK_STRIPPING") == 0 then
+    if pairData.CasterData.Strip or pairData.TargetData.Strip then
         stripDelay = 1600
-        Osi.ApplyStatus(caster, "DARK_JUSTICIAR_VFX", 1)
+        if pairData.CasterData.Strip then
+            Osi.ApplyStatus(caster, "DARK_JUSTICIAR_VFX", 1)
+        end
+        if pairData.TargetData.Strip then
+            Osi.ApplyStatus(target, "DARK_JUSTICIAR_VFX", 1)
+        end
         Osi.ObjectTimerLaunch(caster, "PairedSexStrip", 600)
     end
     
-    if pairData.AnimProperties["Strip"] == true and Osi.HasActiveStatus(target, "BLOCK_STRIPPING") == 0 then
-        stripDelay = 1600
-        Osi.ApplyStatus(target, "DARK_JUSTICIAR_VFX", 1)
-        Osi.ObjectTimerLaunch(target, "PairedSexStrip", 600)
-    end
-
     if pairData.AnimProperties["Fade"] == true then
         Osi.ObjectTimerLaunch(caster, "PairedSexFade.Start", 200 + stripDelay)
         Osi.ObjectTimerLaunch(caster, "PairedSexFade.End", 1200 + stripDelay)
@@ -39,6 +37,13 @@ function StartPairedAnimation(caster, target, animProperties)
     Osi.ObjectTimerLaunch(caster, "PairedSexSetup", 400 + stripDelay)
 
     TryAddSpell(caster, pairData.AnimContainer)
+end
+
+local function TryStripPairedActor(actorData)
+    if actorData.Strip then
+        Osi.ApplyStatus(actorData.Actor, "PASSIVE_WILDMAGIC_MAGICRETRIBUTION_DEFENDER", 1)
+        SexActor_Strip(actorData)
+    end
 end
 
 function PairedAnimationListeners()
@@ -69,18 +74,11 @@ function PairedAnimationListeners()
         end
         local pairData = AnimationPairs[pairIndex]
 
-        --Stripping fixed to work per-actor
         if timer == "PairedSexStrip" then
-            if actor == pairData.Caster then
-                Osi.ApplyStatus(pairData.Caster, "PASSIVE_WILDMAGIC_MAGICRETRIBUTION_DEFENDER", 1)
-                SexActor_Strip(pairData.CasterData)
-            elseif actor == pairData.Target then
-                Osi.ApplyStatus(pairData.Target, "PASSIVE_WILDMAGIC_MAGICRETRIBUTION_DEFENDER", 1)
-                SexActor_Strip(pairData.TargetData)
-                return
-            end
+            TryStripPairedActor(pairData.CasterData)
+            TryStripPairedActor(pairData.TargetData)
+            return
         end
-
 
         if timer == "PairedSexSetup" then
             pairData.ProxyData = SexActor_CreateProxyMarker(pairData.Target)
