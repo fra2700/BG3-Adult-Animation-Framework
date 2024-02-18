@@ -536,7 +536,7 @@
                     <attribute id="IsPoseBank" type="bool" value="False" />
                     <attribute id="LeftTransitionAnimation" type="FixedString" value="" />
                     <attribute id="Looping" type="bool" value="False" />
-                    <attribute id="Name" type="LSString" value="HUM_M_Rig_Wanking" />
+                    <attribute id="Name" type="LSString" value="HUM_M_Rig_Wank" />
                     <attribute id="Offset" type="float" value="0" />
                     <attribute id="PreviewVisualResource" type="FixedString" value="5648d41b-5f6b-2e1c-8e1f-9e69e8094264" />
                     <attribute id="RightTransitionAnimation" type="FixedString" value="" />
