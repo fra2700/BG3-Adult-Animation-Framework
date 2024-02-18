@@ -17,7 +17,6 @@ function StartPairedAnimation(caster, target, animProperties)
 
     AnimationPairs[#AnimationPairs + 1] = pairData
 
-    --check if caster has 'block stripping' status & strip caster if not
     local stripDelay = 0
     if pairData.CasterData.Strip or pairData.TargetData.Strip then
         stripDelay = 1600
@@ -75,13 +74,11 @@ function PairedAnimationListeners()
         end
         local pairData = AnimationPairs[pairIndex]
 
-        --Stripping fixed to work per-actor
         if timer == "PairedSexStrip" then
             TryStripPairedActor(pairData.CasterData)
             TryStripPairedActor(pairData.TargetData)
             return
         end
-
 
         if timer == "PairedSexSetup" then
             pairData.ProxyData = SexActor_CreateProxyMarker(pairData.Target)
@@ -89,17 +86,9 @@ function PairedAnimationListeners()
             -- Always create a proxy for targets if they are PCs or companions or some temporary party members. 
             -- It fixes the moan sounds for companions and prevents animation reset on these characters' selection in the party.
             if ActorIsPlayable(pairData.Target) or Osi.IsPartyMember(pairData.Target, 1) == 1 then
-                -- A workaround for the following bug in BG3 SE "BG3Ext v14 built on Feb 16 2024 23:26:35":
-                -- if 2 proxies are created w/o a delay, copying Voice component to the 2nd proxy results in crashes or Lua errors in the console.
-                -- SexActor_SubstituteProxy(pairData.TargetData, pairData.ProxyData)
-                Osi.ObjectTimerLaunch(pairData.Caster, "PairedSexCreateTargetProxy", 100)
+                SexActor_SubstituteProxy(pairData.TargetData, pairData.ProxyData)
             end
             Osi.ObjectTimerLaunch(pairData.Caster, "PairedSexAnimStart", 400)
-            return
-        end
-
-        if timer == "PairedSexCreateTargetProxy" then
-            SexActor_SubstituteProxy(pairData.TargetData, pairData.ProxyData)
             return
         end
 
