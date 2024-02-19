@@ -90,13 +90,21 @@ function ActorHasPenis(actor)
         return Osi.GetGender(actor, 1) ~= "Female"
     end
 
-    -- If actor is not playable
-    if not ActorIsPlayable(actor) then
-        return Osi.IsTagged(actor, "FEMALE_3806477c-65a7-4100-9f92-be4c12c4fa4f") ~= 1
+    -- Actors seem to have GENITAL_PENIS/GENITAL_VULVA only if they are player chars or companions who can actually join the party.
+    -- NPCs never get the tags. "Future" companions don't have them too.
+    -- E.g., Halsin in Act 1 has no GENITAL_PENIS, he gets it only when his story allows him to join the active party in Act 2.
+    if ActorIsPlayable(actor) then
+        if Osi.IsTagged(actor, "GENITAL_PENIS_d27831df-2891-42e4-b615-ae555404918b") == 1 then
+            return true
+        end
+
+        if Osi.IsTagged(actor, "GENITAL_VULVA_a0738fdf-ca0c-446f-a11d-6211ecac3291") == 1 then
+            return false
+        end
     end
 
-    -- Playable actor (PC or companion)
-    return Osi.IsTagged(actor, "GENITAL_PENIS_d27831df-2891-42e4-b615-ae555404918b") == 1
+    -- Fallback for NPCs, "future" companions, etc.
+    return Osi.IsTagged(actor, "FEMALE_3806477c-65a7-4100-9f92-be4c12c4fa4f") ~= 1
 end
 
 function AddMainSexSpells(actor)
