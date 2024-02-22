@@ -10,7 +10,8 @@ function StartPairedAnimation(caster, target, animProperties)
         Target = target,
         TargetData = SexActor_Init(target, "SexVocalTarget", animProperties),
         AnimProperties = animProperties,
-        SwitchPlaces = false
+        SwitchPlaces = false,
+        IsStartupAnimation = true
     }
 
     UpdatePairedAnimationVars(pairData)
@@ -147,6 +148,7 @@ function PairedAnimationListeners()
             for _, newAnim in ipairs(SexAnimations) do
                 if newAnim.AnimName == spell then
                     pairData.AnimProperties = newAnim
+                    pairData.IsStartupAnimation = false
                     UpdatePairedAnimationVars(pairData)
                     PlayPairedAnimation(pairData)
                     break
@@ -204,7 +206,7 @@ function UpdatePairedAnimationVars(pairData)
         pairData.AnimContainer = "LesbianAnimationsContainer"
     end
 
-    if (casterHasPenis == targetHasPenis and pairData.SwitchPlaces) or (casterHasPenis == false and targetHasPenis) then
+    if (casterHasPenis == targetHasPenis and pairData.SwitchPlaces) or (casterHasPenis == false and targetHasPenis and not pairData.IsStartupAnimation) then
         casterAnimName, targetAnimName = targetAnimName, casterAnimName
         casterSoundName, targetSoundName = targetSoundName, casterSoundName
     end
