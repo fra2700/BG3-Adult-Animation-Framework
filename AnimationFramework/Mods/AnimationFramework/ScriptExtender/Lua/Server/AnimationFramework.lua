@@ -118,11 +118,53 @@ function AddMainSexSpells(actor)
     end
 end
 
-function CopySimpleEntityComponent(srcEntity, dstEntity, componentName)
+local function ResolveEntityArg(entityArg)
+    if entityArg and type(entityArg) == "string" then
+        local e = Ext.Entity.Get(entityArg)
+        if not e then
+            _P("ResolveEntityArg: failed resolve entity from string '" .. entityArg .. "'")
+        end
+        return e
+    end
+
+    return entityArg
+end
+
+-- Credit: Yoinked from Morbyte (Norbyte?)
+function TryToReserializeObject(srcObject, dstObject)
+    local serializer = function()
+        local serialized = Ext.Types.Serialize(srcObject)
+        Ext.Types.Unserialize(dstObject, serialized)
+    end
+
+    local ok, err = xpcall(serializer, debug.traceback)
+    if not ok then
+        return err
+    end
+
+    return nil
+end
+
+-- Copy entity component componentName from srcEntity to dstEntity if it exists.
+-- srcEntity, dstEntity: entity object or UUID string.
+-- componentName: string name of the component to copy.
+-- Returns: true if the component is successfully copied, false if srcEntity does not have componentName component, srcEntity or dstEntity is nil, etc.
+function TryCopyEntityComponent(srcEntity, dstEntity, componentName)
+    -- Find source component
+    srcEntity = ResolveEntityArg(srcEntity)
+    if not srcEntity then
+        return false
+    end
+
     local srcComponent = srcEntity[componentName]
     if not srcComponent then
-        _P("CopySimpleEntityComponent: srcEntity has no '" .. componentName .. "' component.")
-        return
+        return false
+    end
+
+    -- Find dest component
+    dstEntity = ResolveEntityArg(dstEntity)
+    if not dstEntity then
+        return false
     end
 
     local dstComponent = dstEntity[componentName]
@@ -131,11 +173,24 @@ function CopySimpleEntityComponent(srcEntity, dstEntity, componentName)
         dstComponent = dstEntity[componentName]
     end
 
-    for k, v in pairs(srcComponent) do        
-        dstComponent[k] = v
+    -- Copy stuff
+    if componentName == "ServerItem" then
+        for k, v in pairs(srcComponent) do
+            if k ~= "Template" and k ~= "OriginalTemplate" then
+                TryToReserializeObject(dstComponent[k], v)
+            end
+        end
+    else
+        local serializeResult = TryToReserializeObject(srcComponent, dstComponent)
+        if serializeResult then
+            _P("TryCopyEntityComponent, component '" .. componentName .. "': serialization fail:")
+            _P("    " .. serializeResult)
+        end
     end
 
     if componentName ~= "ServerIconList" and componentName ~= "ServerDisplayNameList" and componentName ~= "ServerItem" then
         dstEntity:Replicate(componentName)
     end
+
+    return true
 end

@@ -124,15 +124,11 @@ function SexActor_SubstituteProxy(actorData, proxyData)
     local proxyEntity = Ext.Entity.Get(actorData.Proxy)
 
     -- Copy Voice component to the proxy because Osi.CreateAtObject does not do this and we want the proxy to play vocals
-    if actorEntity.Voice then
-        CopySimpleEntityComponent(actorEntity, proxyEntity, "Voice")
-    end
+    TryCopyEntityComponent(actorEntity, proxyEntity, "Voice")
 
     -- Copy MaterialParameterOverride component if present.
     -- This fixes the white Shadowheart going back to her original black hair as a proxy.
-    if actorEntity.MaterialParameterOverride then
-        CopySimpleEntityComponent(actorEntity, proxyEntity, "MaterialParameterOverride")
-    end
+    TryCopyEntityComponent(actorEntity, proxyEntity, "MaterialParameterOverride")
 
     -- Copy actor's equipment to the proxy (it will be equipped later in SexActor_FinalizeSetup)
     if not SexActor_IsStripped(actorData) then
@@ -142,6 +138,17 @@ end
 
 function SexActor_FinalizeSetup(actorData, proxyData)
     if actorData.Proxy then
+        local actorEntity = Ext.Entity.Get(actorData.Actor)
+        local proxyEntity = Ext.Entity.Get(actorData.Proxy)
+
+        -- Support for the looks brought by Resculpt spell from "Appearance Edit Enhanced" mod.
+        if TryCopyEntityComponent(actorEntity, proxyEntity, "AppearanceOverride") then
+            if proxyEntity.GameObjectVisual.Type ~= 2 then
+                proxyEntity.GameObjectVisual.Type = 2
+                proxyEntity:Replicate("GameObjectVisual")
+            end
+        end
+
         if actorData.CopiedEquipment then
             SexActor_DressProxy(actorData)
         end
@@ -262,10 +269,7 @@ function SexActor_DressProxy(actorData)
         local item = Osi.GetItemByTemplateInInventory(itemData.Template, actorData.Proxy)
         if item then
             -- Copy the dye applied to the source item
-            local srcEntity = Ext.Entity.Get(itemData.SourceItem)
-            if srcEntity and srcEntity.ItemDye then
-                CopySimpleEntityComponent(srcEntity, Ext.Entity.Get(item), "ItemDye")
-            end
+            TryCopyEntityComponent(itemData.SourceItem, item, "ItemDye")
 
             Osi.Equip(actorData.Proxy, item)
         else
