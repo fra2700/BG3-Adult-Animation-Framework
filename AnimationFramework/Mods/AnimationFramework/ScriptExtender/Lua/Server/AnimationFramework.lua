@@ -1,8 +1,9 @@
 
 -- Runs every time a save is loaded --
 function OnSessionLoaded()
+    ------------------------------------------------------------------------------------------------------------------------------------------
                                                  ---- Setup Functions ----
-------------------------------------------------------------------------------------------------------------------------------------------
+    ------------------------------------------------------------------------------------------------------------------------------------------
 
     Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "after", function(_, _)
         local party = Osi.DB_PartyMembers:Get(nil)
@@ -15,9 +16,9 @@ function OnSessionLoaded()
         AddMainSexSpells(actor)
     end)
 
- ------------------------------------------------------------------------------------------------------------------------------------------
+    ------------------------------------------------------------------------------------------------------------------------------------------
                                                 ---- Animation Functions ----
- ------------------------------------------------------------------------------------------------------------------------------------------
+    ------------------------------------------------------------------------------------------------------------------------------------------
 
     -- Typical Spell Use --
     Ext.Osiris.RegisterListener("UsingSpellOnTarget", 6, "after", function(caster, target, spell, _, _, _)
@@ -38,10 +39,6 @@ function OnSessionLoaded()
             Osi.RemoveStatus(target, "BLOCK_STRIPPING")  
         end
     end)
-
-------------------------------------------------------------------------------------------------------------------------------
--- SUBSCRIBE FUNCTION --
-------------------------------------------------------------------------------------------------------------------------------
 
 end
 
@@ -81,9 +78,8 @@ end
 function ActorHasPenis(actor)
     -- If actor is polymorphed (e.g., Disguise Self spell)
     if Osi.HasAppliedStatusOfType(actor, "POLYMORPHED") == 1 then
-        -- As of hot fix #17, "Femme Githyanki" disguise has a dick.
-        local actorEntity = Ext.Entity.Get(actor)
-        if actorEntity.GameObjectVisual and actorEntity.GameObjectVisual.RootTemplateId and actorEntity.GameObjectVisual.RootTemplateId == "7bb034aa-d355-4973-9b61-4d83cf29d510" then
+        -- As of hotfix #17, "Femme Githyanki" disguise has a dick.
+        if TryGetEntityValue(actor, "GameObjectVisual", "RootTemplateId") == "7bb034aa-d355-4973-9b61-4d83cf29d510" then
             return true
         end
 
@@ -118,6 +114,11 @@ function AddMainSexSpells(actor)
     end
 end
 
+
+-------------------------------------------------------------------------------
+          -- ENTITY UTILITIES --
+-------------------------------------------------------------------------------
+
 local function ResolveEntityArg(entityArg)
     if entityArg and type(entityArg) == "string" then
         local e = Ext.Entity.Get(entityArg)
@@ -128,6 +129,49 @@ local function ResolveEntityArg(entityArg)
     end
 
     return entityArg
+end
+
+-- Get the value of a sub-field in entity if the entity has that sub-field.
+-- Args:
+--     entity: entity object or UUID string.
+--     component, field1, field2, ...: string names of the fields. Any typo in the names results in an error in the SE console.
+-- Returns: the value of the sub-field if it exists, otherwise nil.
+-- Example:
+--     -- Get actor.ServerCharacter.PlayerData.HelmetOption value...
+--     TryGetEntityValue(actor, "ServerCharacter", "PlayerData", "HelmetOption")
+function TryGetEntityValue(entity, component, field1, field2, field3)
+    local v, doStop
+
+    v = ResolveEntityArg(entity)
+    if not v then
+        return nil
+    end
+
+    function GetFieldValue(obj, field)
+        if not field then
+            return obj, true
+        end
+        local newObj = obj[field]
+        return newObj, (newObj == nil)
+    end
+
+    v, doStop = GetFieldValue(v, component)
+    if doStop then
+        return v
+    end
+
+    v, doStop = GetFieldValue(v, field1)
+    if doStop then
+        return v
+    end
+
+    v, doStop = GetFieldValue(v, field2)
+    if doStop then
+        return v
+    end
+
+    v, doStop = GetFieldValue(v, field3)
+    return v
 end
 
 -- Credit: Yoinked from Morbyte (Norbyte?)
@@ -146,8 +190,9 @@ function TryToReserializeObject(srcObject, dstObject)
 end
 
 -- Copy entity component componentName from srcEntity to dstEntity if it exists.
--- srcEntity, dstEntity: entity object or UUID string.
--- componentName: string name of the component to copy.
+-- Args:
+--     srcEntity, dstEntity: entity object or UUID string.
+--     componentName: string name of the component to copy.
 -- Returns: true if the component is successfully copied, false if srcEntity does not have componentName component, srcEntity or dstEntity is nil, etc.
 function TryCopyEntityComponent(srcEntity, dstEntity, componentName)
     -- Find source component

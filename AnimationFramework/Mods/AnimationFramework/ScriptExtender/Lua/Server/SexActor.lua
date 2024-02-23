@@ -110,11 +110,10 @@ function SexActor_SubstituteProxy(actorData, proxyData)
     local lookTemplate = actorData.Actor
     -- If current GameObjectVisual template does not match the original actor's template, apply GameObjectVisual template to the proxy.
     -- This copies the horns of Wyll or the look of any Disguise Self spell applied to the actor. 
-    if (actorEntity.GameObjectVisual and actorEntity.GameObjectVisual.RootTemplateId
-        and actorEntity.OriginalTemplate and actorEntity.OriginalTemplate.OriginalTemplate
-        and actorEntity.GameObjectVisual.RootTemplateId ~= actorEntity.OriginalTemplate.OriginalTemplate
-    ) then
-        lookTemplate = actorEntity.GameObjectVisual.RootTemplateId
+    local visTemplate = TryGetEntityValue(actorEntity, "GameObjectVisual", "RootTemplateId")
+    local origTemplate = TryGetEntityValue(actorEntity, "OriginalTemplate", "OriginalTemplate")
+    if visTemplate and origTemplate and visTemplate ~= origTemplate then
+        lookTemplate = visTemplate
     end
     Osi.Transform(actorData.Proxy, lookTemplate, "296bcfb3-9dab-4a93-8ab1-f1c53c6674c9")
 
@@ -236,10 +235,8 @@ function SexActor_CopyEquipmentToProxy(actorData)
     if currentArmourSet == 0 then -- "Normal" armour set
         copySlots = { "Boots", "Breast", "Cloak", "Gloves", "Amulet", "MeleeMainHand", "MeleeOffHand", "RangedMainHand", "RangedOffHand", "MusicalInstrument" }
 
-        -- Check if the actor has "Hide Helmet" option on in the inventory...
-        local actorEntity = Ext.Entity.Get(actorData.Actor)
-        local hideHelmet = actorEntity.ServerCharacter and actorEntity.ServerCharacter.PlayerData and actorEntity.ServerCharacter.PlayerData.HelmetOption == 0
-        if not hideHelmet then
+        -- If the actor has "Hide Helmet" option off in the inventory...
+        if TryGetEntityValue(actorData.Actor, "ServerCharacter", "PlayerData", "HelmetOption") ~= 0 then
             copySlots[#copySlots + 1] = "Helmet"
         end
     elseif currentArmourSet == 1 then -- "Vanity" armour set
