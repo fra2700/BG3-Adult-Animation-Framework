@@ -55,13 +55,29 @@ function PairedAnimationListeners()
                   -- FADE TIMERS --
         ------------------------------------
 
+        local pairActive
+        local pairIndex = FindPairIndexByActor(actor)
+        local target
+
+        -- Handle cases in which no sex pair exists but fade should still happen
+        if pairIndex ~= 0 then
+            pairActive = true
+            target = AnimationPairs[pairIndex].Target
+        end
+
         if timer == "PairedSexFade.Start" then
             Osi.ScreenFadeTo(actor, 0.1, 0.1, "AnimFade")
+            if pairActive then
+                Osi.ScreenFadeTo(target, 0.1, 0.1, "AnimFade")
+            end
             return
         end
 
         if timer == "PairedSexFade.End" then
             Osi.ClearScreenFade(actor, 0.1, "AnimFade", 0)
+            if pairActive then
+                Osi.ClearScreenFade(target, 0.1, "AnimFade", 0)
+            end
             return
         end
         
@@ -182,11 +198,12 @@ function StopPairedAnimation(pairData)
     Osi.ObjectTimerCancel(pairData.Target, "PairedSexFade.End")
 
     Osi.ScreenFadeTo(pairData.Caster, 0.1, 0.1, "AnimFade")
-    --Osi.ScreenFadeTo(pairData.Target, 0.1, 0.1, "AnimFade")
+    Osi.ScreenFadeTo(pairData.Target, 0.1, 0.1, "AnimFade")
 
     Osi.ObjectTimerLaunch(pairData.Caster, "FinishSex", 200)
     Osi.ObjectTimerLaunch(pairData.Caster, "PairedSexFade.End", 2500)
-    --Osi.ObjectTimerLaunch(pairData.Target, "PairedSexFade.End", 2500)
+    Osi.ObjectTimerLaunch(pairData.Target, "PairedSexFade.End", 2500)
+
     SexActor_StopVocalTimer(pairData.CasterData)
     SexActor_StopVocalTimer(pairData.TargetData)
 end
