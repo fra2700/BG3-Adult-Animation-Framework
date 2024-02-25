@@ -144,7 +144,7 @@ SexAnimations = {
         Strip = true,
         Type = "Solo",
         TopAnimationID = "9d8c5992-55ab-4c2f-8d97-28b68eb50a8b",
-        BottomAnimationID = "dab6d199-fb66-4181-b4e1-fc3c3a831cbd",
+        BottomAnimationID = "9d8c5992-55ab-4c2f-8d97-28b68eb50a8b",
     },
     {
         AnimName = "Milking",
