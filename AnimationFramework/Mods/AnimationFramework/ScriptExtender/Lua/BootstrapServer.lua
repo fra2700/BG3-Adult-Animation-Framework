@@ -1,5 +1,3 @@
-Ext.Events.ResetCompleted:Subscribe(on_reset_completed)
-
 Ext.Require("Shared/AnimationPack.lua")
 Ext.Require("Server/AnimationFramework.lua")
 Ext.Require("Server/SexActor.lua")
