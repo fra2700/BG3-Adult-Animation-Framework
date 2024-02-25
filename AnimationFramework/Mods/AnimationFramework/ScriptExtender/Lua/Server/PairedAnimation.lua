@@ -3,24 +3,30 @@ if not AnimationPairs then
 end
 
 function StartPairedAnimation(caster, target, animProperties)
+    -- Always create a proxy for targets if they are PCs or companions or some temporary party members. 
+    -- It fixes the moan sounds for companions and prevents animation reset on these characters' selection in the party.
+    local targetNeedsProxy = (ActorIsPlayable(target) or Osi.IsPartyMember(target, 1) == 1)
 
     local pairData = {
         Caster = caster,
-        CasterData = SexActor_Init(caster, "SexVocalCaster", animProperties),
+        CasterData = SexActor_Init(caster, true, "SexVocalCaster", animProperties),
         Target = target,
-        TargetData = SexActor_Init(target, "SexVocalTarget", animProperties),
+        TargetData = SexActor_Init(target, targetNeedsProxy, "SexVocalTarget", animProperties),
         AnimProperties = animProperties,
         SwitchPlaces = false,
         IsStartupAnimation = true
     }
 
+    local casterScaled = SexActor_PurgeBodyScaleStatuses(pairData.CasterData)
+    local targetScaled = SexActor_PurgeBodyScaleStatuses(pairData.TargetData)
+
     UpdatePairedAnimationVars(pairData)
 
     AnimationPairs[#AnimationPairs + 1] = pairData
 
-    local stripDelay = 0
+    local setupDelay = 400
+
     if pairData.CasterData.Strip or pairData.TargetData.Strip then
-        stripDelay = 1600
         if pairData.CasterData.Strip then
             Osi.ApplyStatus(caster, "DARK_JUSTICIAR_VFX", 1)
         end
@@ -28,23 +34,21 @@ function StartPairedAnimation(caster, target, animProperties)
             Osi.ApplyStatus(target, "DARK_JUSTICIAR_VFX", 1)
         end
         Osi.ObjectTimerLaunch(caster, "PairedSexStrip", 600)
+        setupDelay = 2000
+    end
+
+    if (casterScaled or targetScaled) and setupDelay < BODY_SCALE_DELAY then
+        setupDelay = BODY_SCALE_DELAY -- Give some time for the bodies to go back to their normal scale
     end
     
     if pairData.AnimProperties["Fade"] == true then
-        Osi.ObjectTimerLaunch(caster, "PairedSexFade.Start", 200 + stripDelay)
-        Osi.ObjectTimerLaunch(caster, "PairedSexFade.End", 1200 + stripDelay)
+        Osi.ObjectTimerLaunch(caster, "PairedSexFade.Start", setupDelay - 200)
+        Osi.ObjectTimerLaunch(caster, "PairedSexFade.End", setupDelay + 800)
     end
 
-    Osi.ObjectTimerLaunch(caster, "PairedSexSetup", 400 + stripDelay)
+    Osi.ObjectTimerLaunch(caster, "PairedSexSetup", setupDelay)
 
     TryAddSpell(caster, pairData.AnimContainer)
-end
-
-local function TryStripPairedActor(actorData)
-    if actorData.Strip then
-        Osi.ApplyStatus(actorData.Actor, "PASSIVE_WILDMAGIC_MAGICRETRIBUTION_DEFENDER", 1)
-        SexActor_Strip(actorData)
-    end
 end
 
 function PairedAnimationListeners()
@@ -92,6 +96,13 @@ function PairedAnimationListeners()
         local pairData = AnimationPairs[pairIndex]
 
         if timer == "PairedSexStrip" then
+            function TryStripPairedActor(actorData)
+                if actorData.Strip then
+                    Osi.ApplyStatus(actorData.Actor, "PASSIVE_WILDMAGIC_MAGICRETRIBUTION_DEFENDER", 1)
+                    SexActor_Strip(actorData)
+                end
+            end
+
             TryStripPairedActor(pairData.CasterData)
             TryStripPairedActor(pairData.TargetData)
             return
@@ -100,11 +111,7 @@ function PairedAnimationListeners()
         if timer == "PairedSexSetup" then
             pairData.ProxyData = SexActor_CreateProxyMarker(pairData.Target)
             SexActor_SubstituteProxy(pairData.CasterData, pairData.ProxyData)
-            -- Always create a proxy for targets if they are PCs or companions or some temporary party members. 
-            -- It fixes the moan sounds for companions and prevents animation reset on these characters' selection in the party.
-            if ActorIsPlayable(pairData.Target) or Osi.IsPartyMember(pairData.Target, 1) == 1 then
-                SexActor_SubstituteProxy(pairData.TargetData, pairData.ProxyData)
-            end
+            SexActor_SubstituteProxy(pairData.TargetData, pairData.ProxyData)
             Osi.ObjectTimerLaunch(pairData.Caster, "PairedSexAnimStart", 400)
             return
         end
