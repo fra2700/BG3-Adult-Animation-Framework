@@ -44,6 +44,8 @@ function StartPairedAnimation(caster, target, animProperties)
     if pairData.AnimProperties["Fade"] == true then
         Osi.ObjectTimerLaunch(caster, "PairedSexFade.Start", setupDelay - 200)
         Osi.ObjectTimerLaunch(caster, "PairedSexFade.End", setupDelay + 800)
+        Osi.ObjectTimerLaunch(target, "PairedSexFade.Start", setupDelay - 200)
+        Osi.ObjectTimerLaunch(target, "PairedSexFade.End", setupDelay + 800)
     end
 
     Osi.ObjectTimerLaunch(caster, "PairedSexSetup", setupDelay)
@@ -189,11 +191,12 @@ function StopPairedAnimation(pairData)
     Osi.ObjectTimerCancel(pairData.Target, "PairedSexFade.End")
 
     Osi.ScreenFadeTo(pairData.Caster, 0.1, 0.1, "AnimFade")
-    --Osi.ScreenFadeTo(pairData.Target, 0.1, 0.1, "AnimFade")
+    Osi.ScreenFadeTo(pairData.Target, 0.1, 0.1, "AnimFade")
 
     Osi.ObjectTimerLaunch(pairData.Caster, "FinishSex", 200)
     Osi.ObjectTimerLaunch(pairData.Caster, "PairedSexFade.End", 2500)
-    --Osi.ObjectTimerLaunch(pairData.Target, "PairedSexFade.End", 2500)
+    Osi.ObjectTimerLaunch(pairData.Target, "PairedSexFade.End", 2500)
+
     SexActor_StopVocalTimer(pairData.CasterData)
     SexActor_StopVocalTimer(pairData.TargetData)
 end
