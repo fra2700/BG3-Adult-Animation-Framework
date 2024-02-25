@@ -44,6 +44,8 @@ function StartPairedAnimation(caster, target, animProperties)
     if pairData.AnimProperties["Fade"] == true then
         Osi.ObjectTimerLaunch(caster, "PairedSexFade.Start", setupDelay - 200)
         Osi.ObjectTimerLaunch(caster, "PairedSexFade.End", setupDelay + 800)
+        Osi.ObjectTimerLaunch(target, "PairedSexFade.Start", setupDelay - 200)
+        Osi.ObjectTimerLaunch(target, "PairedSexFade.End", setupDelay + 800)
     end
 
     Osi.ObjectTimerLaunch(caster, "PairedSexSetup", setupDelay)
