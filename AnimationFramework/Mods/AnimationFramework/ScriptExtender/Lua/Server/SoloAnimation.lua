@@ -3,24 +3,30 @@ if not AnimationSolos then
 end
 
 function StartSoloAnimation(actor, animProperties) 
-
     local soloData = {
         Actor = actor,
-        ActorData = SexActor_Init(actor, "SexVocal"),
+        ActorData = SexActor_Init(actor, true, "SexVocal", animProperties),
         AnimProperties = animProperties,
         AnimContainer = ""
     }
+
+    local actorScaled = SexActor_PurgeBodyScaleStatuses(soloData.ActorData)
 
     UpdateSoloAnimationVars(soloData)
 
     AnimationSolos[actor] = soloData
 
-    if animProperties["Fade"] == true then
-        Osi.ObjectTimerLaunch(actor, "SoloSexFade.Start", 200)
-        Osi.ObjectTimerLaunch(actor, "SoloSexFade.End", 1200)
+    local setupDelay = 400
+    if actorScaled and setupDelay < BODY_SCALE_DELAY then
+        setupDelay = BODY_SCALE_DELAY -- Give some time for the actor's body to go back to its normal scale
     end
 
-    Osi.ObjectTimerLaunch(actor, "SoloSexSetup", 400)
+    if animProperties["Fade"] == true then
+        Osi.ObjectTimerLaunch(actor, "SoloSexFade.Start", setupDelay - 200)
+        Osi.ObjectTimerLaunch(actor, "SoloSexFade.End", setupDelay + 800)
+    end
+
+    Osi.ObjectTimerLaunch(actor, "SoloSexSetup", setupDelay)
 
     TryAddSpell(actor, soloData.AnimContainer)
 end
@@ -53,7 +59,7 @@ function SoloAnimationListeners()
         end
 
         if timer == "SoloSexSetup" then
-            if soloData.AnimProperties["Strip"] == true and Osi.HasActiveStatus(soloData.Actor, "BLOCK_STRIPPING") == 0 then
+            if soloData.ActorData.Strip then
                 SexActor_Strip(soloData.ActorData)
             end
             soloData.ProxyData = SexActor_CreateProxyMarker(soloData.Actor)

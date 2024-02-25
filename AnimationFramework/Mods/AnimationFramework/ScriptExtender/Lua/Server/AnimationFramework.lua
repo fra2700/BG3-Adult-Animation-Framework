@@ -1,8 +1,9 @@
 
 -- Runs every time a save is loaded --
 function OnSessionLoaded()
+    ------------------------------------------------------------------------------------------------------------------------------------------
                                                  ---- Setup Functions ----
-------------------------------------------------------------------------------------------------------------------------------------------
+    ------------------------------------------------------------------------------------------------------------------------------------------
 
     Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "after", function(_, _)
         local party = Osi.DB_PartyMembers:Get(nil)
@@ -15,9 +16,9 @@ function OnSessionLoaded()
         AddMainSexSpells(actor)
     end)
 
- ------------------------------------------------------------------------------------------------------------------------------------------
+    ------------------------------------------------------------------------------------------------------------------------------------------
                                                 ---- Animation Functions ----
- ------------------------------------------------------------------------------------------------------------------------------------------
+    ------------------------------------------------------------------------------------------------------------------------------------------
 
     -- Typical Spell Use --
     Ext.Osiris.RegisterListener("UsingSpellOnTarget", 6, "after", function(caster, target, spell, _, _, _)
@@ -38,10 +39,6 @@ function OnSessionLoaded()
             Osi.RemoveStatus(target, "BLOCK_STRIPPING")  
         end
     end)
-
-------------------------------------------------------------------------------------------------------------------------------
--- SUBSCRIBE FUNCTION --
-------------------------------------------------------------------------------------------------------------------------------
 
 end
 
@@ -81,22 +78,29 @@ end
 function ActorHasPenis(actor)
     -- If actor is polymorphed (e.g., Disguise Self spell)
     if Osi.HasAppliedStatusOfType(actor, "POLYMORPHED") == 1 then
-        -- As of hot fix #17, "Femme Githyanki" disguise has a dick.
-        local actorEntity = Ext.Entity.Get(actor)
-        if actorEntity.GameObjectVisual and actorEntity.GameObjectVisual.RootTemplateId and actorEntity.GameObjectVisual.RootTemplateId == "7bb034aa-d355-4973-9b61-4d83cf29d510" then
+        -- As of hotfix #17, "Femme Githyanki" disguise has a dick.
+        if TryGetEntityValue(actor, "GameObjectVisual", "RootTemplateId") == "7bb034aa-d355-4973-9b61-4d83cf29d510" then
             return true
         end
 
         return Osi.GetGender(actor, 1) ~= "Female"
     end
 
-    -- If actor is not playable
-    if not ActorIsPlayable(actor) then
-        return Osi.IsTagged(actor, "FEMALE_3806477c-65a7-4100-9f92-be4c12c4fa4f") ~= 1
+    -- Actors seem to have GENITAL_PENIS/GENITAL_VULVA only if they are player chars or companions who can actually join the party.
+    -- NPCs never get the tags. "Future" companions don't have them too.
+    -- E.g., Halsin in Act 1 has no GENITAL_PENIS, he gets it only when his story allows him to join the active party in Act 2.
+    if ActorIsPlayable(actor) then
+        if Osi.IsTagged(actor, "GENITAL_PENIS_d27831df-2891-42e4-b615-ae555404918b") == 1 then
+            return true
+        end
+
+        if Osi.IsTagged(actor, "GENITAL_VULVA_a0738fdf-ca0c-446f-a11d-6211ecac3291") == 1 then
+            return false
+        end
     end
 
-    -- Playable actor (PC or companion)
-    return Osi.IsTagged(actor, "GENITAL_PENIS_d27831df-2891-42e4-b615-ae555404918b") == 1
+    -- Fallback for NPCs, "future" companions, etc.
+    return Osi.IsTagged(actor, "FEMALE_3806477c-65a7-4100-9f92-be4c12c4fa4f") ~= 1
 end
 
 function AddMainSexSpells(actor)
@@ -110,11 +114,102 @@ function AddMainSexSpells(actor)
     end
 end
 
-function CopySimpleEntityComponent(srcEntity, dstEntity, componentName)
+
+-------------------------------------------------------------------------------
+          -- ENTITY UTILITIES --
+-------------------------------------------------------------------------------
+
+local function ResolveEntityArg(entityArg)
+    if entityArg and type(entityArg) == "string" then
+        local e = Ext.Entity.Get(entityArg)
+        if not e then
+            _P("ResolveEntityArg: failed resolve entity from string '" .. entityArg .. "'")
+        end
+        return e
+    end
+
+    return entityArg
+end
+
+-- Get the value of a sub-field in entity if the entity has that sub-field.
+-- Args:
+--     entity: entity object or UUID string.
+--     component, field1, field2, ...: string names of the fields. Any typo in the names results in an error in the SE console.
+-- Returns: the value of the sub-field if it exists, otherwise nil.
+-- Example:
+--     -- Get actor.ServerCharacter.PlayerData.HelmetOption value...
+--     TryGetEntityValue(actor, "ServerCharacter", "PlayerData", "HelmetOption")
+function TryGetEntityValue(entity, component, field1, field2, field3)
+    local v, doStop
+
+    v = ResolveEntityArg(entity)
+    if not v then
+        return nil
+    end
+
+    function GetFieldValue(obj, field)
+        if not field then
+            return obj, true
+        end
+        local newObj = obj[field]
+        return newObj, (newObj == nil)
+    end
+
+    v, doStop = GetFieldValue(v, component)
+    if doStop then
+        return v
+    end
+
+    v, doStop = GetFieldValue(v, field1)
+    if doStop then
+        return v
+    end
+
+    v, doStop = GetFieldValue(v, field2)
+    if doStop then
+        return v
+    end
+
+    v, doStop = GetFieldValue(v, field3)
+    return v
+end
+
+-- Credit: Yoinked from Morbyte (Norbyte?)
+function TryToReserializeObject(srcObject, dstObject)
+    local serializer = function()
+        local serialized = Ext.Types.Serialize(srcObject)
+        Ext.Types.Unserialize(dstObject, serialized)
+    end
+
+    local ok, err = xpcall(serializer, debug.traceback)
+    if not ok then
+        return err
+    end
+
+    return nil
+end
+
+-- Copy entity component componentName from srcEntity to dstEntity if it exists.
+-- Args:
+--     srcEntity, dstEntity: entity object or UUID string.
+--     componentName: string name of the component to copy.
+-- Returns: true if the component is successfully copied, false if srcEntity does not have componentName component, srcEntity or dstEntity is nil, etc.
+function TryCopyEntityComponent(srcEntity, dstEntity, componentName)
+    -- Find source component
+    srcEntity = ResolveEntityArg(srcEntity)
+    if not srcEntity then
+        return false
+    end
+
     local srcComponent = srcEntity[componentName]
     if not srcComponent then
-        _P("CopySimpleEntityComponent: srcEntity has no '" .. componentName .. "' component.")
-        return
+        return false
+    end
+
+    -- Find dest component
+    dstEntity = ResolveEntityArg(dstEntity)
+    if not dstEntity then
+        return false
     end
 
     local dstComponent = dstEntity[componentName]
@@ -123,11 +218,24 @@ function CopySimpleEntityComponent(srcEntity, dstEntity, componentName)
         dstComponent = dstEntity[componentName]
     end
 
-    for k, v in pairs(srcComponent) do        
-        dstComponent[k] = v
+    -- Copy stuff
+    if componentName == "ServerItem" then
+        for k, v in pairs(srcComponent) do
+            if k ~= "Template" and k ~= "OriginalTemplate" then
+                TryToReserializeObject(dstComponent[k], v)
+            end
+        end
+    else
+        local serializeResult = TryToReserializeObject(srcComponent, dstComponent)
+        if serializeResult then
+            _P("TryCopyEntityComponent, component '" .. componentName .. "': serialization fail:")
+            _P("    " .. serializeResult)
+        end
     end
 
     if componentName ~= "ServerIconList" and componentName ~= "ServerDisplayNameList" and componentName ~= "ServerItem" then
         dstEntity:Replicate(componentName)
     end
+
+    return true
 end

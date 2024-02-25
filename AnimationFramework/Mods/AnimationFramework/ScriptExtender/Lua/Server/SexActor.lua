@@ -20,15 +20,32 @@ local ORGASM_SOUNDS = {
     "Player_Races_Voice_Gen_Recover_Cinematics"
 }
 
+BODY_SCALE_DELAY = 2000
 
-function SexActor_Init(actor, vocalTimerName)
+local BODY_SCALE_STATUSES = {
+    -- The list of statuses below was copied from OnApplyFunctors data of ALCH_ELIXIR_ENLARGE entry in
+    -- <unpacked game data>/Gustav/Public/Honour/Stats/Generated/Data/Status_BOOST.txt
+    "ENLARGE",
+    "ENLARGE_DUERGAR",
+    "REDUCE",
+    "REDUCE_DUERGAR",
+    "WYR_POTENTDRINK_SIZE_ENLARGE",
+    "WYR_POTENTDRINK_SIZE_REDUCE",
+    "MAG_COMBAT_QUARTERSTAFF_ENLARGE",
+    "MAG_GIANT_SLAYER_LEGENDARY_ENLRAGE"
+}
+
+
+function SexActor_Init(actor, needsProxy, vocalTimerName, animProperties)
     local actorData = {
         Actor = actor,
         Proxy = nil,
+        NeedsProxy = needsProxy,
         Animation = "",
         SoundTable = {},
         VocalTimerName = vocalTimerName,
-        IsCompanionInCamp = false
+        Strip = (animProperties["Strip"] == true and Osi.HasActiveStatus(actor, "BLOCK_STRIPPING") == 0),
+        CameraScaleDown = (needsProxy and Osi.IsPartyMember(actor, 0) == 1)
     }
 
     Osi.SetDetached(actor, 1)
@@ -67,6 +84,12 @@ function SexActor_Terminate(actorData)
     Osi.RemoveBoosts(actorData.Actor, "ActionResourceBlock(Movement)", 0, "", "")
     SexActor_StopVocalTimer(actorData)
 
+    if actorData.OldVisualScale then
+        local actorEntity = Ext.Entity.Get(actorData.Actor)
+        actorEntity.GameObjectVisual.Scale = actorData.OldVisualScale
+        actorEntity:Replicate("GameObjectVisual")
+    end
+
     if SexActor_IsStripped(actorData) then
         SexActor_Redress(actorData)
     end
@@ -83,6 +106,27 @@ function SexActor_Terminate(actorData)
     Osi.SetDetached(actorData.Actor, 0)
 end
 
+function SexActor_PurgeBodyScaleStatuses(actorData)
+    local result = false
+    
+    if actorData.CameraScaleDown or not actorData.NeedsProxy then
+        -- Need to purge all statuses affecting the body scale that could expire during sex,
+        -- especially if we're going to scale the body down to bring the camera closer.
+        for _, status in ipairs(BODY_SCALE_STATUSES) do
+            if Osi.HasAppliedStatus(actorData.Actor, status) == 1 then
+                local statusToRemove = status
+                if status == "MAG_GIANT_SLAYER_LEGENDARY_ENLRAGE" then
+                    statusToRemove = "ALCH_ELIXIR_ENLARGE"
+                end
+                Osi.RemoveStatus(actorData.Actor, statusToRemove, "")
+                result = true
+            end
+        end
+    end
+
+    return result
+end
+
 function SexActor_CreateProxyMarker(target)
     local proxyData = {}
     proxyData.MarkerX, proxyData.MarkerY, proxyData.MarkerZ = Osi.GetPosition(target)
@@ -97,6 +141,10 @@ function SexActor_TerminateProxyMarker(proxyData)
 end
 
 function SexActor_SubstituteProxy(actorData, proxyData)
+    if not actorData.NeedsProxy then
+        return
+    end
+
     actorData.StartX, actorData.StartY, actorData.StartZ = Osi.GetPosition(actorData.Actor)
 
     -- Temporary teleport the original away a bit to give room for the proxy
@@ -110,11 +158,10 @@ function SexActor_SubstituteProxy(actorData, proxyData)
     local lookTemplate = actorData.Actor
     -- If current GameObjectVisual template does not match the original actor's template, apply GameObjectVisual template to the proxy.
     -- This copies the horns of Wyll or the look of any Disguise Self spell applied to the actor. 
-    if (actorEntity.GameObjectVisual and actorEntity.GameObjectVisual.RootTemplateId
-        and actorEntity.OriginalTemplate and actorEntity.OriginalTemplate.OriginalTemplate
-        and actorEntity.GameObjectVisual.RootTemplateId ~= actorEntity.OriginalTemplate.OriginalTemplate
-    ) then
-        lookTemplate = actorEntity.GameObjectVisual.RootTemplateId
+    local visTemplate = TryGetEntityValue(actorEntity, "GameObjectVisual", "RootTemplateId")
+    local origTemplate = TryGetEntityValue(actorEntity, "OriginalTemplate", "OriginalTemplate")
+    if visTemplate and origTemplate and visTemplate ~= origTemplate then
+        lookTemplate = visTemplate
     end
     Osi.Transform(actorData.Proxy, lookTemplate, "296bcfb3-9dab-4a93-8ab1-f1c53c6674c9")
 
@@ -124,24 +171,41 @@ function SexActor_SubstituteProxy(actorData, proxyData)
     local proxyEntity = Ext.Entity.Get(actorData.Proxy)
 
     -- Copy Voice component to the proxy because Osi.CreateAtObject does not do this and we want the proxy to play vocals
-    if actorEntity.Voice then
-        CopySimpleEntityComponent(actorEntity, proxyEntity, "Voice")
-    end
+    TryCopyEntityComponent(actorEntity, proxyEntity, "Voice")
 
     -- Copy MaterialParameterOverride component if present.
     -- This fixes the white Shadowheart going back to her original black hair as a proxy.
-    if actorEntity.MaterialParameterOverride then
-        CopySimpleEntityComponent(actorEntity, proxyEntity, "MaterialParameterOverride")
-    end
+    TryCopyEntityComponent(actorEntity, proxyEntity, "MaterialParameterOverride")
 
     -- Copy actor's equipment to the proxy (it will be equipped later in SexActor_FinalizeSetup)
     if not SexActor_IsStripped(actorData) then
         SexActor_CopyEquipmentToProxy(actorData)
     end
+
+    -- Scale party members down so the camera would be closer to the action.
+    if actorData.CameraScaleDown then
+        local curScale = TryGetEntityValue(actorEntity, "GameObjectVisual", "Scale")
+        if curScale then
+            actorData.OldVisualScale = curScale
+            actorEntity.GameObjectVisual.Scale = 0.05
+            actorEntity:Replicate("GameObjectVisual")
+        end
+    end
 end
 
 function SexActor_FinalizeSetup(actorData, proxyData)
     if actorData.Proxy then
+        local actorEntity = Ext.Entity.Get(actorData.Actor)
+        local proxyEntity = Ext.Entity.Get(actorData.Proxy)
+
+        -- Support for the looks brought by Resculpt spell from "Appearance Edit Enhanced" mod.
+        if TryCopyEntityComponent(actorEntity, proxyEntity, "AppearanceOverride") then
+            if proxyEntity.GameObjectVisual.Type ~= 2 then
+                proxyEntity.GameObjectVisual.Type = 2
+                proxyEntity:Replicate("GameObjectVisual")
+            end
+        end
+
         if actorData.CopiedEquipment then
             SexActor_DressProxy(actorData)
         end
@@ -149,6 +213,7 @@ function SexActor_FinalizeSetup(actorData, proxyData)
         Osi.TeleportToPosition(actorData.Actor, proxyData.MarkerX, proxyData.MarkerY, proxyData.MarkerZ, "", 0, 0, 0, 0, 1)
         Osi.SetVisible(actorData.Actor, 0)
     end
+
     BlockActorMovement(actorData.Actor)
 end
 
@@ -229,10 +294,8 @@ function SexActor_CopyEquipmentToProxy(actorData)
     if currentArmourSet == 0 then -- "Normal" armour set
         copySlots = { "Boots", "Breast", "Cloak", "Gloves", "Amulet", "MeleeMainHand", "MeleeOffHand", "RangedMainHand", "RangedOffHand", "MusicalInstrument" }
 
-        -- Check if the actor has "Hide Helmet" option on in the inventory...
-        local actorEntity = Ext.Entity.Get(actorData.Actor)
-        local hideHelmet = actorEntity.ServerCharacter and actorEntity.ServerCharacter.PlayerData and actorEntity.ServerCharacter.PlayerData.HelmetOption == 0
-        if not hideHelmet then
+        -- If the actor has "Hide Helmet" option off in the inventory...
+        if TryGetEntityValue(actorData.Actor, "ServerCharacter", "PlayerData", "HelmetOption") ~= 0 then
             copySlots[#copySlots + 1] = "Helmet"
         end
     elseif currentArmourSet == 1 then -- "Vanity" armour set
@@ -262,10 +325,7 @@ function SexActor_DressProxy(actorData)
         local item = Osi.GetItemByTemplateInInventory(itemData.Template, actorData.Proxy)
         if item then
             -- Copy the dye applied to the source item
-            local srcEntity = Ext.Entity.Get(itemData.SourceItem)
-            if srcEntity and srcEntity.ItemDye then
-                CopySimpleEntityComponent(srcEntity, Ext.Entity.Get(item), "ItemDye")
-            end
+            TryCopyEntityComponent(itemData.SourceItem, item, "ItemDye")
 
             Osi.Equip(actorData.Proxy, item)
         else
