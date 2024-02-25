@@ -20,15 +20,32 @@ local ORGASM_SOUNDS = {
     "Player_Races_Voice_Gen_Recover_Cinematics"
 }
 
+BODY_SCALE_DELAY = 2000
 
-function SexActor_Init(actor, vocalTimerName, animProperties)
+local BODY_SCALE_STATUSES = {
+    -- The list of statuses below was copied from OnApplyFunctors data of ALCH_ELIXIR_ENLARGE entry in
+    -- <unpacked game data>/Gustav/Public/Honour/Stats/Generated/Data/Status_BOOST.txt
+    "ENLARGE",
+    "ENLARGE_DUERGAR",
+    "REDUCE",
+    "REDUCE_DUERGAR",
+    "WYR_POTENTDRINK_SIZE_ENLARGE",
+    "WYR_POTENTDRINK_SIZE_REDUCE",
+    "MAG_COMBAT_QUARTERSTAFF_ENLARGE",
+    "MAG_GIANT_SLAYER_LEGENDARY_ENLRAGE"
+}
+
+
+function SexActor_Init(actor, needsProxy, vocalTimerName, animProperties)
     local actorData = {
         Actor = actor,
         Proxy = nil,
+        NeedsProxy = needsProxy,
         Animation = "",
         SoundTable = {},
         VocalTimerName = vocalTimerName,
-        Strip = (animProperties["Strip"] == true and Osi.HasActiveStatus(actor, "BLOCK_STRIPPING") == 0)
+        Strip = (animProperties["Strip"] == true and Osi.HasActiveStatus(actor, "BLOCK_STRIPPING") == 0),
+        CameraScaleDown = (needsProxy and Osi.IsPartyMember(actor, 0) == 1)
     }
 
     Osi.SetDetached(actor, 1)
@@ -67,6 +84,12 @@ function SexActor_Terminate(actorData)
     Osi.RemoveBoosts(actorData.Actor, "ActionResourceBlock(Movement)", 0, "", "")
     SexActor_StopVocalTimer(actorData)
 
+    if actorData.OldVisualScale then
+        local actorEntity = Ext.Entity.Get(actorData.Actor)
+        actorEntity.GameObjectVisual.Scale = actorData.OldVisualScale
+        actorEntity:Replicate("GameObjectVisual")
+    end
+
     if SexActor_IsStripped(actorData) then
         SexActor_Redress(actorData)
     end
@@ -83,6 +106,27 @@ function SexActor_Terminate(actorData)
     Osi.SetDetached(actorData.Actor, 0)
 end
 
+function SexActor_PurgeBodyScaleStatuses(actorData)
+    local result = false
+    
+    if actorData.CameraScaleDown or not actorData.NeedsProxy then
+        -- Need to purge all statuses affecting the body scale that could expire during sex,
+        -- especially if we're going to scale the body down to bring the camera closer.
+        for _, status in ipairs(BODY_SCALE_STATUSES) do
+            if Osi.HasAppliedStatus(actorData.Actor, status) == 1 then
+                local statusToRemove = status
+                if status == "MAG_GIANT_SLAYER_LEGENDARY_ENLRAGE" then
+                    statusToRemove = "ALCH_ELIXIR_ENLARGE"
+                end
+                Osi.RemoveStatus(actorData.Actor, statusToRemove, "")
+                result = true
+            end
+        end
+    end
+
+    return result
+end
+
 function SexActor_CreateProxyMarker(target)
     local proxyData = {}
     proxyData.MarkerX, proxyData.MarkerY, proxyData.MarkerZ = Osi.GetPosition(target)
@@ -97,6 +141,10 @@ function SexActor_TerminateProxyMarker(proxyData)
 end
 
 function SexActor_SubstituteProxy(actorData, proxyData)
+    if not actorData.NeedsProxy then
+        return
+    end
+
     actorData.StartX, actorData.StartY, actorData.StartZ = Osi.GetPosition(actorData.Actor)
 
     -- Temporary teleport the original away a bit to give room for the proxy
@@ -133,6 +181,16 @@ function SexActor_SubstituteProxy(actorData, proxyData)
     if not SexActor_IsStripped(actorData) then
         SexActor_CopyEquipmentToProxy(actorData)
     end
+
+    -- Scale party members down so the camera would be closer to the action.
+    if actorData.CameraScaleDown then
+        local curScale = TryGetEntityValue(actorEntity, "GameObjectVisual", "Scale")
+        if curScale then
+            actorData.OldVisualScale = curScale
+            actorEntity.GameObjectVisual.Scale = 0.05
+            actorEntity:Replicate("GameObjectVisual")
+        end
+    end
 end
 
 function SexActor_FinalizeSetup(actorData, proxyData)
@@ -155,6 +213,7 @@ function SexActor_FinalizeSetup(actorData, proxyData)
         Osi.TeleportToPosition(actorData.Actor, proxyData.MarkerX, proxyData.MarkerY, proxyData.MarkerZ, "", 0, 0, 0, 0, 1)
         Osi.SetVisible(actorData.Actor, 0)
     end
+
     BlockActorMovement(actorData.Actor)
 end
 
