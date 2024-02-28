@@ -232,8 +232,6 @@ data "AIFlags" "CanNotUse"
 data "SpellFlags" "IsLinkedSpellContainer"
     
 
-
-
 //-------------------------------------------------
 // Female Masturbation
 //-------------------------------------------------
