@@ -206,6 +206,10 @@ function SexActor_FinalizeSetup(actorData, proxyData)
             end
         end
 
+        -- Copy actor's display name to proxy (mostly for Tavs)
+        TryCopyEntityComponent(actorEntity, proxyEntity, "DisplayName")
+        -- TryCopyEntityComponent(actorEntity, proxyEntity, "CustomName")
+
         if actorData.CopiedEquipment then
             SexActor_DressProxy(actorData)
         end
