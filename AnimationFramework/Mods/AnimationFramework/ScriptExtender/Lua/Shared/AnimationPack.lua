@@ -122,18 +122,6 @@ SexAnimations = {
         AnimName = "StopMasturbating",
     },
     {
-        AnimName = "MasturbateOnBack",
-        AnimLength = 3600,
-        Loop = true,
-        Fade = true,
-        Sound = true,
-        SoundTop = {"BreathLongExhaleOpen_PlayerCharacter_Cine","BreathLongInhaleOpen_PlayerCharacter_Cine","LoveMoanClosed_PlayerCharacter_Cine", "LoveMoanClosed_PlayerCharacter_Cine", "LoveMoanOpen_PlayerCharacter_Cine"},
-        SoundBottom = {"CAMP_Karlach_CRD_ROM_Date_SexKiss2", "CAMP_Karlach_CRD_ROM_Date_SexKiss3", "CAMP_Karlach_CRD_ROM_Date_SexKiss6", "CAMP_Karlach_CRD_ROM_Date_SexKiss7", "CAMP_Karlach_CRD_ROM_Date_SexKiss9"},
-        Strip = true,
-        Type = "Solo",
-        TopAnimationID = "",
-    },
-    {
         AnimName = "MasturbateStanding",
         AnimLength = 3600,
         Loop = true,
@@ -172,6 +160,5 @@ SexAnimations = {
         TopAnimationID = "49497bdc-d901-4f60-9e4e-3d31a06f9002",
         BottomAnimationID = "49497bdc-d901-4f60-9e4e-3d31a06f9002"
     },
-	
 
 }
