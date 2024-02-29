@@ -160,5 +160,19 @@ SexAnimations = {
         TopAnimationID = "49497bdc-d901-4f60-9e4e-3d31a06f9002",
         BottomAnimationID = "49497bdc-d901-4f60-9e4e-3d31a06f9002"
     },
+    {
+        AnimName = "BottleSit",
+        AnimLength = 3600,
+        Loop = true,
+        Fade = true,
+        Sound = true,
+        SoundTop = {"BreathLongExhaleOpen_PlayerCharacter_Cine","BreathLongInhaleOpen_PlayerCharacter_Cine","LoveMoanClosed_PlayerCharacter_Cine", "LoveMoanClosed_PlayerCharacter_Cine", "LoveMoanOpen_PlayerCharacter_Cine"},
+        SoundBottom = {"BreathLongExhaleOpen_PlayerCharacter_Cine","BreathLongInhaleOpen_PlayerCharacter_Cine","LoveMoanClosed_PlayerCharacter_Cine", "LoveMoanClosed_PlayerCharacter_Cine", "LoveMoanOpen_PlayerCharacter_Cine"},
+        Strip = true,
+        Type = "Solo",
+        TopAnimationID = "d0f6cf4a-a418-4640-bf36-87531d55154b",
+        BottomAnimationID = "d0f6cf4a-a418-4640-bf36-87531d55154b",
+        AnimObject = "0f2ccca6-3ce8-4271-aec0-820f6581c551",
+    },
 
 }

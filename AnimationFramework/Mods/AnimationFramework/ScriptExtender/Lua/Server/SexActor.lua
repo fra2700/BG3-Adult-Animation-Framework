@@ -81,6 +81,10 @@ function SexActor_Terminate(actorData)
     -- Orgasm
     Osi.PlaySound(actorData.Actor, ORGASM_SOUNDS[math.random(1, #ORGASM_SOUNDS)])
 
+    --Effects
+    Osi.ApplyStatus(actorData.Actor, "SWEATY", 60, 1)
+    Osi.CreateSurface(actorData.Actor, "SurfaceWater", 0.4, 30, "")
+
     Osi.RemoveBoosts(actorData.Actor, "ActionResourceBlock(Movement)", 0, "", "")
     SexActor_StopVocalTimer(actorData)
 
@@ -187,7 +191,7 @@ function SexActor_SubstituteProxy(actorData, proxyData)
         local curScale = TryGetEntityValue(actorEntity, "GameObjectVisual", "Scale")
         if curScale then
             actorData.OldVisualScale = curScale
-            actorEntity.GameObjectVisual.Scale = 0.05
+            actorEntity.GameObjectVisual.Scale = 0.5
             actorEntity:Replicate("GameObjectVisual")
         end
     end
@@ -219,6 +223,7 @@ function SexActor_FinalizeSetup(actorData, proxyData)
     end
 
     BlockActorMovement(actorData.Actor)
+    Osi.ApplyStatus(actorData.Proxy, "SWEATY_LIGHT", -1, 1)
 end
 
 function SexActor_StartAnimation(actorData, animProperties)

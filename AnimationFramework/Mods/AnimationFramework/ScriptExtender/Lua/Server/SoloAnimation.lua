@@ -2,12 +2,17 @@ if not AnimationSolos then
     AnimationSolos = {}
 end
 
+if not AnimationProps then
+    AnimationProps = {}
+end
+
 function StartSoloAnimation(actor, animProperties) 
     local soloData = {
         Actor = actor,
         ActorData = SexActor_Init(actor, true, "SexVocal", animProperties),
         AnimProperties = animProperties,
-        AnimContainer = ""
+        AnimContainer = "",
+        AnimObject = "",
     }
 
     local actorScaled = SexActor_PurgeBodyScaleStatuses(soloData.ActorData)
@@ -81,6 +86,7 @@ function SoloAnimationListeners()
         end
 
         if timer == "FinishMasturbating" then
+            RemoveAnimationProps(soloData)
             SexActor_Terminate(soloData.ActorData)
             SexActor_TerminateProxyMarker(soloData.ProxyData)
 
@@ -114,7 +120,9 @@ function SoloAnimationListeners()
             for _, newAnim in ipairs(SexAnimations) do
                 if newAnim.AnimName == spell then
                     soloData.AnimProperties = newAnim
+                    RemoveAnimationProps(soloData)
                     UpdateSoloAnimationVars(soloData)
+                    CreateAnimationProp(soloData)
                     PlaySoloAnimation(soloData)
                     break
                 end
@@ -165,6 +173,21 @@ function UpdateSoloAnimationVars(soloData)
         soloData.AnimContainer = "FemaleMasturbationContainer"
         soloData.ActorData.Animation = soloData.AnimProperties["BottomAnimationID"]
     end
-
     soloData.ActorData.SoundTable = PLAYER_SEX_SOUNDS
+
+    soloData.AnimObject = soloData.AnimProperties["AnimObject"]
+end
+
+function CreateAnimationProp(soloData)
+    local prop = soloData.AnimObject
+    if soloData.AnimObject then
+        local createdObject = Osi.CreateAtObject(prop, soloData.ActorData.Proxy, 0, 0,"",1)
+        AnimationProps[soloData.ActorData.Proxy] = createdObject
+    end
+end
+
+function RemoveAnimationProps(soloData)
+    if AnimationProps[soloData.ActorData.Proxy] then
+        Osi.RequestDelete(AnimationProps[soloData.ActorData.Proxy])
+    end
 end
