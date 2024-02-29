@@ -220,10 +220,10 @@ function SexActor_FinalizeSetup(actorData, proxyData)
 
         Osi.TeleportToPosition(actorData.Actor, proxyData.MarkerX, proxyData.MarkerY, proxyData.MarkerZ, "", 0, 0, 0, 0, 1)
         Osi.SetVisible(actorData.Actor, 0)
+        Osi.ApplyStatus(actorData.Proxy, "SWEATY_LIGHT", -1, 1)
     end
 
     BlockActorMovement(actorData.Actor)
-    Osi.ApplyStatus(actorData.Proxy, "SWEATY_LIGHT", -1, 1)
 end
 
 function SexActor_StartAnimation(actorData, animProperties)

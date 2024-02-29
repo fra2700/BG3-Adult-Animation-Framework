@@ -2,17 +2,12 @@ if not AnimationSolos then
     AnimationSolos = {}
 end
 
-if not AnimationProps then
-    AnimationProps = {}
-end
-
 function StartSoloAnimation(actor, animProperties) 
     local soloData = {
         Actor = actor,
         ActorData = SexActor_Init(actor, true, "SexVocal", animProperties),
         AnimProperties = animProperties,
-        AnimContainer = "",
-        AnimObject = "",
+        AnimContainer = ""
     }
 
     local actorScaled = SexActor_PurgeBodyScaleStatuses(soloData.ActorData)
@@ -86,8 +81,8 @@ function SoloAnimationListeners()
         end
 
         if timer == "FinishMasturbating" then
-            RemoveAnimationProps(soloData)
             SexActor_Terminate(soloData.ActorData)
+            RemoveAnimationProp(soloData)
             SexActor_TerminateProxyMarker(soloData.ProxyData)
 
             AnimationSolos[actor] = nil
@@ -120,9 +115,7 @@ function SoloAnimationListeners()
             for _, newAnim in ipairs(SexAnimations) do
                 if newAnim.AnimName == spell then
                     soloData.AnimProperties = newAnim
-                    RemoveAnimationProps(soloData)
                     UpdateSoloAnimationVars(soloData)
-                    CreateAnimationProp(soloData)
                     PlaySoloAnimation(soloData)
                     break
                 end
@@ -134,7 +127,9 @@ end
 Ext.Events.SessionLoaded:Subscribe(SoloAnimationListeners)
 
 function PlaySoloAnimation(soloData)
+    RemoveAnimationProp(soloData)
     SexActor_StartAnimation(soloData.ActorData, soloData.AnimProperties)
+    CreateAnimationProp(soloData)
 
     -- Timeout timer
     local animTimeout = soloData.AnimProperties["AnimLength"] * 1000
@@ -174,20 +169,18 @@ function UpdateSoloAnimationVars(soloData)
         soloData.ActorData.Animation = soloData.AnimProperties["BottomAnimationID"]
     end
     soloData.ActorData.SoundTable = PLAYER_SEX_SOUNDS
-
-    soloData.AnimObject = soloData.AnimProperties["AnimObject"]
 end
 
 function CreateAnimationProp(soloData)
-    local prop = soloData.AnimObject
-    if soloData.AnimObject then
-        local createdObject = Osi.CreateAtObject(prop, soloData.ActorData.Proxy, 0, 0,"",1)
-        AnimationProps[soloData.ActorData.Proxy] = createdObject
+    local prop = soloData.AnimProperties["AnimObject"]
+    if prop then
+        soloData.AnimationProp = Osi.CreateAtObject(prop, soloData.ActorData.Proxy, 1, 0, "", 1)
     end
 end
 
-function RemoveAnimationProps(soloData)
-    if AnimationProps[soloData.ActorData.Proxy] then
-        Osi.RequestDelete(AnimationProps[soloData.ActorData.Proxy])
+function RemoveAnimationProp(soloData)
+    if soloData.AnimationProp then
+        Osi.RequestDelete(soloData.AnimationProp)
+        soloData.AnimationProp = nil
     end
 end
