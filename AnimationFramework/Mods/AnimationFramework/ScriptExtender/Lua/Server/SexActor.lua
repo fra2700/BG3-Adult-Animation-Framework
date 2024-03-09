@@ -6,6 +6,11 @@ local function RemoveSexPositionSpells(actor)
     TryRemoveSpell(actor, "LesbianAnimationsContainer")
     TryRemoveSpell(actor, "FemaleMasturbationContainer")
     TryRemoveSpell(actor, "MaleMasturbationContainer")
+    TryRemoveSpell(actor, "zzzEndSex")
+    TryRemoveSpell(actor, "zzzStopMasturbating")
+    TryRemoveSpell(actor, "CameraHeight")
+    TryRemoveSpell(actor, "ChangeLocationPaired")
+    TryRemoveSpell(actor, "ChangeLocationSolo")
 end
 
 local function BlockActorMovement(actor)
@@ -40,6 +45,7 @@ function SexActor_Init(actor, needsProxy, vocalTimerName, animProperties)
     local actorData = {
         Actor = actor,
         Proxy = nil,
+        StartAnchor = "",
         NeedsProxy = needsProxy,
         Animation = "",
         SoundTable = {},
@@ -197,6 +203,18 @@ function SexActor_SubstituteProxy(actorData, proxyData)
     end
 end
 
+function ChangeCameraHeight(actor)
+    local actorEntity = Ext.Entity.Get(actor)
+    local currentActorScale = TryGetEntityValue(actorEntity, "GameObjectVisual", "Scale")
+    if currentActorScale == 0.5 then
+        actorEntity.GameObjectVisual.Scale = 0.05
+        actorEntity:Replicate("GameObjectVisual")
+    elseif currentActorScale ~= 0.5 then
+        actorEntity.GameObjectVisual.Scale = 0.5
+        actorEntity:Replicate("GameObjectVisual")
+    end
+end
+
 function SexActor_FinalizeSetup(actorData, proxyData)
     if actorData.Proxy then
         local actorEntity = Ext.Entity.Get(actorData.Actor)
@@ -344,4 +362,9 @@ function SexActor_DressProxy(actorData)
 
     actorData.CopiedArmourSet = nil
     actorData.CopiedEquipment = nil
+end
+
+
+function GetEntity(actor)
+    return Ext.Entity.Get(actor)
 end

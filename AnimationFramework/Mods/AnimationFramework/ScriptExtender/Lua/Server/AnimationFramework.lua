@@ -9,6 +9,7 @@ function OnSessionLoaded()
         local party = Osi.DB_PartyMembers:Get(nil)
         for i = #party, 1, -1 do
             AddMainSexSpells(party[i][1])
+            --InitializeArousal(party[i][1])
         end
     end)
 
@@ -40,6 +41,20 @@ function OnSessionLoaded()
         end
     end)
 
+    Ext.Osiris.RegisterListener("UsingSpellAtPosition", 8, "after", function(caster, x, y, z, spell, spellType, spellElement, storyActionID)
+        if spell == "ChangeLocationPaired" then
+            MovePairedSceneToLocation(caster, x,y,z)
+        end
+        if spell == "ChangeLocationSolo" then
+            MoveSoloSceneToLocation(caster, x,y,z)
+        end
+    end)
+
+    Ext.Osiris.RegisterListener("UsingSpell", 5, "after", function(caster, spell, _, _, _)
+        if spell == "CameraHeight" then
+            ChangeCameraHeight(caster)
+        end
+    end)
 end
 
 Ext.Events.SessionLoaded:Subscribe(OnSessionLoaded)

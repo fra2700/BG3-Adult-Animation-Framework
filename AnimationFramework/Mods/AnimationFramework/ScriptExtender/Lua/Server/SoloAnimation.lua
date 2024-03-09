@@ -7,7 +7,10 @@ function StartSoloAnimation(actor, animProperties)
         Actor = actor,
         ActorData = SexActor_Init(actor, true, "SexVocal", animProperties),
         AnimProperties = animProperties,
-        AnimContainer = ""
+        AnimContainer = "",
+        OriginalStartLocationx = "",
+        OriginalStartLocationy = "",
+        OriginalStartLocationz = "",
     }
 
     local actorScaled = SexActor_PurgeBodyScaleStatuses(soloData.ActorData)
@@ -15,6 +18,8 @@ function StartSoloAnimation(actor, animProperties)
     UpdateSoloAnimationVars(soloData)
 
     AnimationSolos[actor] = soloData
+
+    GetOriginalSoloStartLocation(soloData)
 
     local setupDelay = 400
     if actorScaled and setupDelay < BODY_SCALE_DELAY then
@@ -28,7 +33,7 @@ function StartSoloAnimation(actor, animProperties)
 
     Osi.ObjectTimerLaunch(actor, "SoloSexSetup", setupDelay)
 
-    TryAddSpell(actor, soloData.AnimContainer)
+    TryAddSoloSexSpells(soloData)
 end
 
 function SoloAnimationListeners()
@@ -83,6 +88,7 @@ function SoloAnimationListeners()
         if timer == "FinishMasturbating" then
             SexActor_Terminate(soloData.ActorData)
             RemoveAnimationProp(soloData)
+
             SexActor_TerminateProxyMarker(soloData.ProxyData)
 
             AnimationSolos[actor] = nil
@@ -183,4 +189,57 @@ function RemoveAnimationProp(soloData)
         Osi.RequestDelete(soloData.AnimationProp)
         soloData.AnimationProp = nil
     end
+end
+
+function TryAddSoloSexSpells(soloData)
+    TryAddSpell(soloData.Actor, "CameraHeight")
+    TryAddSpell(soloData.Actor, "ChangeLocationSolo")
+    TryAddSpell(soloData.Actor, "zzzStopMasturbating")
+    TryAddSpell(soloData.Actor, soloData.AnimContainer)
+end
+
+function MoveSoloSceneToLocation(actor, x,y,z)
+    local soloData = FindSoloData(actor)
+    Osi.SetDetached(soloData.ActorData.Proxy, 1)
+    Osi.SetDetached(soloData.Actor, 1)
+
+    if CheckDistanceToNewLocationSolo(soloData, x,y,z) < 4 then
+        Osi.TeleportToPosition(soloData.ActorData.Proxy, x, y, z)
+        Osi.TeleportToPosition(soloData.Actor, x, y, z)
+    end
+    Osi.SetDetached(soloData.Actor, 0)
+end
+
+--Sets the original start location, to prevent the ChangeLocation spell from being abused
+function GetOriginalSoloStartLocation(soloData)
+    local x,y,z = Osi.GetPosition(soloData.Actor)
+    soloData.OriginalStartLocationx = x
+    soloData.OriginalStartLocationy = y
+    soloData.OriginalStartLocationz = z
+end
+
+--Distance Check
+function CheckDistanceToNewLocationSolo(soloData, x,y,z)
+    local dx = x - soloData.OriginalStartLocationx
+    local dy = y - soloData.OriginalStartLocationy
+    local dz = z - soloData.OriginalStartLocationz
+
+    local dxSquared = dx * dx
+    local dySquared = dy * dy
+    local dzSquared = dz * dz
+
+    local distanceSquared = dxSquared + dySquared + dzSquared
+    local distance = math.sqrt(distanceSquared)
+
+    return distance
+end
+
+--Returns the soloData of an actor
+function FindSoloData(actor)
+    for _, i in pairs(AnimationSolos) do
+        if AnimationSolos[actor] ~= nil then
+            return AnimationSolos[actor]
+        end
+    end    
+    return nil
 end

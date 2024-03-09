@@ -14,7 +14,10 @@ function StartPairedAnimation(caster, target, animProperties)
         TargetData = SexActor_Init(target, targetNeedsProxy, "SexVocalTarget", animProperties),
         AnimProperties = animProperties,
         SwitchPlaces = false,
-        IsStartupAnimation = true
+        IsStartupAnimation = true,
+        OriginalStartLocationx = "",
+        OriginalStartLocationy = "",
+        OriginalStartLocationz = "",
     }
 
     local casterScaled = SexActor_PurgeBodyScaleStatuses(pairData.CasterData)
@@ -23,6 +26,8 @@ function StartPairedAnimation(caster, target, animProperties)
     UpdatePairedAnimationVars(pairData)
 
     AnimationPairs[#AnimationPairs + 1] = pairData
+
+    GetOriginalPairedStartLocation(pairData)
 
     local setupDelay = 400
 
@@ -50,7 +55,7 @@ function StartPairedAnimation(caster, target, animProperties)
 
     Osi.ObjectTimerLaunch(caster, "PairedSexSetup", setupDelay)
 
-    TryAddSpell(caster, pairData.AnimContainer)
+    TryAddPairedSexSpells(pairData)
 end
 
 function PairedAnimationListeners()
@@ -227,6 +232,13 @@ function UpdatePairedAnimationVars(pairData)
     pairData.TargetData.SoundTable = pairData.AnimProperties[targetSoundName]
 end
 
+function TryAddPairedSexSpells(pairData)
+    TryAddSpell(pairData.Caster, "CameraHeight")
+    TryAddSpell(pairData.Caster, "ChangeLocationPaired")
+    TryAddSpell(pairData.Caster, "zzzEndSex")
+    TryAddSpell(pairData.Caster, pairData.AnimContainer)
+end
+
 function FindPairIndexByActor(actor)
     for i = 1, #AnimationPairs do
         if AnimationPairs[i].Caster == actor or AnimationPairs[i].Target == actor then
@@ -235,3 +247,47 @@ function FindPairIndexByActor(actor)
     end    
     return 0
 end
+
+function FindAnimationPairs(actor)
+    local pairIndex = FindPairIndexByActor(actor)
+    if pairIndex < 1 then
+        return
+    end
+    return AnimationPairs[pairIndex]
+end
+
+function MovePairedSceneToLocation(actor, x,y,z)
+    local pairData = FindAnimationPairs(actor)
+
+    if CheckDistanceToNewLocation(pairData, x,y,z) < 4 then
+        Osi.TeleportToPosition(pairData.CasterData.Proxy, x, y, z)
+        Osi.TeleportToPosition(pairData.TargetData.Proxy, x, y, z)
+        Osi.TeleportToPosition(pairData.Caster, x, y, z)
+        Osi.TeleportToPosition(pairData.Target, x, y, z)
+        Osi.CharacterMoveToPosition(pairData.Target, x,y,z,"","")
+    end
+end
+
+--Alternate Distance Check
+function GetOriginalPairedStartLocation(pairData)
+    local x,y,z = Osi.GetPosition(pairData.Caster)
+    pairData.OriginalStartLocationx = x
+    pairData.OriginalStartLocationy = y
+    pairData.OriginalStartLocationz = z
+end
+
+function CheckDistanceToNewLocation(pairData, x,y,z)
+    local dx = x - pairData.OriginalStartLocationx
+    local dy = y - pairData.OriginalStartLocationy
+    local dz = z - pairData.OriginalStartLocationz
+
+    local dxSquared = dx * dx
+    local dySquared = dy * dy
+    local dzSquared = dz * dz
+
+    local distanceSquared = dxSquared + dySquared + dzSquared
+    local distance = math.sqrt(distanceSquared)
+
+    return distance
+end
+
