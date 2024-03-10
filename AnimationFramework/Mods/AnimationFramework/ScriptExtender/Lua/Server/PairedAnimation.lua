@@ -154,7 +154,7 @@ function PairedAnimationListeners()
 
         if spell == "zzzEndSex" then
             StopPairedAnimation(pairData)
-        elseif spell == "zzSwitchPlacesLesbian" or spell == "zzSwitchPlacesStraight" then
+        elseif spell == "zzSwitchPlaces" then
             pairData.SwitchPlaces = not pairData.SwitchPlaces
             UpdatePairedAnimationVars(pairData)
             PlayPairedAnimation(pairData)
@@ -230,13 +230,21 @@ function UpdatePairedAnimationVars(pairData)
     pairData.CasterData.SoundTable = pairData.AnimProperties[casterSoundName]
     pairData.TargetData.Animation  = pairData.AnimProperties[targetAnimName]
     pairData.TargetData.SoundTable = pairData.AnimProperties[targetSoundName]
+
+    --Update the Persistent Variable on the actor so that other mods can use this
+    local casterEnt = Ext.Entity.Get(pairData.Caster)
+    local targetEnt = Ext.Entity.Get(pairData.Target)
+    casterEnt.Vars.PairData = pairData
+    targetEnt.Vars.PairData = pairData
 end
 
 function TryAddPairedSexSpells(pairData)
-    TryAddSpell(pairData.Caster, "CameraHeight")
     TryAddSpell(pairData.Caster, "ChangeLocationPaired")
     TryAddSpell(pairData.Caster, "zzzEndSex")
+    TryAddSpell(pairData.Caster, "CameraHeight")
     TryAddSpell(pairData.Caster, pairData.AnimContainer)
+    TryAddSpell(pairData.Caster, "zzSwitchPlaces")
+    
 end
 
 function FindPairIndexByActor(actor)
@@ -244,7 +252,7 @@ function FindPairIndexByActor(actor)
         if AnimationPairs[i].Caster == actor or AnimationPairs[i].Target == actor then
             return i
         end
-    end    
+    end
     return 0
 end
 

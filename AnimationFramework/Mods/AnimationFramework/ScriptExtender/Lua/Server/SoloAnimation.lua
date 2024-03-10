@@ -11,6 +11,7 @@ function StartSoloAnimation(actor, animProperties)
         OriginalStartLocationx = "",
         OriginalStartLocationy = "",
         OriginalStartLocationz = "",
+        AnimationProp = "",
     }
 
     local actorScaled = SexActor_PurgeBodyScaleStatuses(soloData.ActorData)
@@ -193,9 +194,9 @@ end
 
 function TryAddSoloSexSpells(soloData)
     TryAddSpell(soloData.Actor, "CameraHeight")
-    TryAddSpell(soloData.Actor, "ChangeLocationSolo")
     TryAddSpell(soloData.Actor, "zzzStopMasturbating")
     TryAddSpell(soloData.Actor, soloData.AnimContainer)
+    TryAddSpell(soloData.Actor, "ChangeLocationSolo")
 end
 
 function MoveSoloSceneToLocation(actor, x,y,z)
@@ -206,6 +207,9 @@ function MoveSoloSceneToLocation(actor, x,y,z)
     if CheckDistanceToNewLocationSolo(soloData, x,y,z) < 4 then
         Osi.TeleportToPosition(soloData.ActorData.Proxy, x, y, z)
         Osi.TeleportToPosition(soloData.Actor, x, y, z)
+        if soloData.AnimationProp ~= nil then
+            Osi.TeleportToPosition(soloData.AnimationProp, x, y, z)
+        end
     end
     Osi.SetDetached(soloData.Actor, 0)
 end

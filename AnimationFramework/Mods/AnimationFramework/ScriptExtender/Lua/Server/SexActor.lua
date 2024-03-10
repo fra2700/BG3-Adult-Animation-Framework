@@ -11,6 +11,7 @@ local function RemoveSexPositionSpells(actor)
     TryRemoveSpell(actor, "CameraHeight")
     TryRemoveSpell(actor, "ChangeLocationPaired")
     TryRemoveSpell(actor, "ChangeLocationSolo")
+    TryRemoveSpell(actor, "zzSwitchPlaces")
 end
 
 local function BlockActorMovement(actor)
@@ -87,10 +88,6 @@ function SexActor_Terminate(actorData)
     -- Orgasm
     Osi.PlaySound(actorData.Actor, ORGASM_SOUNDS[math.random(1, #ORGASM_SOUNDS)])
 
-    --Effects
-    Osi.ApplyStatus(actorData.Actor, "SWEATY", 60, 1)
-    Osi.CreateSurface(actorData.Actor, "SurfaceWater", 0.4, 30, "")
-
     Osi.RemoveBoosts(actorData.Actor, "ActionResourceBlock(Movement)", 0, "", "")
     SexActor_StopVocalTimer(actorData)
 
@@ -112,8 +109,11 @@ function SexActor_Terminate(actorData)
     if actorData.IsCompanionInCamp then
         Osi.SetFlag(FLAG_COMPANION_IN_CAMP, actorData.Actor)
     end
-
+    
     Osi.SetDetached(actorData.Actor, 0)
+
+    --Fire a timer to notify other mods that a scene has ended
+    SexEvent_EndSexScene(actorData)
 end
 
 function SexActor_PurgeBodyScaleStatuses(actorData)
@@ -201,6 +201,7 @@ function SexActor_SubstituteProxy(actorData, proxyData)
             actorEntity:Replicate("GameObjectVisual")
         end
     end
+    Osi.ApplyStatus(actorData.Proxy, "SEX_ACTOR", -1)
 end
 
 function ChangeCameraHeight(actor)
@@ -238,7 +239,6 @@ function SexActor_FinalizeSetup(actorData, proxyData)
 
         Osi.TeleportToPosition(actorData.Actor, proxyData.MarkerX, proxyData.MarkerY, proxyData.MarkerZ, "", 0, 0, 0, 0, 1)
         Osi.SetVisible(actorData.Actor, 0)
-        Osi.ApplyStatus(actorData.Proxy, "SWEATY_LIGHT", -1, 1)
     end
 
     BlockActorMovement(actorData.Actor)
@@ -257,6 +257,13 @@ function SexActor_StartAnimation(actorData, animProperties)
     if animProperties["Sound"] == true and #actorData.SoundTable >= 1 then
         SexActor_StartVocalTimer(actorData, 600)
     end
+    
+    --Update the Persistent Variable on the actor so that other mods can use this
+    local actorEntity = Ext.Entity.Get(actorData.Actor)
+    actorEntity.Vars.ActorData = actorData
+
+    --Fire a timer to notify other mods that an Animation has started or changed 
+    SexEvent_SexAnimationStart(actorData)
 end
 
 function SexActor_StartVocalTimer(actorData, time)
@@ -273,6 +280,14 @@ function SexActor_PlayVocal(actorData, minRepeatTime, maxRepeatTime)
         Osi.PlaySound(soundActor, actorData.SoundTable[math.random(1, #actorData.SoundTable)])
         SexActor_StartVocalTimer(actorData, math.random(minRepeatTime, maxRepeatTime))
     end
+end
+
+function SexEvent_SexAnimationStart(actorData)
+    Osi.ObjectTimerLaunch(actorData.Actor, "Event_SexAnimationStart", 1)
+end
+
+function SexEvent_EndSexScene(actorData)
+    Osi.ObjectTimerLaunch(actorData.Actor, "Event_EndSexScene", 1)
 end
 
 
