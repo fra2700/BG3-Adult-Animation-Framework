@@ -19,10 +19,11 @@ BodyTypes = {
     TieflingMale = "6503c830-9200-409a-bd26-895738587a4a",
     TieflingStrongMale = "f625476d-29ec-4a6d-9086-42209af0cf6f",
     TieflingStrongFemale = "a5789cd3-ecd6-411b-a53a-368b659bc04a",
+    TieflingKarlach = "6326d417-315c-4605-964e-d0fad73d719b",
     GithyankiFemale = "06aaae02-bb9e-4fa3-ac00-b08e13a5b0fa",
     GithyankiMale = "f07faafa-0c6f-4f79-a049-70e96b23d51b",
     ElfMale = "7dd0aa66-5177-4f65-b7d7-187c02531b0b",
-    ElfFemale = "ad21d837-2db5-4e46-8393-7d875dd71287 ",
+    ElfFemale = "ad21d837-2db5-4e46-8393-7d875dd71287",
     HalfElfFemale = "541473b3-0bf3-4e68-b1ab-d85894d96d3e",
     HalfElfMale = "a0737289-ca84-4fde-bd52-25bae4fe8dea ",
     DwarfFemale = "b4a34ce7-41be-44d9-8486-938fe1472149",
@@ -37,12 +38,12 @@ BodyTypes = {
     HalforcMale = "6dd3db4f-e2db-4097-b82e-12f379f94c2e",
 }
 
-
 ActorHeights = {
     HumanStrongFemale = "Tall",
     HumanStrongMale = "Tall",
     TieflingStrongMale = "Tall",
     TieflingStrongFemale = "Tall",
+    TieflingKarlach = "Tall",
     DragonbornFemale = "Tall",
     DragonbornMale = "Tall",
     HalforcFemale = "Tall",
@@ -73,7 +74,6 @@ function ActorScale_GetBodyType(actor)
     local equipmentRace = (actorEntity.ServerCharacter.Template.EquipmentRace)
     for bodyType, bodyID in pairs(BodyTypes) do
         if bodyID == equipmentRace then
-            _P(bodyType)
             return bodyType
         end
     end
@@ -82,7 +82,6 @@ end
 function ActorScale_GetHeightClass(actorBody)
     for body, height in pairs(ActorHeights) do
         if body == actorBody then
-            _P(height)
             return height
         end
     end
