@@ -191,8 +191,8 @@ function UpdateSoloAnimationVars(soloData)
     soloData.ActorData.SoundTable = PLAYER_SEX_SOUNDS
 
     --Update the Persistent Variable on the actor so that other mods can use this
-    --local actorEnt = Ext.Entity.Get(soloData.Actor)
-    --actorEnt.Vars.soloData = soloData
+    local actorEnt = Ext.Entity.Get(soloData.Actor)
+    actorEnt.Vars.SoloData = soloData
 end
 
 function CreateAnimationProp(soloData)
