@@ -25,7 +25,7 @@ BodyTypes = {
     ElfMale = "7dd0aa66-5177-4f65-b7d7-187c02531b0b",
     ElfFemale = "ad21d837-2db5-4e46-8393-7d875dd71287",
     HalfElfFemale = "541473b3-0bf3-4e68-b1ab-d85894d96d3e",
-    HalfElfMale = "a0737289-ca84-4fde-bd52-25bae4fe8dea ",
+    HalfElfMale = "a0737289-ca84-4fde-bd52-25bae4fe8dea",
     DwarfFemale = "b4a34ce7-41be-44d9-8486-938fe1472149",
     DwarfMale = "abf674d2-2ea4-4a74-ade0-125429f69f83",
     HalflingFemale = "8f00cf38-4588-433a-8175-8acdbbf33f33",
@@ -67,8 +67,6 @@ ActorHeights = {
 }
 
 
-
-
 function ActorScale_GetBodyType(actor)
     local actorEntity = Ext.Entity.Get(actor)
     local equipmentRace = (actorEntity.ServerCharacter.Template.EquipmentRace)
@@ -77,6 +75,8 @@ function ActorScale_GetBodyType(actor)
             return bodyType
         end
     end
+    _P("failed BodyType check")
+    return BodyTypes['HumanMale']
 end
 
 function ActorScale_GetHeightClass(actorBody)
@@ -86,4 +86,5 @@ function ActorScale_GetHeightClass(actorBody)
         end
     end
     _P("failed height check")
+    return "Med"
 end
