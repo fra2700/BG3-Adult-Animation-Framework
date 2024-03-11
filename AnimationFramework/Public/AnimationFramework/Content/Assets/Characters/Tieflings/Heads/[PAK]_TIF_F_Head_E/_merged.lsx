@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <save>
 	<version major="4" minor="0" revision="9" build="0" lslib_meta="v1,bswap_guids" />
 	<region id="SkeletonBank">
@@ -6722,6 +6722,16 @@
 							<attribute id="PairElement2" type="FixedString" value="f4ead328-66b0-35c8-4c30-319ce28fa36f" />
 							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
 						<node id="AnimationWaterfall">
 							<attribute id="Object" type="FixedString" value="3432a2ac-69ad-9a75-a624-4d00dd12b62f" />
 						</node>
@@ -6818,7 +6828,7 @@
 							<attribute id="MaterialID" type="FixedString" value="2c04a8f7-0124-836b-8b35-d34f2e84ad43" />
 							<attribute id="ObjectID" type="FixedString" value="TIF_F_NKD_Head_E.TIF_F_NKD_Head_E_Mesh_LOD4.16" />
 						</node>
-					<node id="AnimationSetOverrides"><attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" /><attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" /><attribute id="strAnimationSetOverrideType" type="int32" value="0" /></node></children>
+					</children>
 				</node>
 			</children>
 		</node>

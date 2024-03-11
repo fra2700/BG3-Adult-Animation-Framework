@@ -166,16 +166,33 @@ local PLAYER_SEX_SOUNDS = {
     "LoveMoanClosed_PlayerCharacter_Cine",
     "LoveMoanOpen_PlayerCharacter_Cine"
 }
-
 function UpdateSoloAnimationVars(soloData)
+    local height = soloData.ActorData.HeightClass
+    _P(ActorHasPenis(soloData.Actor))
+    local filteredAnim = ""
+    local gender = ""
+
     if ActorHasPenis(soloData.Actor) then
         soloData.AnimContainer = "MaleMasturbationContainer"
-        soloData.ActorData.Animation = soloData.AnimProperties["TopAnimationID"]
+        gender = "_Male"
+        soloData.ActorData.Animation = soloData.AnimProperties['FallbackTopAnimationID']
     else
         soloData.AnimContainer = "FemaleMasturbationContainer"
-        soloData.ActorData.Animation = soloData.AnimProperties["BottomAnimationID"]
+        gender = "_Female"
+        
+        soloData.ActorData.Animation = soloData.AnimProperties['FallbackBottomAnimationID']
+    end
+
+    filteredAnim = height..gender
+
+    if soloData.AnimProperties[filteredAnim] then
+        soloData.ActorData.Animation = soloData.AnimProperties[filteredAnim]
     end
     soloData.ActorData.SoundTable = PLAYER_SEX_SOUNDS
+
+    --Update the Persistent Variable on the actor so that other mods can use this
+    --local actorEnt = Ext.Entity.Get(soloData.Actor)
+    --actorEnt.Vars.soloData = soloData
 end
 
 function CreateAnimationProp(soloData)

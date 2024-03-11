@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <save>
 	<version major="4" minor="0" revision="9" build="0" lslib_meta="v1,bswap_guids" />
 	<region id="MaterialBank">
@@ -851,7 +851,17 @@
 							<attribute id="MaterialID" type="FixedString" value="c9eaa867-9dc6-96a6-8c56-2c1b816bf257" />
 							<attribute id="ObjectID" type="FixedString" value="GNO_F_NKD_NeckCut.GNO_F_NKD_NeckCut_Inside_Mesh.1" />
 						</node>
-					<node id="AnimationSetOverrides"><attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" /><attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" /><attribute id="strAnimationSetOverrideType" type="int32" value="0" /></node></children>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+					</children>
 				</node>
 			</children>
 		</node>

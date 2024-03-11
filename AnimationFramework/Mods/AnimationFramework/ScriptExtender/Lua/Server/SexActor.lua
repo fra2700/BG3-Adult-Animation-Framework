@@ -52,8 +52,14 @@ function SexActor_Init(actor, needsProxy, vocalTimerName, animProperties)
         SoundTable = {},
         VocalTimerName = vocalTimerName,
         Strip = (animProperties["Strip"] == true and Osi.HasActiveStatus(actor, "BLOCK_STRIPPING") == 0),
-        CameraScaleDown = (needsProxy and Osi.IsPartyMember(actor, 0) == 1)
+        CameraScaleDown = (needsProxy and Osi.IsPartyMember(actor, 0) == 1),
+        BodyType = "",
+        HeightClass = "",
+        SexRole = "",
     }
+
+    actorData.BodyType = ActorScale_GetBodyType(actorData.Actor)
+    actorData.HeightClass = ActorScale_GetHeightClass(actorData.BodyType)
 
     Osi.SetDetached(actor, 1)
     Osi.DetachFromPartyGroup(actor)

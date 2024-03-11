@@ -12,12 +12,14 @@ function StartPairedAnimation(caster, target, animProperties)
         CasterData = SexActor_Init(caster, true, "SexVocalCaster", animProperties),
         Target = target,
         TargetData = SexActor_Init(target, targetNeedsProxy, "SexVocalTarget", animProperties),
+        AnimationActorHeights = "",
         AnimProperties = animProperties,
         SwitchPlaces = false,
         IsStartupAnimation = true,
         OriginalStartLocationx = "",
         OriginalStartLocationy = "",
         OriginalStartLocationz = "",
+        HeightPair = "",
     }
 
     local casterScaled = SexActor_PurgeBodyScaleStatuses(pairData.CasterData)
@@ -208,11 +210,10 @@ end
 
 function UpdatePairedAnimationVars(pairData)
     pairData.AnimContainer = "StraightAnimationsContainer"
-
-    local casterAnimName  = "TopAnimationID"
-    local casterSoundName = "SoundTop"
-    local targetAnimName  = "BottomAnimationID"
-    local targetSoundName = "SoundBottom"
+    pairData.CasterData.SexRole  = "Top"
+    pairData.TargetData.SexRole  = "Btm"
+    local topHeight = pairData.CasterData.HeightClass
+    local btmHeight = pairData.TargetData.HeightClass
 
     local casterHasPenis = ActorHasPenis(pairData.Caster)
     local targetHasPenis = ActorHasPenis(pairData.Target)
@@ -220,16 +221,29 @@ function UpdatePairedAnimationVars(pairData)
     if casterHasPenis == false and targetHasPenis == false then
         pairData.AnimContainer = "LesbianAnimationsContainer"
     end
-
-    if (casterHasPenis == targetHasPenis and pairData.SwitchPlaces) or (casterHasPenis == false and targetHasPenis and not pairData.IsStartupAnimation) then
-        casterAnimName, targetAnimName = targetAnimName, casterAnimName
-        casterSoundName, targetSoundName = targetSoundName, casterSoundName
+    
+    if (casterHasPenis == targetHasPenis and pairData.SwitchPlaces) or (casterHasPenis == false and targetHasPenis) then
+        pairData.CasterData.SexRole = "Btm"
+        pairData.TargetData.SexRole = "Top"
+        topHeight = pairData.TargetData.HeightClass
+        btmHeight = pairData.CasterData.HeightClass
     end
     
-    pairData.CasterData.Animation  = pairData.AnimProperties[casterAnimName]
-    pairData.CasterData.SoundTable = pairData.AnimProperties[casterSoundName]
-    pairData.TargetData.Animation  = pairData.AnimProperties[targetAnimName]
-    pairData.TargetData.SoundTable = pairData.AnimProperties[targetSoundName]
+    --Get Height Animation Filter
+    pairData.HeightPair = topHeight.."Top_"..btmHeight.."Btm"
+
+    if pairData.AnimProperties[pairData.HeightPair] and pairData.AnimProperties[pairData.HeightPair][pairData.CasterData.SexRole] and pairData.AnimProperties[pairData.HeightPair][pairData.TargetData.SexRole] then
+        pairData.CasterData.Animation = pairData.AnimProperties[pairData.HeightPair][pairData.CasterData.SexRole]
+        _P(pairData.AnimProperties[pairData.HeightPair][pairData.CasterData.SexRole])
+        pairData.TargetData.Animation = pairData.AnimProperties[pairData.HeightPair][pairData.TargetData.SexRole]
+        _P(pairData.AnimProperties[pairData.HeightPair][pairData.TargetData.SexRole])
+    elseif pairData.CasterData.SexRole == "Btm" and  pairData.TargetData.SexRole == "Top" then
+        pairData.CasterData.Animation = pairData.AnimProperties['FallbackBottomAnimationID']
+        pairData.TargetData.Animation = pairData.AnimProperties['FallbackTopAnimationID']
+    elseif pairData.CasterData.SexRole == "Top" and  pairData.TargetData.SexRole == "Btm" then
+        pairData.CasterData.Animation = pairData.AnimProperties['FallbackTopAnimationID']
+        pairData.TargetData.Animation = pairData.AnimProperties['FallbackBottomAnimationID']
+    end
 
     --Update the Persistent Variable on the actor so that other mods can use this
     local casterEnt = Ext.Entity.Get(pairData.Caster)

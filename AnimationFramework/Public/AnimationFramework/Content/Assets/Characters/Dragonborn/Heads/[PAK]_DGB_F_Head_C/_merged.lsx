@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <save>
 	<version major="4" minor="0" revision="9" build="0" lslib_meta="v1,bswap_guids" />
 	<region id="SkeletonBank">
@@ -10539,7 +10539,17 @@
 							<attribute id="MaterialID" type="FixedString" value="ed020633-5854-ee2e-dc7b-902ef253209d" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Top_Horn_FC.DGB_F_NKD_Head_C_Top_Horn_FC_Mesh_LOD1.1" />
 						</node>
-					<node id="AnimationSetOverrides"><attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" /><attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" /><attribute id="strAnimationSetOverrideType" type="int32" value="0" /></node></children>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+					</children>
 				</node>
 				<node id="Resource">
 					<attribute id="AttachBone" type="FixedString" value="" />
@@ -10590,6 +10600,16 @@
 							<attribute id="MaterialID" type="FixedString" value="26044c3d-40f2-274a-584e-c68f16f33f2b" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Top_FB.DGB_F_NKD_Head_C_Top_Dreadlocks_FB_Mesh_LOD1.3" />
 						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
 					</children>
 				</node>
 				<node id="Resource">
@@ -10631,6 +10651,16 @@
 							<attribute id="MaterialID" type="FixedString" value="47a460f5-2a4c-cc44-90e8-58775ba1562a" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Chin_FD.DGB_F_NKD_Head_C_Chin_Spikes_FD_Mesh_LOD1.1" />
 						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
 					</children>
 				</node>
 				<node id="Resource">
@@ -10660,6 +10690,16 @@
 						<node id="AnimationSetOverrides">
 							<attribute id="PairElement1" type="guid" value="b6aa23c3-c96d-42d5-8ffa-8d441d18faa7" />
 							<attribute id="PairElement2" type="FixedString" value="447d7268-82c3-f6dc-e246-f2adcc153515" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
 							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
 						<node id="AnimationWaterfall">
@@ -10770,6 +10810,16 @@
 							<attribute id="MaterialID" type="FixedString" value="b7be9c05-b661-b210-e6b4-7e37a0c9a90f" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Chin_FB.DGB_F_NKD_Head_C_Chin_Bones_FB_Mesh_LOD1.1" />
 						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
 					</children>
 				</node>
 				<node id="Resource">
@@ -10810,6 +10860,16 @@
 							<attribute id="LOD" type="uint8" value="1" />
 							<attribute id="MaterialID" type="FixedString" value="2c4ad085-a9cd-a0ed-b9c3-b210587f3af6" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Jaw_MD.DGB_F_NKD_Head_C_Jaw_Spikes_MD_Mesh_LOD1.1" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
 					</children>
 				</node>
@@ -10852,6 +10912,16 @@
 							<attribute id="MaterialID" type="FixedString" value="8ad261cd-87d6-47b9-ede5-593bde79b8c4" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Top_MF.DGB_F_NKD_Head_C_Top_Horns_MF_Mesh_LOD1.1" />
 						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
 					</children>
 				</node>
 				<node id="Resource">
@@ -10892,6 +10962,16 @@
 							<attribute id="LOD" type="uint8" value="1" />
 							<attribute id="MaterialID" type="FixedString" value="009ef477-f344-5041-e24a-8ed4fad38e95" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Chin_MD.DGB_F_NKD_Head_C_Chin_Spikes_MD_Mesh_LOD1.1" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
 					</children>
 				</node>
@@ -10934,6 +11014,16 @@
 							<attribute id="MaterialID" type="FixedString" value="2716ad88-5087-8481-e9f3-a5307bfe02e6" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Jaw_MF.DGB_F_NKD_Head_C_Jaw_Spikes_MF_Mesh_LOD1.1" />
 						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
 					</children>
 				</node>
 				<node id="Resource">
@@ -10974,6 +11064,16 @@
 							<attribute id="LOD" type="uint8" value="1" />
 							<attribute id="MaterialID" type="FixedString" value="f7582257-0423-1733-998f-5c71c916e2cf" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Chin_FA.DGB_F_NKD_Head_C_Chin_Horn_FA_Mesh_LOD1.1" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
 					</children>
 				</node>
@@ -11016,6 +11116,16 @@
 							<attribute id="MaterialID" type="FixedString" value="16ddca91-e74e-48c3-4566-81854055fe66" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Chin_FE.DGB_F_NKD_Head_C_Chin_Scales_FE_Mesh_LOD1.1" />
 						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
 					</children>
 				</node>
 				<node id="Resource">
@@ -11056,6 +11166,16 @@
 							<attribute id="LOD" type="uint8" value="1" />
 							<attribute id="MaterialID" type="FixedString" value="f083d006-2779-40f8-5898-6baa795f5e8e" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Top_FC.DGB_F_NKD_Head_C_Top_Horns_FC_Mesh_LOD1.1" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
 					</children>
 				</node>
@@ -11098,6 +11218,16 @@
 							<attribute id="MaterialID" type="FixedString" value="1cbac465-426d-e9ec-be15-17bef9fb6e00" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Eyes.DGB_F_NKD_Head_C_Eyes_Mesh_LOD1.1" />
 						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
 					</children>
 				</node>
 				<node id="Resource">
@@ -11138,6 +11268,16 @@
 							<attribute id="LOD" type="uint8" value="1" />
 							<attribute id="MaterialID" type="FixedString" value="ce2f3481-08b4-6595-d91d-4cc62297ebcb" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Jaw_FD.DGB_F_NKD_Head_C_Jaw_Spikes_FD_Mesh_LOD1.1" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
 					</children>
 				</node>
@@ -11180,6 +11320,16 @@
 							<attribute id="MaterialID" type="FixedString" value="00a96dcf-ba33-22a5-4a13-3ae498a12f6a" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Jaw_MA.DGB_F_NKD_Head_C_Jaw_Scales_MA_Mesh_LOD1.1" />
 						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
 					</children>
 				</node>
 				<node id="Resource">
@@ -11220,6 +11370,16 @@
 							<attribute id="LOD" type="uint8" value="1" />
 							<attribute id="MaterialID" type="FixedString" value="b5ac5b8c-a606-3bd4-77c1-ce18f8dbb9d2" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Top_FE.DGB_F_NKD_Head_C_Top_Horns_FE_Mesh_LOD1.1" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
 					</children>
 				</node>
@@ -11262,6 +11422,16 @@
 							<attribute id="MaterialID" type="FixedString" value="6ecd2c00-2440-24a5-6666-a201470fc25b" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Top_ME.DGB_F_NKD_Head_C_Top_Horns_ME_Mesh_LOD1.1" />
 						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
 					</children>
 				</node>
 				<node id="Resource">
@@ -11302,6 +11472,16 @@
 							<attribute id="LOD" type="uint8" value="1" />
 							<attribute id="MaterialID" type="FixedString" value="9889bf6d-7fce-2dba-3eb9-2b466ccc4b48" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Top_MD.DGB_F_NKD_Head_C_Top_Spikes_MD_Mesh_LOD1.1" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
 					</children>
 				</node>
@@ -11344,6 +11524,16 @@
 							<attribute id="MaterialID" type="FixedString" value="697b804c-7b8c-7555-0b34-72b1fadf45bb" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Chin_FC.DGB_F_NKD_Head_C_Chin_Spikes_FC_Mesh_LOD1.1" />
 						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
 					</children>
 				</node>
 				<node id="Resource">
@@ -11384,6 +11574,16 @@
 							<attribute id="LOD" type="uint8" value="1" />
 							<attribute id="MaterialID" type="FixedString" value="674f9d53-2a01-0264-7d08-5e2c973554ff" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Chin_MC.DGB_F_NKD_Head_C_Chin_Spikes_MC_Mesh_LOD1.1" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
 					</children>
 				</node>
@@ -11426,6 +11626,16 @@
 							<attribute id="MaterialID" type="FixedString" value="2f9fb44e-8155-e981-aba7-b792317a8b2e" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Jaw_ME.DGB_F_NKD_Head_C_Jaw_Spikes_ME_Mesh_LOD1.1" />
 						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
 					</children>
 				</node>
 				<node id="Resource">
@@ -11466,6 +11676,16 @@
 							<attribute id="LOD" type="uint8" value="1" />
 							<attribute id="MaterialID" type="FixedString" value="6f32458c-8927-2c30-e2e8-4d1c2fed9ed3" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Top_MG.DGB_F_NKD_Head_C_Top_Horns_MG_Mesh_LOD1.1" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
 					</children>
 				</node>
@@ -11508,6 +11728,16 @@
 							<attribute id="MaterialID" type="FixedString" value="3df3176d-f6c7-c777-2106-416c1e1b5fee" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Jaw_FB.DGB_F_NKD_Head_C_Jaw_Bones_FB_Mesh_LOD1.1" />
 						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
 					</children>
 				</node>
 				<node id="Resource">
@@ -11548,6 +11778,16 @@
 							<attribute id="LOD" type="uint8" value="1" />
 							<attribute id="MaterialID" type="FixedString" value="f6c7ed74-7f85-2f75-0fa2-caf1748030d6" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Chin_MG.DGB_F_NKD_Head_C_Chin_Spikes_MG_Mesh_LOD1.1" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
 					</children>
 				</node>
@@ -11590,6 +11830,16 @@
 							<attribute id="MaterialID" type="FixedString" value="5b16993e-797d-9bcd-7131-f160d9f36091" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Chin_MF.DGB_F_NKD_Head_C_Chin_Spikes_MF_Mesh_LOD1.1" />
 						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
 					</children>
 				</node>
 				<node id="Resource">
@@ -11630,6 +11880,16 @@
 							<attribute id="LOD" type="uint8" value="1" />
 							<attribute id="MaterialID" type="FixedString" value="8cbe297e-0d95-baf4-42b1-076bdeae5289" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Jaw_MC.DGB_F_NKD_Head_C_Jaw_Spikes_MC_Mesh_LOD1.1" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
 					</children>
 				</node>
@@ -11672,6 +11932,16 @@
 							<attribute id="MaterialID" type="FixedString" value="196791e0-f6fe-e52b-c687-4e4a8fb4b4e0" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Top_MA.DGB_F_NKD_Head_C_Top_Horns_MA_Mesh_LOD1.1" />
 						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
 					</children>
 				</node>
 				<node id="Resource">
@@ -11701,6 +11971,16 @@
 						<node id="AnimationSetOverrides">
 							<attribute id="PairElement1" type="guid" value="b6aa23c3-c96d-42d5-8ffa-8d441d18faa7" />
 							<attribute id="PairElement2" type="FixedString" value="447d7268-82c3-f6dc-e246-f2adcc153515" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
 							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
 						<node id="AnimationWaterfall">
@@ -11811,6 +12091,16 @@
 							<attribute id="MaterialID" type="FixedString" value="6d5826f3-648a-3219-4e37-8caf9741a0b5" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Jaw_FC.DGB_F_NKD_Head_C_Jaw_Spikes_FC_Mesh_LOD1.1" />
 						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
 					</children>
 				</node>
 				<node id="Resource">
@@ -11851,6 +12141,16 @@
 							<attribute id="LOD" type="uint8" value="1" />
 							<attribute id="MaterialID" type="FixedString" value="55a1a9fe-8bd0-5877-88c3-137264c5e0af" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Top_FD.DGB_F_NKD_Head_C_Top_Horn_FD_Mesh_LOD1.1" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
 					</children>
 				</node>
@@ -11893,6 +12193,16 @@
 							<attribute id="MaterialID" type="FixedString" value="1970ab04-e9e2-0c07-94aa-53138e3a2616" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Jaw_FA.DGB_F_NKD_Head_C_Jaw_Pikes_FA_Mesh_LOD1.1" />
 						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
 					</children>
 				</node>
 				<node id="Resource">
@@ -11933,6 +12243,16 @@
 							<attribute id="LOD" type="uint8" value="1" />
 							<attribute id="MaterialID" type="FixedString" value="19a5195f-ce45-1cc2-186e-3266e35e3e76" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Jaw_MG.DGB_F_NKD_Head_C_Jaw_Spikes_MG_Mesh_LOD1.1" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
 					</children>
 				</node>
@@ -11985,6 +12305,16 @@
 							<attribute id="MaterialID" type="FixedString" value="c3e04259-0441-9681-89d8-62489cb82e18" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Top_FA.DGB_F_NKD_Head_C_Top_Horns_FA_Mesh_LOD1.3" />
 						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
 					</children>
 				</node>
 				<node id="Resource">
@@ -12025,6 +12355,16 @@
 							<attribute id="LOD" type="uint8" value="1" />
 							<attribute id="MaterialID" type="FixedString" value="b773767b-a5c3-e47f-74e6-641b21bdc696" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Chin_ME.DGB_F_NKD_Head_C_Chin_Spikes_ME_Mesh_LOD1.1" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
 					</children>
 				</node>
@@ -12067,6 +12407,16 @@
 							<attribute id="MaterialID" type="FixedString" value="1324dee4-2118-8fd9-cf2c-c346b8e63e62" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Jaw_FE.DGB_F_NKD_Head_C_Jaw_Scales_FE_Mesh_LOD1.1" />
 						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
 					</children>
 				</node>
 				<node id="Resource">
@@ -12107,6 +12457,16 @@
 							<attribute id="LOD" type="uint8" value="1" />
 							<attribute id="MaterialID" type="FixedString" value="fdd28ac1-5c83-cc2e-4f94-0c8c58d57bb3" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Top_MC.DGB_F_NKD_Head_C_Top_Horns_MC_Mesh_LOD1.1" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
 					</children>
 				</node>
@@ -12149,6 +12509,16 @@
 							<attribute id="MaterialID" type="FixedString" value="cc616711-c451-9524-5fff-732f7d138428" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Chin_MA.DGB_F_NKD_Head_C_Chin_Horn_MA_Mesh_LOD1.1" />
 						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
 					</children>
 				</node>
 				<node id="Resource">
@@ -12189,6 +12559,16 @@
 							<attribute id="LOD" type="uint8" value="1" />
 							<attribute id="MaterialID" type="FixedString" value="495a5233-e8ec-8287-4bee-417c53148e4f" />
 							<attribute id="ObjectID" type="FixedString" value="DGB_F_NKD_Head_C_Top_MB.DGB_F_NKD_Head_C_Top_Horns_MB_Mesh_LOD1.1" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
 					</children>
 				</node>

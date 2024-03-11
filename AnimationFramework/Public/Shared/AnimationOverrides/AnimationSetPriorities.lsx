@@ -10,6 +10,11 @@
                     <attribute id="UUID" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7"/>
                 </node>
                 <node id="AnimationSetPriority">
+                    <attribute id="Name" type="LSString" value="Idle_Expressions"/>
+                    <attribute id="Priority" type="int32" value="0"/>
+                    <attribute id="UUID" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328"/>
+                </node>
+                <node id="AnimationSetPriority">
                     <attribute id="Name" type="LSString" value="Dog_Discover"/>
                     <attribute id="Priority" type="int32" value="0"/>
                     <attribute id="UUID" type="guid" value="62d59e08-003b-4c71-9c2c-dbf595070646"/>

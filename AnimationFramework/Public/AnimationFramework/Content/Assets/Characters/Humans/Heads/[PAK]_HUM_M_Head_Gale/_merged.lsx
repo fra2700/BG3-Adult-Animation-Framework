@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <save>
 	<version major="4" minor="0" revision="9" build="0" lslib_meta="v1,bswap_guids" />
 	<region id="AnimationBlueprintBank">
@@ -8205,6 +8205,16 @@
 							<attribute id="PairElement2" type="FixedString" value="f4ead328-66b0-35c8-4c30-319ce28fa36f" />
 							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
 						<node id="AnimationWaterfall">
 							<attribute id="Object" type="FixedString" value="7a8ef7ff-de87-f5f9-0160-ed693b2f0484" />
 						</node>
@@ -8323,7 +8333,7 @@
 							<attribute id="MaterialID" type="FixedString" value="1d48d280-e00f-0999-d0de-19b7d2eab0d6" />
 							<attribute id="ObjectID" type="FixedString" value="HUM_M_NKD_Head_Gale.PRC_Gale_Mystra_R_Mesh_LOD4.21" />
 						</node>
-					<node id="AnimationSetOverrides"><attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" /><attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" /><attribute id="strAnimationSetOverrideType" type="int32" value="0" /></node></children>
+					</children>
 				</node>
 				<node id="Resource">
 					<attribute id="AttachBone" type="FixedString" value="" />
@@ -8352,6 +8362,16 @@
 						<node id="AnimationSetOverrides">
 							<attribute id="PairElement1" type="guid" value="b6aa23c3-c96d-42d5-8ffa-8d441d18faa7" />
 							<attribute id="PairElement2" type="FixedString" value="f4ead328-66b0-35c8-4c30-319ce28fa36f" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
 							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
 						<node id="AnimationWaterfall">
@@ -8501,6 +8521,16 @@
 						<node id="AnimationSetOverrides">
 							<attribute id="PairElement1" type="guid" value="b6aa23c3-c96d-42d5-8ffa-8d441d18faa7" />
 							<attribute id="PairElement2" type="FixedString" value="f4ead328-66b0-35c8-4c30-319ce28fa36f" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
 							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
 						<node id="AnimationWaterfall">
@@ -8667,6 +8697,16 @@
 							<attribute id="LOD" type="uint8" value="1" />
 							<attribute id="MaterialID" type="FixedString" value="4f8d9a29-c8b8-d048-305c-ca95ae84eacf" />
 							<attribute id="ObjectID" type="FixedString" value="HAIR_HUM_M_Gale_New.HAIR_HUM_M_Gale_Mesh_LOD1.1" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="fb124671-bc4c-4ba4-a3a9-5707b4dfc8f7" />
+							<attribute id="PairElement2" type="FixedString" value="ed8b2365-2396-49aa-a207-c2215e64fc9a" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
+						</node>
+						<node id="AnimationSetOverrides">
+							<attribute id="PairElement1" type="guid" value="be33569f-f5ce-416a-8954-188eb7a2a328" />
+							<attribute id="PairElement2" type="FixedString" value="f20cfa73-bfa2-4a2c-9f38-e0b85f2b6981" />
+							<attribute id="strAnimationSetOverrideType" type="int32" value="0" />
 						</node>
 					</children>
 				</node>

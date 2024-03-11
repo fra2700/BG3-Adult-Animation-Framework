@@ -9,3 +9,9 @@ Ext.Vars.RegisterUserVariable("PairData", {
     Client = true, 
     SyncToClient = true
 })
+
+Ext.Vars.RegisterUserVariable("SoloData", {
+    Server = true,
+    Client = true, 
+    SyncToClient = true
+})

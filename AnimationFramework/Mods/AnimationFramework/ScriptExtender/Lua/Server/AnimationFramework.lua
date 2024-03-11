@@ -9,7 +9,6 @@ function OnSessionLoaded()
         local party = Osi.DB_PartyMembers:Get(nil)
         for i = #party, 1, -1 do
             AddMainSexSpells(party[i][1])
-            --InitializeArousal(party[i][1])
         end
     end)
 

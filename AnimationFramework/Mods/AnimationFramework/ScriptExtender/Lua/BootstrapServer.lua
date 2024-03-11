@@ -3,6 +3,7 @@ Ext.Require("Server/AnimationFramework.lua")
 Ext.Require("Server/SexActor.lua")
 Ext.Require("Server/PairedAnimation.lua")
 Ext.Require("Server/SoloAnimation.lua")
+Ext.Require("Server/ActorScale.lua")
 
 Ext.Vars.RegisterUserVariable("ActorData", {
     Server = true,
@@ -11,6 +12,12 @@ Ext.Vars.RegisterUserVariable("ActorData", {
 })
 
 Ext.Vars.RegisterUserVariable("PairData", {
+    Server = true,
+    Client = true, 
+    SyncToClient = true
+})
+
+Ext.Vars.RegisterUserVariable("SoloData", {
     Server = true,
     Client = true, 
     SyncToClient = true
