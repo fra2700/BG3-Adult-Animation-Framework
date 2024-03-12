@@ -11,7 +11,7 @@ function StartPairedAnimation(caster, target, animProperties)
         Caster = caster,
         CasterData = SexActor_Init(caster, true, "SexVocalCaster", animProperties),
         Target = target,
-        TargetData = SexActor_Init(target, targetNeedsProxy, "SexVocalTarget", animProperties),
+        TargetData = SexActor_Init(target, true, "SexVocalTarget", animProperties), -- targetNeedsProxy
         AnimationActorHeights = "",
         AnimProperties = animProperties,
         SwitchPlaces = false,
@@ -50,15 +50,18 @@ function StartPairedAnimation(caster, target, animProperties)
 
     Osi.ObjectTimerLaunch(caster, "PairedSexSetup", setupDelay)
 
-    TryAddSpell(caster, pairData.AnimContainer)
-    TryAddSpell(caster, "ChangeLocationPaired")
-    if pairData.CasterData.CameraScaleDown then
-        TryAddSpell(caster, "CameraHeight")
-    end
+    -- Add sex control spells to the caster
+    SexActor_InitCasterSexSpells(pairData)
+    SexActor_RegisterCasterSexSpell(pairData, pairData.AnimContainer)
     if pairData.CasterData.HasPenis == pairData.TargetData.HasPenis then
-        TryAddSpell(caster, "zzSwitchPlaces")
+        SexActor_RegisterCasterSexSpell(pairData, "zzSwitchPlaces")
     end
-    TryAddSpell(caster, "zzzEndSex")
+    SexActor_RegisterCasterSexSpell(pairData, "ChangeLocationPaired")
+    if pairData.CasterData.CameraScaleDown then
+        SexActor_RegisterCasterSexSpell(pairData, "CameraHeight")
+    end
+    SexActor_RegisterCasterSexSpell(pairData, "zzzEndSex")
+    AddPairedCasterSexSpell(pairData)
 end
 
 function PairedAnimationListeners()
@@ -129,6 +132,11 @@ function PairedAnimationListeners()
             SexActor_TerminateProxyMarker(pairData.ProxyData)
 
             table.remove(AnimationPairs, pairIndex)
+            return
+        end
+
+        if timer == "PairedAddCasterSexSpell" then
+            AddPairedCasterSexSpell(pairData)
             return
         end
 
@@ -228,25 +236,20 @@ function UpdatePairedAnimationVars(pairData)
         btmData, topData = topData, btmData
     end
 
-    _P("UpdatePairedAnimationVars: " .. topData.Actor .. " - " .. btmData.Actor)
-
     local topAnimation, btmAnimation
     local heightAnimation = pairData.AnimProperties[topData.HeightClass .. "Top_" .. btmData.HeightClass .. "Btm"]
     if heightAnimation then
-        _P("    Found height animation by key " .. topData.HeightClass .. "Top_" .. btmData.HeightClass .. "Btm")
         topAnimation = heightAnimation.Top
         btmAnimation = heightAnimation.Btm
     else
-        _P("    Fallback animation")
         topAnimation = pairData.AnimProperties.FallbackTopAnimationID
         btmAnimation = pairData.AnimProperties.FallbackBottomAnimationID
     end
 
     -- For the initial "standing hug" animation in a FxM pair do NOT revert top/bottom roles
     if switchRoles == 2 and topAnimation == "49d78660-5175-4ed2-9853-840bb58cf34a" and btmAnimation == "10fee5b7-d674-436c-994c-616e01efcb90" then
-        _P("    Forced roles switch back")
         switchRoles = 0
-        topData, btmData = btmData, topData
+        btmData, topData = topData, btmData
     end
 
     topData.Animation  = topAnimation
@@ -278,4 +281,8 @@ function MovePairedSceneToLocation(actor, x, y, z)
     local pairData = AnimationPairs[pairIndex]
 
     SexActor_MoveSceneToLocation(x, y, z, pairData.CasterData, pairData.TargetData)
+end
+
+function AddPairedCasterSexSpell(pairData)
+    SexActor_AddCasterSexSpell(pairData, pairData.CasterData, "PairedAddCasterSexSpell")
 end

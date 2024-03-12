@@ -118,10 +118,11 @@ function ActorHasPenis(actor)
 end
 
 function AddMainSexSpells(actor)
-    -- Add "Start Sex" and "Sex Options" spells only if actor is PLAYABLE or HUMANOID or FIEND
+    -- Add "Start Sex" and "Sex Options" spells only if actor is PLAYABLE or HUMANOID or FIEND, and is not a child (KID)
     if (ActorIsPlayable(actor)
         or Osi.IsTagged(actor, "HUMANOID_7fbed0d4-cabc-4a9d-804e-12ca6088a0a8") == 1 
         or Osi.IsTagged(actor, "FIEND_44be2f5b-f27e-4665-86f1-49c5bfac54ab") == 1)
+        and Osi.IsTagged(actor, "KID_ee978587-6c68-4186-9bfc-3b3cc719a835") == 0
     then
         TryAddSpell(actor, "StartSexContainer")
         TryAddSpell(actor, "SexOptions")
