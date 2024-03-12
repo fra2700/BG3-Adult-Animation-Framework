@@ -8,9 +8,6 @@ function StartSoloAnimation(actor, animProperties)
         ActorData = SexActor_Init(actor, true, "SexVocal", animProperties),
         AnimProperties = animProperties,
         AnimContainer = "",
-        OriginalStartLocationx = "",
-        OriginalStartLocationy = "",
-        OriginalStartLocationz = "",
         AnimationProp = "",
     }
 
@@ -19,8 +16,6 @@ function StartSoloAnimation(actor, animProperties)
     UpdateSoloAnimationVars(soloData)
 
     AnimationSolos[actor] = soloData
-
-    GetOriginalSoloStartLocation(soloData)
 
     local setupDelay = 400
     if actorScaled and setupDelay < BODY_SCALE_DELAY then
@@ -34,7 +29,12 @@ function StartSoloAnimation(actor, animProperties)
 
     Osi.ObjectTimerLaunch(actor, "SoloSexSetup", setupDelay)
 
-    TryAddSoloSexSpells(soloData)
+    TryAddSpell(actor, soloData.AnimContainer)
+    TryAddSpell(actor, "ChangeLocationSolo")
+    if soloData.ActorData.CameraScaleDown then
+        TryAddSpell(actor, "CameraHeight")
+    end
+    TryAddSpell(actor, "zzzStopMasturbating")
 end
 
 function SoloAnimationListeners()
@@ -166,13 +166,11 @@ local PLAYER_SEX_SOUNDS = {
     "LoveMoanClosed_PlayerCharacter_Cine",
     "LoveMoanOpen_PlayerCharacter_Cine"
 }
-function UpdateSoloAnimationVars(soloData)
-    local height = soloData.ActorData.HeightClass
-    _P(ActorHasPenis(soloData.Actor))
-    local filteredAnim = ""
-    local gender = ""
 
-    if ActorHasPenis(soloData.Actor) then
+function UpdateSoloAnimationVars(soloData)
+    local gender
+
+    if soloData.ActorData.HasPenis then
         soloData.AnimContainer = "MaleMasturbationContainer"
         gender = "_Male"
         soloData.ActorData.Animation = soloData.AnimProperties['FallbackTopAnimationID']
@@ -183,7 +181,7 @@ function UpdateSoloAnimationVars(soloData)
         soloData.ActorData.Animation = soloData.AnimProperties['FallbackBottomAnimationID']
     end
 
-    filteredAnim = height..gender
+    local filteredAnim = soloData.ActorData.HeightClass..gender
 
     if soloData.AnimProperties[filteredAnim] then
         soloData.ActorData.Animation = soloData.AnimProperties[filteredAnim]
@@ -209,58 +207,9 @@ function RemoveAnimationProp(soloData)
     end
 end
 
-function TryAddSoloSexSpells(soloData)
-    TryAddSpell(soloData.Actor, "CameraHeight")
-    TryAddSpell(soloData.Actor, "zzzStopMasturbating")
-    TryAddSpell(soloData.Actor, soloData.AnimContainer)
-    TryAddSpell(soloData.Actor, "ChangeLocationSolo")
-end
-
-function MoveSoloSceneToLocation(actor, x,y,z)
-    local soloData = FindSoloData(actor)
-    Osi.SetDetached(soloData.ActorData.Proxy, 1)
-    Osi.SetDetached(soloData.Actor, 1)
-
-    if CheckDistanceToNewLocationSolo(soloData, x,y,z) < 4 then
-        Osi.TeleportToPosition(soloData.ActorData.Proxy, x, y, z)
-        Osi.TeleportToPosition(soloData.Actor, x, y, z)
-        if soloData.AnimationProp ~= nil then
-            Osi.TeleportToPosition(soloData.AnimationProp, x, y, z)
-        end
+function MoveSoloSceneToLocation(actor, x, y, z)
+    local soloData = AnimationSolos[actor]
+    if soloData then
+        SexActor_MoveSceneToLocation(x, y, z, soloData.ActorData, nil, soloData.AnimationProp)
     end
-    Osi.SetDetached(soloData.Actor, 0)
-end
-
---Sets the original start location, to prevent the ChangeLocation spell from being abused
-function GetOriginalSoloStartLocation(soloData)
-    local x,y,z = Osi.GetPosition(soloData.Actor)
-    soloData.OriginalStartLocationx = x
-    soloData.OriginalStartLocationy = y
-    soloData.OriginalStartLocationz = z
-end
-
---Distance Check
-function CheckDistanceToNewLocationSolo(soloData, x,y,z)
-    local dx = x - soloData.OriginalStartLocationx
-    local dy = y - soloData.OriginalStartLocationy
-    local dz = z - soloData.OriginalStartLocationz
-
-    local dxSquared = dx * dx
-    local dySquared = dy * dy
-    local dzSquared = dz * dz
-
-    local distanceSquared = dxSquared + dySquared + dzSquared
-    local distance = math.sqrt(distanceSquared)
-
-    return distance
-end
-
---Returns the soloData of an actor
-function FindSoloData(actor)
-    for _, i in pairs(AnimationSolos) do
-        if AnimationSolos[actor] ~= nil then
-            return AnimationSolos[actor]
-        end
-    end    
-    return nil
 end

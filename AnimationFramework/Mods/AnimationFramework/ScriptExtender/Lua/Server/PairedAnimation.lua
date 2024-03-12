@@ -15,11 +15,6 @@ function StartPairedAnimation(caster, target, animProperties)
         AnimationActorHeights = "",
         AnimProperties = animProperties,
         SwitchPlaces = false,
-        IsStartupAnimation = true,
-        OriginalStartLocationx = "",
-        OriginalStartLocationy = "",
-        OriginalStartLocationz = "",
-        HeightPair = "",
     }
 
     local casterScaled = SexActor_PurgeBodyScaleStatuses(pairData.CasterData)
@@ -28,8 +23,6 @@ function StartPairedAnimation(caster, target, animProperties)
     UpdatePairedAnimationVars(pairData)
 
     AnimationPairs[#AnimationPairs + 1] = pairData
-
-    GetOriginalPairedStartLocation(pairData)
 
     local setupDelay = 400
 
@@ -57,7 +50,15 @@ function StartPairedAnimation(caster, target, animProperties)
 
     Osi.ObjectTimerLaunch(caster, "PairedSexSetup", setupDelay)
 
-    TryAddPairedSexSpells(pairData)
+    TryAddSpell(caster, pairData.AnimContainer)
+    TryAddSpell(caster, "ChangeLocationPaired")
+    if pairData.CasterData.CameraScaleDown then
+        TryAddSpell(caster, "CameraHeight")
+    end
+    if pairData.CasterData.HasPenis == pairData.TargetData.HasPenis then
+        TryAddSpell(caster, "zzSwitchPlaces")
+    end
+    TryAddSpell(caster, "zzzEndSex")
 end
 
 function PairedAnimationListeners()
@@ -164,7 +165,6 @@ function PairedAnimationListeners()
             for _, newAnim in ipairs(SexAnimations) do
                 if newAnim.AnimName == spell then
                     pairData.AnimProperties = newAnim
-                    pairData.IsStartupAnimation = false
                     UpdatePairedAnimationVars(pairData)
                     PlayPairedAnimation(pairData)
                     break
@@ -209,56 +209,56 @@ function StopPairedAnimation(pairData)
 end
 
 function UpdatePairedAnimationVars(pairData)
-    pairData.AnimContainer = "StraightAnimationsContainer"
-    pairData.CasterData.SexRole  = "Top"
-    pairData.TargetData.SexRole  = "Btm"
-    local topHeight = pairData.CasterData.HeightClass
-    local btmHeight = pairData.TargetData.HeightClass
+    local topData = pairData.CasterData
+    local btmData = pairData.TargetData
 
-    local casterHasPenis = ActorHasPenis(pairData.Caster)
-    local targetHasPenis = ActorHasPenis(pairData.Target)
-
-    if casterHasPenis == false and targetHasPenis == false then
+    if topData.HasPenis == false and btmData.HasPenis == false then
         pairData.AnimContainer = "LesbianAnimationsContainer"
+    else
+        pairData.AnimContainer = "StraightAnimationsContainer"
     end
-    
-    if (casterHasPenis == targetHasPenis and pairData.SwitchPlaces) or (casterHasPenis == false and targetHasPenis) then
-        pairData.CasterData.SexRole = "Btm"
-        pairData.TargetData.SexRole = "Top"
-        topHeight = pairData.TargetData.HeightClass
-        btmHeight = pairData.CasterData.HeightClass
-    end
-    
-    --Get Height Animation Filter
-    pairData.HeightPair = topHeight.."Top_"..btmHeight.."Btm"
 
-    if pairData.AnimProperties[pairData.HeightPair] and pairData.AnimProperties[pairData.HeightPair][pairData.CasterData.SexRole] and pairData.AnimProperties[pairData.HeightPair][pairData.TargetData.SexRole] then
-        pairData.CasterData.Animation = pairData.AnimProperties[pairData.HeightPair][pairData.CasterData.SexRole]
-        _P(pairData.AnimProperties[pairData.HeightPair][pairData.CasterData.SexRole])
-        pairData.TargetData.Animation = pairData.AnimProperties[pairData.HeightPair][pairData.TargetData.SexRole]
-        _P(pairData.AnimProperties[pairData.HeightPair][pairData.TargetData.SexRole])
-    elseif pairData.CasterData.SexRole == "Btm" and  pairData.TargetData.SexRole == "Top" then
-        pairData.CasterData.Animation = pairData.AnimProperties['FallbackBottomAnimationID']
-        pairData.TargetData.Animation = pairData.AnimProperties['FallbackTopAnimationID']
-    elseif pairData.CasterData.SexRole == "Top" and  pairData.TargetData.SexRole == "Btm" then
-        pairData.CasterData.Animation = pairData.AnimProperties['FallbackTopAnimationID']
-        pairData.TargetData.Animation = pairData.AnimProperties['FallbackBottomAnimationID']
+    local switchRoles = 0 -- No role switch
+    if topData.HasPenis == btmData.HasPenis and pairData.SwitchPlaces then
+        switchRoles = 1 -- Normal role switch
+    elseif topData.HasPenis == false and btmData.HasPenis then
+        switchRoles = 2 -- Forced switch for FxM pair
     end
+    if switchRoles ~= 0 then
+        btmData, topData = topData, btmData
+    end
+
+    _P("UpdatePairedAnimationVars: " .. topData.Actor .. " - " .. btmData.Actor)
+
+    local topAnimation, btmAnimation
+    local heightAnimation = pairData.AnimProperties[topData.HeightClass .. "Top_" .. btmData.HeightClass .. "Btm"]
+    if heightAnimation then
+        _P("    Found height animation by key " .. topData.HeightClass .. "Top_" .. btmData.HeightClass .. "Btm")
+        topAnimation = heightAnimation.Top
+        btmAnimation = heightAnimation.Btm
+    else
+        _P("    Fallback animation")
+        topAnimation = pairData.AnimProperties.FallbackTopAnimationID
+        btmAnimation = pairData.AnimProperties.FallbackBottomAnimationID
+    end
+
+    -- For the initial "standing hug" animation in a FxM pair do NOT revert top/bottom roles
+    if switchRoles == 2 and topAnimation == "49d78660-5175-4ed2-9853-840bb58cf34a" and btmAnimation == "10fee5b7-d674-436c-994c-616e01efcb90" then
+        _P("    Forced roles switch back")
+        switchRoles = 0
+        topData, btmData = btmData, topData
+    end
+
+    topData.Animation  = topAnimation
+    topData.SoundTable = pairData.AnimProperties.SoundTop
+    btmData.Animation  = btmAnimation
+    btmData.SoundTable = pairData.AnimProperties.SoundBottom
 
     --Update the Persistent Variable on the actor so that other mods can use this
     local casterEnt = Ext.Entity.Get(pairData.Caster)
     local targetEnt = Ext.Entity.Get(pairData.Target)
     casterEnt.Vars.PairData = pairData
     targetEnt.Vars.PairData = pairData
-end
-
-function TryAddPairedSexSpells(pairData)
-    TryAddSpell(pairData.Caster, "ChangeLocationPaired")
-    TryAddSpell(pairData.Caster, "zzzEndSex")
-    TryAddSpell(pairData.Caster, "CameraHeight")
-    TryAddSpell(pairData.Caster, pairData.AnimContainer)
-    TryAddSpell(pairData.Caster, "zzSwitchPlaces")
-    
 end
 
 function FindPairIndexByActor(actor)
@@ -270,46 +270,12 @@ function FindPairIndexByActor(actor)
     return 0
 end
 
-function FindAnimationPairs(actor)
+function MovePairedSceneToLocation(actor, x, y, z)
     local pairIndex = FindPairIndexByActor(actor)
     if pairIndex < 1 then
         return
     end
-    return AnimationPairs[pairIndex]
+    local pairData = AnimationPairs[pairIndex]
+
+    SexActor_MoveSceneToLocation(x, y, z, pairData.CasterData, pairData.TargetData)
 end
-
-function MovePairedSceneToLocation(actor, x,y,z)
-    local pairData = FindAnimationPairs(actor)
-
-    if CheckDistanceToNewLocation(pairData, x,y,z) < 4 then
-        Osi.TeleportToPosition(pairData.CasterData.Proxy, x, y, z)
-        Osi.TeleportToPosition(pairData.TargetData.Proxy, x, y, z)
-        Osi.TeleportToPosition(pairData.Caster, x, y, z)
-        Osi.TeleportToPosition(pairData.Target, x, y, z)
-        Osi.CharacterMoveToPosition(pairData.Target, x,y,z,"","")
-    end
-end
-
---Alternate Distance Check
-function GetOriginalPairedStartLocation(pairData)
-    local x,y,z = Osi.GetPosition(pairData.Caster)
-    pairData.OriginalStartLocationx = x
-    pairData.OriginalStartLocationy = y
-    pairData.OriginalStartLocationz = z
-end
-
-function CheckDistanceToNewLocation(pairData, x,y,z)
-    local dx = x - pairData.OriginalStartLocationx
-    local dy = y - pairData.OriginalStartLocationy
-    local dz = z - pairData.OriginalStartLocationz
-
-    local dxSquared = dx * dx
-    local dySquared = dy * dy
-    local dzSquared = dz * dz
-
-    local distanceSquared = dxSquared + dySquared + dzSquared
-    local distance = math.sqrt(distanceSquared)
-
-    return distance
-end
-

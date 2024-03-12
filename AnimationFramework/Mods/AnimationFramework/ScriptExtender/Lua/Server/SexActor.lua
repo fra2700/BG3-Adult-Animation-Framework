@@ -51,11 +51,9 @@ function SexActor_Init(actor, needsProxy, vocalTimerName, animProperties)
         Animation = "",
         SoundTable = {},
         VocalTimerName = vocalTimerName,
+        HasPenis = ActorHasPenis(actor),
         Strip = (animProperties["Strip"] == true and Osi.HasActiveStatus(actor, "BLOCK_STRIPPING") == 0),
         CameraScaleDown = (needsProxy and Osi.IsPartyMember(actor, 0) == 1),
-        BodyType = "",
-        HeightClass = "",
-        SexRole = "",
     }
 
     actorData.BodyType = ActorScale_GetBodyType(actorData.Actor)
@@ -157,11 +155,11 @@ function SexActor_TerminateProxyMarker(proxyData)
 end
 
 function SexActor_SubstituteProxy(actorData, proxyData)
+    actorData.StartX, actorData.StartY, actorData.StartZ = Osi.GetPosition(actorData.Actor)
+
     if not actorData.NeedsProxy then
         return
     end
-
-    actorData.StartX, actorData.StartY, actorData.StartZ = Osi.GetPosition(actorData.Actor)
 
     -- Temporary teleport the original away a bit to give room for the proxy
     Osi.TeleportToPosition(actorData.Actor, actorData.StartX + 1.3, actorData.StartY, actorData.StartZ + 1.3, "", 0, 0, 0, 0, 1)
@@ -296,6 +294,38 @@ function SexEvent_EndSexScene(actorData)
     Osi.ObjectTimerLaunch(actorData.Actor, "Event_EndSexScene", 1)
 end
 
+function SexActor_MoveSceneToLocation(newX, newY, newZ, casterData, targetData, scenePropObject)
+    -- Do nothing if the new location is too far from the caster's start position,
+    -- so players would not abuse it to get to some "no go" places.
+    local dx = newX - casterData.StartX
+    local dy = newY - casterData.StartY
+    local dz = newZ - casterData.StartZ
+    if math.sqrt(dx * dx + dy * dy + dz * dz) >= 4 then
+        return false
+    end
+
+    -- Move stuff
+    function TryMoveObject(obj)
+        if obj then
+            Osi.TeleportToPosition(obj, newX, newY, newZ)
+        end
+    end
+
+    Osi.SetDetached(casterData.Actor, 1)
+
+    TryMoveObject(casterData.Proxy)
+    if targetData and targetData.Proxy then
+        TryMoveObject(targetData.Proxy)
+    end
+    TryMoveObject(scenePropObject)
+    TryMoveObject(casterData.Actor)
+    if targetData then
+        TryMoveObject(targetData.Actor)
+    end
+
+    Osi.SetDetached(casterData.Actor, 0)
+end
+
 
 -------------------------------------------------------------------------------
           -- STRIPPING --
@@ -383,9 +413,4 @@ function SexActor_DressProxy(actorData)
 
     actorData.CopiedArmourSet = nil
     actorData.CopiedEquipment = nil
-end
-
-
-function GetEntity(actor)
-    return Ext.Entity.Get(actor)
 end
