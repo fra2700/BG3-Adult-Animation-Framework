@@ -3,6 +3,19 @@
 // Required Spells
 //-------------------------------------------------
                
+new entry "SexOptions"
+type "SpellData"
+data "SpellType" "Shout"
+data "ContainerSpells" "BlockStripping;RemoveStrippingBlock"
+data "Icon" "Spell_Evocation_Moonbeam"
+data "DisplayName" "h5387c5bfga3bfg409dgab09gd9094f091e8d;1"
+data "Description" ""
+data "PrepareSound" "Instrument_Bard_Silence"
+data "CastSound" "Instrument_Bard_Silence"
+data "TargetSound" "Instrument_Bard_Silence"
+data "AIFlags" "CanNotUse"
+data "SpellFlags" "IsLinkedSpellContainer"
+
 new entry "zzzEndSex"
 type "SpellData"
 data "SpellType" "Shout"
