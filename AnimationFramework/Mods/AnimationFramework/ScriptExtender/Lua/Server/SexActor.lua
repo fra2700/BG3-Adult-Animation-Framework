@@ -46,7 +46,6 @@ function SexActor_Init(actor, needsProxy, vocalTimerName, animProperties)
     local actorData = {
         Actor = actor,
         Proxy = nil,
-        StartAnchor = "",
         NeedsProxy = needsProxy,
         Animation = "",
         SoundTable = {},
@@ -294,6 +293,7 @@ function SexEvent_EndSexScene(actorData)
     Osi.ObjectTimerLaunch(actorData.Actor, "Event_EndSexScene", 1)
 end
 
+-- TODO: Move the function to a separate SexScene.lua or something
 function SexActor_MoveSceneToLocation(newX, newY, newZ, casterData, targetData, scenePropObject)
     -- Do nothing if the new location is too far from the caster's start position,
     -- so players would not abuse it to get to some "no go" places.
@@ -301,7 +301,7 @@ function SexActor_MoveSceneToLocation(newX, newY, newZ, casterData, targetData, 
     local dy = newY - casterData.StartY
     local dz = newZ - casterData.StartZ
     if math.sqrt(dx * dx + dy * dy + dz * dz) >= 4 then
-        return false
+        return
     end
 
     -- Move stuff
@@ -314,16 +314,42 @@ function SexActor_MoveSceneToLocation(newX, newY, newZ, casterData, targetData, 
     Osi.SetDetached(casterData.Actor, 1)
 
     TryMoveObject(casterData.Proxy)
-    if targetData and targetData.Proxy then
+    if targetData then
         TryMoveObject(targetData.Proxy)
     end
     TryMoveObject(scenePropObject)
     TryMoveObject(casterData.Actor)
     if targetData then
         TryMoveObject(targetData.Actor)
+        Osi.CharacterMoveToPosition(targetData.Actor, newX, newY, newZ, "", "")
     end
 
     Osi.SetDetached(casterData.Actor, 0)
+end
+
+-- TODO: Move the function to a separate SexScene.lua or something
+function SexActor_InitCasterSexSpells(sceneData)
+    sceneData.CasterSexSpells = {}
+    sceneData.NextCasterSexSpell = 1
+end
+
+-- TODO: Move the function to a separate SexScene.lua or something
+function SexActor_RegisterCasterSexSpell(sceneData, spellName)
+    sceneData.CasterSexSpells[#sceneData.CasterSexSpells + 1] = spellName
+end
+
+-- TODO: Move the function to a separate SexScene.lua or something
+function SexActor_AddCasterSexSpell(sceneData, casterData, timerName)
+    if sceneData.NextCasterSexSpell <= #sceneData.CasterSexSpells then
+        TryAddSpell(casterData.Actor, sceneData.CasterSexSpells[sceneData.NextCasterSexSpell])
+
+        sceneData.NextCasterSexSpell = sceneData.NextCasterSexSpell + 1
+        if sceneData.NextCasterSexSpell <= #sceneData.CasterSexSpells then
+            -- A pause greater than 0.1 sec between two (Try)AddSpell calls in needed 
+            -- for the spells to appear in the hotbar exactly in the order they are added.
+            Osi.ObjectTimerLaunch(casterData.Actor, timerName, 200)
+        end
+    end
 end
 
 

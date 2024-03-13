@@ -118,10 +118,11 @@ function ActorHasPenis(actor)
 end
 
 function AddMainSexSpells(actor)
-    -- Add "Start Sex" and "Sex Options" spells only if actor is PLAYABLE or HUMANOID or FIEND
+    -- Add "Start Sex" and "Sex Options" spells only if actor is PLAYABLE or HUMANOID or FIEND, and is not a child (KID)
     if (ActorIsPlayable(actor)
         or Osi.IsTagged(actor, "HUMANOID_7fbed0d4-cabc-4a9d-804e-12ca6088a0a8") == 1 
         or Osi.IsTagged(actor, "FIEND_44be2f5b-f27e-4665-86f1-49c5bfac54ab") == 1)
+        and Osi.IsTagged(actor, "KID_ee978587-6c68-4186-9bfc-3b3cc719a835") == 0
     then
         TryAddSpell(actor, "StartSexContainer")
         TryAddSpell(actor, "SexOptions")
@@ -143,6 +144,25 @@ local function ResolveEntityArg(entityArg)
     end
 
     return entityArg
+end
+
+-- Dump an entity to a text file.
+-- Args:
+--     entity: entity object or UUID string.
+--     outfile: Optional string file name. Ext.IO.SaveFile throws an error if 'outfile' is a full path.
+-- If 'outfile' arg is omitted, then the output files gets an auto-generated name with an index: entity1.txt, entity2.txt...
+-- The file is created in ...\AppData\Local\Larian Studios\Baldur's Gate 3\Script Extender folder.
+local DumpEntityCounter = 1
+
+function DumpEntity(entity, outfile)
+    entity = ResolveEntityArg(entity)
+    if entity then
+        if not outfile then
+            outfile = "entity" .. DumpEntityCounter .. ".txt"
+            DumpEntityCounter = DumpEntityCounter + 1
+        end
+        Ext.IO.SaveFile(outfile, Ext.DumpExport(entity:GetAllComponents()))
+    end
 end
 
 -- Get the value of a sub-field in entity if the entity has that sub-field.

@@ -29,12 +29,15 @@ function StartSoloAnimation(actor, animProperties)
 
     Osi.ObjectTimerLaunch(actor, "SoloSexSetup", setupDelay)
 
-    TryAddSpell(actor, soloData.AnimContainer)
-    TryAddSpell(actor, "ChangeLocationSolo")
+    -- Add sex control spells to the caster
+    SexActor_InitCasterSexSpells(soloData)
+    SexActor_RegisterCasterSexSpell(soloData, soloData.AnimContainer)
+    SexActor_RegisterCasterSexSpell(soloData, "ChangeLocationSolo")
     if soloData.ActorData.CameraScaleDown then
-        TryAddSpell(actor, "CameraHeight")
+        SexActor_RegisterCasterSexSpell(soloData, "CameraHeight")
     end
-    TryAddSpell(actor, "zzzStopMasturbating")
+    SexActor_RegisterCasterSexSpell(soloData, "zzzStopMasturbating")
+    AddSoloCasterSexSpell(soloData)
 end
 
 function SoloAnimationListeners()
@@ -93,6 +96,11 @@ function SoloAnimationListeners()
             SexActor_TerminateProxyMarker(soloData.ProxyData)
 
             AnimationSolos[actor] = nil
+            return
+        end
+
+        if timer == "SoloAddCasterSexSpell" then
+            AddSoloCasterSexSpell(soloData)
             return
         end
 
@@ -212,4 +220,8 @@ function MoveSoloSceneToLocation(actor, x, y, z)
     if soloData then
         SexActor_MoveSceneToLocation(x, y, z, soloData.ActorData, nil, soloData.AnimationProp)
     end
+end
+
+function AddSoloCasterSexSpell(soloData)
+    SexActor_AddCasterSexSpell(soloData, soloData.ActorData, "SoloAddCasterSexSpell")
 end

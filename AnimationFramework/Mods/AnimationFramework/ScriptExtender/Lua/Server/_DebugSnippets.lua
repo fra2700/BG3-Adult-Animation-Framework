@@ -1,16 +1,5 @@
 
 ----------------------------------------------------------------------------------------------------
--- Dump the entity of object 'uuid' to a text file `outfile`.
--- 'outfile' must be a file name. Ext.IO.SaveFile throws an error if 'outfile' is a full path.
--- The file is created in ...\AppData\Local\Larian Studios\Baldur's Gate 3\Script Extender.
-----------------------------------------------------------------------------------------------------
-
-function DumpEntity(uuid, outfile)
-    Ext.IO.SaveFile(outfile, Ext.DumpExport(Ext.Entity.Get(uuid):GetAllComponents()))
-end
-
-
-----------------------------------------------------------------------------------------------------
 -- Loop through a table of sound resources (TestSounds), playing a new sound each time, with console output.
 ----------------------------------------------------------------------------------------------------
 
