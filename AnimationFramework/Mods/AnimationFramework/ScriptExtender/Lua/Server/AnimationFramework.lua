@@ -146,6 +146,18 @@ local function ResolveEntityArg(entityArg)
     return entityArg
 end
 
+-- Dump an entity to a text file.
+-- Args:
+--     entity: entity object or UUID string.
+--     outfile: string file name. Ext.IO.SaveFile throws an error if 'outfile' is a full path.
+-- The file is created in ...\AppData\Local\Larian Studios\Baldur's Gate 3\Script Extender folder.
+function DumpEntity(entity, outfile)
+    entity = ResolveEntityArg(entity)
+    if entity then
+        Ext.IO.SaveFile(outfile, Ext.DumpExport(entity:GetAllComponents()))
+    end
+end
+
 -- Get the value of a sub-field in entity if the entity has that sub-field.
 -- Args:
 --     entity: entity object or UUID string.
