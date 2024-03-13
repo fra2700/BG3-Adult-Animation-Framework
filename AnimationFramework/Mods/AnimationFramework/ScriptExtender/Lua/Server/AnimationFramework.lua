@@ -150,7 +150,7 @@ end
 -- Args:
 --     entity: entity object or UUID string.
 --     outfile: Optional string file name. Ext.IO.SaveFile throws an error if 'outfile' is a full path.
--- If 'outfile' arg is ommitted, then the output files gets an auto-generated name with an index: entity1.txt, entity2.txt...
+-- If 'outfile' arg is omitted, then the output files gets an auto-generated name with an index: entity1.txt, entity2.txt...
 -- The file is created in ...\AppData\Local\Larian Studios\Baldur's Gate 3\Script Extender folder.
 local DumpEntityCounter = 1
 
