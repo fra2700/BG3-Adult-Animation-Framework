@@ -127,10 +127,7 @@ function PairedAnimationListeners()
         end
 
         if timer == "FinishSex" then
-            SexActor_Terminate(pairData.CasterData)
-            SexActor_Terminate(pairData.TargetData)
-            SexActor_TerminateProxyMarker(pairData.ProxyData)
-
+            TerminatePairedAnimation(pairData)
             table.remove(AnimationPairs, pairIndex)
             return
         end
@@ -196,6 +193,19 @@ function PlayPairedAnimation(pairData)
     else
         Osi.ObjectTimerCancel(pairData.Caster, "PairedAnimTimeout")
     end
+end
+
+function TerminatePairedAnimation(pairData)
+    SexActor_Terminate(pairData.CasterData)
+    SexActor_Terminate(pairData.TargetData)
+    SexActor_TerminateProxyMarker(pairData.ProxyData)
+end
+
+function TerminateAllPairedAnimations()
+    for _, pairData in ipairs(AnimationPairs) do
+        TerminatePairedAnimation(pairData)
+    end
+    AnimationPairs = {}
 end
 
 function StopPairedAnimation(pairData)

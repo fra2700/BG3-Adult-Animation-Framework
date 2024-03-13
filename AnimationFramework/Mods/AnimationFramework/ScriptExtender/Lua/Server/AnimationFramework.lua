@@ -58,6 +58,13 @@ end
 
 Ext.Events.SessionLoaded:Subscribe(OnSessionLoaded)
 
+Ext.Events.GameStateChanged:Subscribe(function(e)
+    if e.FromState == "Running" and e.ToState == "Save" then
+        TerminateAllSoloAnimations()
+        TerminateAllPairedAnimations()
+    end
+end)
+
 function SexSpellUsed(caster, target, animProperties)
     if animProperties then
         if animProperties["Type"] == "Solo" then
