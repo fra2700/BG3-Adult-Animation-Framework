@@ -90,11 +90,7 @@ function SoloAnimationListeners()
         end
 
         if timer == "FinishMasturbating" then
-            SexActor_Terminate(soloData.ActorData)
-            RemoveAnimationProp(soloData)
-
-            SexActor_TerminateProxyMarker(soloData.ProxyData)
-
+            TerminateSoloAnimation(soloData)
             AnimationSolos[actor] = nil
             return
         end
@@ -153,6 +149,19 @@ function PlaySoloAnimation(soloData)
     else
         Osi.ObjectTimerCancel(soloData.Actor, "SoloAnimTimeout")
     end
+end
+
+function TerminateSoloAnimation(soloData)
+    SexActor_Terminate(soloData.ActorData)
+    RemoveAnimationProp(soloData)
+    SexActor_TerminateProxyMarker(soloData.ProxyData)
+end
+
+function TerminateAllSoloAnimations()
+    for _, soloData in pairs(AnimationSolos) do
+        TerminateSoloAnimation(soloData)
+    end
+    AnimationSolos = {}
 end
 
 function StopSoloAnimation(soloData)
