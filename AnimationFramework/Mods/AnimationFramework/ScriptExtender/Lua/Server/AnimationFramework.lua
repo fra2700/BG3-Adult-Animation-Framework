@@ -22,13 +22,18 @@ function OnSessionLoaded()
 
     -- Typical Spell Use --
     Ext.Osiris.RegisterListener("UsingSpellOnTarget", 6, "after", function(caster, target, spell, _, _, _)
+
+        local sexData = Ext.Vars.GetModVariables("df8b9877-5662-4411-9d08-9ee2ec4d8d9e")
+        _D(sexData.BG3SX_AnimationData)
+
+
         -- Checks to see if the name of the spell used matches any of the Spells in the AnimationPacks
-        for _, table in ipairs(StartSexSpells) do
+        --[[ for _, table in ipairs(startSexSpells) do
             if table.AnimName == spell then
                 SexSpellUsed(caster, target, table)
                 break
             end
-        end
+        end ]]
     end)
     
     Ext.Osiris.RegisterListener("UsingSpellOnTarget", 6, "after", function(_, target, spell, _, _, _)
