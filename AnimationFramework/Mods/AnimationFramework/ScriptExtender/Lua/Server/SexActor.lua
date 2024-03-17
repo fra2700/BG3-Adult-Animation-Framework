@@ -173,8 +173,17 @@ function SexActor_SubstituteProxy(actorData, proxyData)
     -- This copies the horns of Wyll or the look of any Disguise Self spell applied to the actor. 
     local visTemplate = TryGetEntityValue(actorEntity, "GameObjectVisual", "RootTemplateId")
     local origTemplate = TryGetEntityValue(actorEntity, "OriginalTemplate", "OriginalTemplate")
-    if visTemplate and origTemplate and visTemplate ~= origTemplate then
-        lookTemplate = visTemplate
+    if visTemplate then
+        if origTemplate then
+            if origTemplate ~= visTemplate then
+                lookTemplate = visTemplate
+            end
+        elseif origTemplate == nil then -- It's Tav?
+            -- For Tavs, copy the look of visTemplate only if they are polymorphed or have AppearanceOverride component (under effect of "Appearance Edit Enhanced" mod)
+            if Osi.HasAppliedStatusOfType(actorData.Actor, "POLYMORPHED") == 1 or actorEntity.AppearanceOverride then
+                lookTemplate = visTemplate
+            end
+        end
     end
     Osi.Transform(actorData.Proxy, lookTemplate, "296bcfb3-9dab-4a93-8ab1-f1c53c6674c9")
 
