@@ -12,6 +12,7 @@ StartSexSpells = {
         FallbackBottomAnimationID = "9d8c5992-55ab-4c2f-8d97-28b68eb50a8b",
         Med_Female = "9d8c5992-55ab-4c2f-8d97-28b68eb50a8b",
         Med_Male = "49497bdc-d901-4f60-9e4e-3d31a06f9002",
+        Tall_Female = "2c60a233-b669-4b94-81dc-280e98238fd0",
     },
     {
         AnimName = "AskForSex",
@@ -143,6 +144,7 @@ SexAnimations = {
         Type = "Solo",
         FallbackTopAnimationID = "9d8c5992-55ab-4c2f-8d97-28b68eb50a8b",
         FallbackBottomAnimationID = "9d8c5992-55ab-4c2f-8d97-28b68eb50a8b",
+        Tall_Female = "2c60a233-b669-4b94-81dc-280e98238fd0",
     },
     {
         AnimName = "Milking",

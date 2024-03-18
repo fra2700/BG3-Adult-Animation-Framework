@@ -27,6 +27,10 @@
 															<children>
 																<node id="Object">
 																	<attribute id="ID" type="FixedString" value="cd8b98d1-5ae2-f4f7-ce9d-8b47a3252b4d" />
+																	<attribute id="MapKey" type="FixedString" value="2c60a233-b669-4b94-81dc-280e98238fd0" />
+																</node>
+																<node id="Object">
+																	<attribute id="ID" type="FixedString" value="cd8b98d1-5ae2-f4f7-ce9d-8b47a3252b4d" />
 																	<attribute id="MapKey" type="FixedString" value="f801ec0d-9fee-4584-bae3-96d7c3e285ff" />
 																</node>
 																<node id="Object">
