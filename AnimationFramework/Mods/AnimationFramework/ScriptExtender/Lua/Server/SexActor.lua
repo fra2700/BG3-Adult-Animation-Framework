@@ -229,6 +229,7 @@ function ChangeCameraHeight(actor)
 end
 
 function SexActor_FinalizeSetup(actorData, proxyData)
+
     if actorData.Proxy then
         local actorEntity = Ext.Entity.Get(actorData.Actor)
         local proxyEntity = Ext.Entity.Get(actorData.Proxy)
@@ -260,6 +261,22 @@ function SexActor_StartAnimation(actorData, animProperties)
     SexActor_StopVocalTimer(actorData)
 
     local animActor = actorData.Proxy or actorData.Actor
+    Ext.Net.BroadcastMessage("AddAnimatonWaterfall", Ext.Json.Stringify({
+        Actor = animActor,
+        AnimationWaterfall = {
+            Resource = "8335d892-7440-42f7-b084-b31a768c623d",
+            Slot = 0,
+            Type = "Visual"
+        }
+    }))
+    Ext.Net.BroadcastMessage("AddAnimatonWaterfall", Ext.Json.Stringify({
+        Actor = animActor,
+        AnimationWaterfall = {
+            Resource = "ed8b2365-2396-49aa-a207-c2215e64fc9a",
+            Slot = 1,
+            Type = "VisualSet"
+        }
+    }))
     if animProperties["Loop"] == true then
         Osi.PlayLoopingAnimation(animActor, "", actorData.Animation, "", "", "", "", "")
     else

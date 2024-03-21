@@ -1,0 +1,6 @@
+TODO:
+
+1. Uninstall Facial Animation Mod.
+2. Dump Waterfall info for target actor, ensure that facial animation waterfall is not present initially.
+3. Apply the Facial Animation Status via Osiris, triggered by a spell.
+4. Dump the Waterfall again and check if it applied

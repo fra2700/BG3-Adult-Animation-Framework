@@ -1,3 +1,4 @@
+Ext.Require("Shared/WaterfallReplication.lua")
 Ext.Vars.RegisterUserVariable("ActorData", {
     Server = true,
     Client = true, 
@@ -15,3 +16,4 @@ Ext.Vars.RegisterUserVariable("SoloData", {
     Client = true, 
     SyncToClient = true
 })
+

@@ -1,4 +1,5 @@
 Ext.Require("Shared/AnimationPack.lua")
+Ext.Require("Shared/WaterfallReplication.lua")
 Ext.Require("Server/AnimationFramework.lua")
 Ext.Require("Server/SexActor.lua")
 Ext.Require("Server/PairedAnimation.lua")
