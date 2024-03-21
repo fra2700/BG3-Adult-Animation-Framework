@@ -1,19 +1,17 @@
-function IdleAnimations(payload)
-    local data = Ext.Json.Parse(payload)
-    local actorEntity = Ext.Entity.Get(data.Character)
-
-    actorEntity.AnimationWaterfall.Waterfall[#actorEntity.AnimationWaterfall.Waterfall+1] = data.AnimationWaterfall
-end
-
-function SexAnimationOverride(payload)
+--[[ function AddAnimsetToWaterfall(payload)
     local data = Ext.Json.Parse(payload)
     local actorEntity = Ext.Entity.Get(data.Actor)
 
     actorEntity.AnimationWaterfall.Waterfall[#actorEntity.AnimationWaterfall.Waterfall+1] = data.AnimationWaterfall
-end
+end ]]
 
 if Ext.IsClient() then
-    Ext.RegisterNetListener("AddAnimatonWaterfall", function(_, payload) SexAnimationOverride(payload) end)
+    Ext.RegisterNetListener("AddAnimatonToWaterfall", function(_, payload) 
+        local data = Ext.Json.Parse(payload)
+        local actorEntity = Ext.Entity.Get(data.Actor)
+
+        actorEntity.AnimationWaterfall.Waterfall[#actorEntity.AnimationWaterfall.Waterfall+1] = data.AnimationWaterfall 
+    end)
 end
 
 --[[ if Ext.IsServer() then

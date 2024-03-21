@@ -261,7 +261,8 @@ function SexActor_StartAnimation(actorData, animProperties)
     SexActor_StopVocalTimer(actorData)
 
     local animActor = actorData.Proxy or actorData.Actor
-    Ext.Net.BroadcastMessage("AddAnimatonWaterfall", Ext.Json.Stringify({
+
+    Ext.Net.BroadcastMessage("AddAnimatonToWaterfall", Ext.Json.Stringify({
         Actor = animActor,
         AnimationWaterfall = {
             Resource = "8335d892-7440-42f7-b084-b31a768c623d",
@@ -269,7 +270,8 @@ function SexActor_StartAnimation(actorData, animProperties)
             Type = "Visual"
         }
     }))
-    Ext.Net.BroadcastMessage("AddAnimatonWaterfall", Ext.Json.Stringify({
+
+    Ext.Net.BroadcastMessage("AddAnimatonToWaterfall", Ext.Json.Stringify({
         Actor = animActor,
         AnimationWaterfall = {
             Resource = "ed8b2365-2396-49aa-a207-c2215e64fc9a",

@@ -56,6 +56,7 @@ function OnSessionLoaded()
     end)
 end
 
+
 Ext.Events.SessionLoaded:Subscribe(OnSessionLoaded)
 
 Ext.Events.GameStateChanged:Subscribe(function(e)
@@ -280,3 +281,4 @@ function TryCopyEntityComponent(srcEntity, dstEntity, componentName)
 
     return true
 end
+
