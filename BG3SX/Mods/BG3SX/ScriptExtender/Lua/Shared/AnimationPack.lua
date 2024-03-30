@@ -169,8 +169,8 @@ SexAnimations = {
         SoundBottom = {"CAMP_Karlach_CRD_ROM_Date_SexKiss2", "CAMP_Karlach_CRD_ROM_Date_SexKiss3", "CAMP_Karlach_CRD_ROM_Date_SexKiss6", "CAMP_Karlach_CRD_ROM_Date_SexKiss7", "CAMP_Karlach_CRD_ROM_Date_SexKiss9"},
         Strip = true,
         Type = "Solo",
-        FallbackTopAnimationID = "49497bdc-d901-4f60-9e4e-3d31a06f9002",
-        FallbackBottomAnimationID = "49497bdc-d901-4f60-9e4e-3d31a06f9002"
+        FallbackTopAnimationID = "2f9140db-696e-4eaf-8a7f-d5c3b4b8a6f1",
+        FallbackBottomAnimationID = "2f9140db-696e-4eaf-8a7f-d5c3b4b8a6f1"
     },
     {
         AnimName = "BottleSit",
