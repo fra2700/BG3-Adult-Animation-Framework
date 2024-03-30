@@ -165,27 +165,45 @@ function SexActor_SubstituteProxy(actorData, proxyData)
 
     local actorEntity = Ext.Entity.Get(actorData.Actor)
 
-    actorData.Proxy = Osi.CreateAtObject(Osi.GetTemplate(actorData.Actor), proxyData.Marker, 1, 0, "", 1)
-
-    -- Copy the actor's looks to the proxy (does not copy transforms)
-    local lookTemplate = actorData.Actor
-    -- If current GameObjectVisual template does not match the original actor's template, apply GameObjectVisual template to the proxy.
-    -- This copies the horns of Wyll or the look of any Disguise Self spell applied to the actor. 
     local visTemplate = TryGetEntityValue(actorEntity, "GameObjectVisual", "RootTemplateId")
     local origTemplate = TryGetEntityValue(actorEntity, "OriginalTemplate", "OriginalTemplate")
-    if visTemplate then
-        if origTemplate then
-            if origTemplate ~= visTemplate then
-                lookTemplate = visTemplate
-            end
-        elseif origTemplate == nil then -- It's Tav?
-            -- For Tavs, copy the look of visTemplate only if they are polymorphed or have AppearanceOverride component (under effect of "Appearance Edit Enhanced" mod)
-            if Osi.HasAppliedStatusOfType(actorData.Actor, "POLYMORPHED") == 1 or actorEntity.AppearanceOverride then
-                lookTemplate = visTemplate
-            end
+
+    local overrideTemplate = nil
+    if not ActorIsPlayable(actorData.Actor) and SexActor_IsStripped(actorData) then
+        if visTemplate and visTemplate ~= origTemplate then
+            overrideTemplate = CHARACTER_TEMPLATE_OVERRIDES[visTemplate]
+        elseif origTemplate then
+            overrideTemplate = CHARACTER_TEMPLATE_OVERRIDES[origTemplate]
         end
     end
-    Osi.Transform(actorData.Proxy, lookTemplate, "296bcfb3-9dab-4a93-8ab1-f1c53c6674c9")
+
+    _P(actorData.Actor .. ":")
+    _P("    Templates: original = " .. (origTemplate or "nil") .. "; visual = " .. (visTemplate or "nil"))
+    _P("    Override: " .. (overrideTemplate or "nil"))
+
+    if overrideTemplate then
+        actorData.Proxy = Osi.CreateAtObject(overrideTemplate, proxyData.Marker, 1, 0, "", 1)
+    else
+        actorData.Proxy = Osi.CreateAtObject(Osi.GetTemplate(actorData.Actor), proxyData.Marker, 1, 0, "", 1)
+
+        -- Copy the actor's looks to the proxy (does not copy transforms)
+        local lookTemplate = actorData.Actor
+        -- If current GameObjectVisual template does not match the original actor's template, apply GameObjectVisual template to the proxy.
+        -- This copies the horns of Wyll or the look of any Disguise Self spell applied to the actor. 
+        if visTemplate then
+            if origTemplate then
+                if origTemplate ~= visTemplate then
+                    lookTemplate = visTemplate
+                end
+            elseif origTemplate == nil then -- It's Tav?
+                -- For Tavs, copy the look of visTemplate only if they are polymorphed or have AppearanceOverride component (under effect of "Appearance Edit Enhanced" mod)
+                if Osi.HasAppliedStatusOfType(actorData.Actor, "POLYMORPHED") == 1 or actorEntity.AppearanceOverride then
+                    lookTemplate = visTemplate
+                end
+            end
+        end
+        Osi.Transform(actorData.Proxy, lookTemplate, "296bcfb3-9dab-4a93-8ab1-f1c53c6674c9")
+    end
 
     Osi.SetDetached(actorData.Proxy, 1)
     BlockActorMovement(actorData.Proxy)
@@ -213,7 +231,6 @@ function SexActor_SubstituteProxy(actorData, proxyData)
             actorEntity:Replicate("GameObjectVisual")
         end
     end
-    Osi.ApplyStatus(actorData.Proxy, "SEX_ACTOR", -1)
 end
 
 function ChangeCameraHeight(actor)
@@ -251,6 +268,14 @@ function SexActor_FinalizeSetup(actorData, proxyData)
 
         Osi.TeleportToPosition(actorData.Actor, proxyData.MarkerX, proxyData.MarkerY, proxyData.MarkerZ, "", 0, 0, 0, 0, 1)
         Osi.SetVisible(actorData.Actor, 0)
+        if actorData.Proxy then
+            Osi.ApplyStatus(actorData.Proxy, "AF_BG3SX", -1)
+            Osi.ApplyStatus(actorData.Proxy, "AF_BG3SX_FACIAL", -1)
+        else
+            Osi.ApplyStatus(actorData.Actor, "AF_BG3SX", -1)
+            Osi.ApplyStatus(actorData.Actor, "AF_BG3SX_FACIAL", -1)
+        end
+        
     end
 
     BlockActorMovement(actorData.Actor)
