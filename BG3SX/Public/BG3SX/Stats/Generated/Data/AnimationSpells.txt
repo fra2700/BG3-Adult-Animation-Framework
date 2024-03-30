@@ -340,6 +340,26 @@ data "SpellFlags" "ImmediateCast;IsLinkedSpellContainer"
 data "HitAnimationType" "None"
 data "SpellAnimationIntentType" "None"
 
+new entry "BottleSit"
+type "SpellData"
+data "SpellType" "Shout"
+data "SpellProperties" ""
+data "Requirements" "!Combat"
+data "SpellContainerID" "FemaleMasturbationContainer"
+data "Icon" "Spell_Divination_Guidance"
+data "DisplayName" "hbe549eebgabfdg4bcag9f74g6d0aeb44bc90;1"
+data "Description" "h00aada49g2cf4g46c3g8d16g7d349c935237;1"
+data "ExtraDescription" ""
+data "TargetConditions" ""
+data "PrepareSound" "Instrument_Bard_Silence"
+data "CastSound" "Instrument_Bard_Silence"
+data "TargetSound" "Instrument_Bard_Silence"
+data "Autocast" "Yes"
+data "SpellFlags" "ImmediateCast;IsLinkedSpellContainer"
+data "HitAnimationType" "None"
+data "SpellAnimationIntentType" "None"
+
+
 
 //-------------------------------------------------
 // Male Masturbation
@@ -530,26 +550,3 @@ data "SpellFlags" "ImmediateCast;IsLinkedSpellContainer"
 data "HitAnimationType" "None"
 data "SpellAnimationIntentType" "None"
 
-
-
-
-
-
-new entry "BottleSit"
-type "SpellData"
-data "SpellType" "Shout"
-data "SpellProperties" ""
-data "Requirements" "!Combat"
-data "SpellContainerID" "FemaleMasturbationContainer"
-data "Icon" "Spell_Divination_Guidance"
-data "DisplayName" "hbe549eebgabfdg4bcag9f74g6d0aeb44bc90;1"
-data "Description" "h00aada49g2cf4g46c3g8d16g7d349c935237;1"
-data "ExtraDescription" ""
-data "TargetConditions" ""
-data "PrepareSound" "Instrument_Bard_Silence"
-data "CastSound" "Instrument_Bard_Silence"
-data "TargetSound" "Instrument_Bard_Silence"
-data "Autocast" "Yes"
-data "SpellFlags" "ImmediateCast;IsLinkedSpellContainer"
-data "HitAnimationType" "None"
-data "SpellAnimationIntentType" "None"
